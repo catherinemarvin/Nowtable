@@ -1,0 +1,36 @@
+<!DOCTYPE HTML> 
+<html lang="en"> 
+<head> 
+<title>HERP CHAT</title> 
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script src="/nowjs/now.js"></script>
+
+<script>
+$(document).ready(function(){
+	now.onjoin = function(id, text){
+		var mydiv = $("<div></div>").attr("id", id).css("border", "5px solid red");
+		mydiv.appendTo($("body"));
+		mydiv.text(text);
+	}
+	now.refreshtext = function(id, text) {
+		$("#" + id).append(text);
+	}
+	now.ready(function(){
+		now.onclientload();
+	});
+	$("#box").keypress(function(e){
+		if(e.which == '13') {
+			now.appendtext($("#box").val());
+			$("#box").val("");		
+		}		
+		
+	});
+});
+</script>
+
+
+<body>
+<input type="text">
+</body> 
+</html> 
