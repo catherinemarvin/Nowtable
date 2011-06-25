@@ -3,27 +3,73 @@
 <head> 
 <title>HERP CHAT</title> 
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
 <script src="/nowjs/now.js"></script>
+<style>
 
+body {
+	background-color: #666;
+}
+
+input {
+	border:0;
+	font-size: 26px;
+	color: #ccc;
+	background-color: #666;
+	margin: 15px;
+	width: 80%;
+	padding: 10px;
+	box-shadow: #333 3px 3px 15px;
+	
+}
+
+.chat { 
+	color: #ccc;
+	text-shadow: 0px 1px 1px #333;
+	width: 200px;
+	height: 200px;
+	box-shadow: #333 3px 3px 15px;
+	margin: 15px;
+	padding: 15px;
+	font-family: Helvetica, Arial;
+	font-weight: bold;
+	font-size: 15px;
+	float: left;
+	overflow-y: auto;
+}
+
+.textline {
+	padding: 4px 0;
+	border-bottom: 1px dotted #444;
+}
+</style>
 <script>
 $(document).ready(function(){
 	now.onjoin = function(id, text){
-		var mydiv = $("<div></div>").attr("id", id).css("border", "5px solid red");
+		var mydiv = $("<div></div>").attr("id", id).addClass("chat");
+		mydiv.hide();		
 		mydiv.appendTo($("body"));
 		mydiv.text(text);
+		mydiv.slideDown(1000);
 	}
 	now.refreshtext = function(id, text) {
-		$("#" + id).append(text);
+		var div = $("#" + id);
+		div.append("<div class=\"textline\">" + text + "</div>");
+		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	now.ready(function(){
 		now.onclientload();
 	});
+
+	now.deleteUser = function(id){
+		$("#" + id).remove();
+	}
+
 	$("#box").keypress(function(e){
 		if(e.which == '13') {
 			now.appendtext($("#box").val());
 			$("#box").val("");		
-		}		
+		}
 		
 	});
 });
@@ -31,6 +77,6 @@ $(document).ready(function(){
 
 
 <body>
-<input type="text">
+<div><input placeholder="Type your message ..." type="text" id="box"></div>
 </body> 
 </html> 

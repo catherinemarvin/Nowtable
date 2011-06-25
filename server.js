@@ -26,6 +26,11 @@ console.log("Express server listening on port %d", server.address().port);
 var nowjs = require('now');
 var everyone = nowjs.initialize(server);
 
+everyone.on('disconnect', function() {
+	delete user[this.user.clientId];
+        everyone.now.deleteUser(this.user.clientId);
+});
+
 everyone.now.onclientload = function() {
 	everyone.now.onjoin(this.user.clientId, "");
 	for (var i in user) {
@@ -36,5 +41,5 @@ everyone.now.onclientload = function() {
 
 everyone.now.appendtext = function(text) {
 	user[this.user.clientId] += text;
-	everyone.new.refreshtext(this.user.clientId, text);
+	everyone.now.refreshtext(this.user.clientId, text);
 }
