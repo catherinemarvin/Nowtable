@@ -12,7 +12,7 @@
 $(document).ready(function(){
 
 	loadSong = function(songid, position) {
-		$("#jquery_jplayer_1").jPlayer("setMedia", { mp3: __dirname+'/play/'+songid });
+		$("#jquery_jplayer_1").jPlayer("setMedia", { mp3: document.location.pathname+'/play/'+songid });
 	}
 
 	now.onjoin = function(id, text){

@@ -26,7 +26,7 @@ server.get('/', function(req, res){
 });
 
 server.get('/play/:song', function(req, res) {
-	filePath = path.join(__dirname, "static/music", req.param('song'));
+	filePath = path.join(__dirname, "/music/", req.param('song'));
 	filePath += ".mp3";
 	stat = fs.statSync(filePath);
 	res.header('content-type', 'audio/mp3');
