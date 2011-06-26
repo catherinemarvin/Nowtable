@@ -26,10 +26,9 @@ server.get('/', function(req, res){
 });
 
 server.get('/play/:song', function(req, res) {
-	filePath = path.join(__dirname, "/music/", req.param('song'));
-	filePath += ".mp3";
+	filePath = path.join(__dirname, "/static/music", req.param('song'));
 	stat = fs.statSync(filePath);
-	res.header('content-type', 'audio/mp3');
+	res.header('content-type', 'audio/m4a');
 	res.header('content-length', stat.size);
 	res.sendfile(filePath);
 	});
@@ -51,6 +50,10 @@ everyone.now.onclientload = function() {
 		this.now.onjoin(i, user[i]);
 	}
 	user[this.user.clientId] = "";
+}
+
+everyone.now.changeSong = function(songid) {
+	everyone.now.loadSong(songid, 0);
 }
 
 everyone.now.appendtext = function(text) {
