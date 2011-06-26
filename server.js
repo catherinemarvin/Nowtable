@@ -14,6 +14,8 @@ server.set('view engine', 'ejs');
 
 // Configuration
 server.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+server.set('views', __dirname + '/views');
+server.use(express.static(__dirname + '/static'));
 
 // Routes
 server.get('/', function(req, res){
