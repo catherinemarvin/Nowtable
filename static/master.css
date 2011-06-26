@@ -33,3 +33,7 @@ input {
 	padding: 4px 0;
 	border-bottom: 1px dotted #444;
 }
+
+div.jp-audio, div.jp-video {
+  font-size:1.25em;
+}

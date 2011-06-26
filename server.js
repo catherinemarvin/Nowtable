@@ -1,6 +1,8 @@
 var version = 0.1;
 
 var express = require('express');
+var path = require('path');
+var fs = require('fs');
 
 var server = express.createServer();
 
@@ -9,6 +11,7 @@ layout: false
 });
 
 var user = {};
+var songs = {};
 
 server.set('view engine', 'ejs');
 
@@ -21,6 +24,15 @@ server.use(express.static(__dirname + '/static'));
 server.get('/', function(req, res){
   res.render("index");
 });
+
+server.get('/play/:song', function(req, res) {
+	filePath = path.join(__dirname, "static/music", req.param('song'));
+	filePath += ".mp3";
+	stat = fs.statSync(filePath);
+	res.header('content-type', 'audio/mp3');
+	res.header('content-length', stat.size);
+	res.sendfile(filePath);
+	});
 
 server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
