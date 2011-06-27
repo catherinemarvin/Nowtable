@@ -40,7 +40,7 @@ var nowjs = require('now');
 var everyone = nowjs.initialize(server);
 
 var kinggroup = nowjs.getGroup("king");
-var kingId;
+var kingId = 0;
 
 everyone.on('disconnect', function() {
 	delete user[this.user.clientId];
