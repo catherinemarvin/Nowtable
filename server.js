@@ -40,33 +40,57 @@ var nowjs = require('now');
 var everyone = nowjs.initialize(server);
 
 var kinggroup = nowjs.getGroup("king");
+var kingId;
 
 everyone.on('disconnect', function() {
 	delete user[this.user.clientId];
-        everyone.now.deleteUser(this.user.clientId);
-	if (kinggroup.now.hasClient(this.user.clientId)) {
-		kinggroup.now.removeUser(clientId);
-		
-	}
+   everyone.now.deleteUser(this.user.clientId);
 });
 
+everyone.on('connect', function() { });
+
+everyone.now.bugTest = function() {
+	console.log("KINGS: " + kingId);
+	console.log("EVERYONE: " + everyone.count);
+	console.log("King Song: " + nowjs.getClient(kingId, function() {this.now.giveSong()}));
+	console.log("King Time: " + nowjs.getClient(kingId, function() {this.now.giveTime()}));
+	
+}
+
+everyone.now.becomeKing = function() {
+	kingId = this.user.clientId;
+	
+	//kinggroup.addUser(this.user.clientId);
+}
+
 everyone.now.onclientload = function() {
-	everyone.now.onjoin(this.user.clientId, "");
+	everyone.now.onjoin(this.user.clientId, "");everyone.now.becomeKing = function() {
+	kingId = this.user.clientId;
+	
+	//kinggroup.addUser(this.user.clientId);
+}
 	for (var i in user) {
 		this.now.onjoin(i, user[i]);
 	}
 	user[this.user.clientId] = "";
-	if (kinggroup.now.count < 1) {
-		kinggroup.now.addUser(this.user.clientId);
-	}
 }
 
 everyone.now.changeSong = function(songid) {
 	everyone.now.loadSong(songid, 0);
 }
 
-everyone.now.currentSong = function() {
-	this.now.loadSong(nowjs.getClient(i, function(){this.now.}), nowjs.getClient(i, this.now.giveTime()));
+everyone.now.setSong = function(cId, songid, loc) {
+	nowjs.getClient(cId, function() {this.now.loadSong(songid, loc)});
+}
+
+everyone.now.myId = function() {
+	return this.now.clientId;
+}
+
+everyone.now.kingSong = function(cId) {
+	nowjs.getClient(kingId, function() {this.now.giveData(cId)});
+	//kinggroup.now.giveData(this.now.clientId);
+	//this.now.loadSong(nowjs.getClient(i, function(){this.now.}), nowjs.getClient(i, this.now.giveTime()));
 }
 
 everyone.now.appendtext = function(text) {

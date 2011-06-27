@@ -10,13 +10,20 @@
 <link rel="stylesheet" href="/master.css">
 <script>
 $(document).ready(function(){
+	now.giveData = function(cId) {
+		now.setSong(
+			cId, 
+			$("#jquery_jplayer_1").data("jPlayer").status.src, 
+			$("#jquery_jplayer_1").data("jPlayer").status.currentTime
+		);
+	}
+	
+	now.giveSong = function() { 
+		return $("#jquery_jplayer_1").data("jPlayer").status.src;
+	}
 	
 	now.giveTime = function() {
-		return $("#jquery_jplayer_1").jPlayer.event.jPlayer.status.currentTime;
-	}
-
-	now.giveSong = function() {
-		return $("#jquery_jplayer_1").jPlayer.event.jPlayer.status.src;
+		return $("#jquery_jplayer_1").data("jPlayer").status.currentTime;
 	}
 
 	now.loadSong = function(songid, position) {
@@ -44,13 +51,10 @@ $(document).ready(function(){
             		m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
             		oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
           	});
-		now.currentSong();
         },
         swfPath: "/",
         supplied: "m4a, oga"
       });
-		
-		
 	});
 
 	now.deleteUser = function(id){
@@ -100,7 +104,10 @@ $(document).ready(function(){
     </div>
   </div>
   
-  <div id="nextbutton"><button type="button" onclick="now.changeSong('/play/3.m4a')">NEXT</button>
+  <div id="nextbutton"><button type="button" onclick="now.loadSong('/play/3.m4a', 0)">NEXT</button>
+  <div id="kingbutton"><button type="button" onclick="now.becomeKing()">Become King</button>
+  <div id="syncbutton"><button type="button" onclick="now.kingSong(now.myId())">Sync</button>
+  <div id="testbutton"><button type="button" onclick="now.bugTest()">Bug Test</button>
 
 <div><input placeholder="Type your message ..." type="text" id="box"></div>
 </body> 
