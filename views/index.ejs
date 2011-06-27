@@ -11,8 +11,17 @@
 <script>
 $(document).ready(function(){
 	
+	now.giveTime = function() {
+		return $("#jquery_jplayer_1").jPlayer.event.jPlayer.status.currentTime;
+	}
+
+	now.giveSong = function() {
+		return $("#jquery_jplayer_1").jPlayer.event.jPlayer.status.src;
+	}
+
 	now.loadSong = function(songid, position) {
-		$("#jquery_jplayer_1").jPlayer("setMedia", { m4a: "/play/"+songid+".m4a" });
+		$("#jquery_jplayer_1").jPlayer("setMedia", { m4a: songid });
+		$("#jquery_jplayer_1").jPlayer( "play", position);
 	}
 
 	now.onjoin = function(id, text){
@@ -29,13 +38,13 @@ $(document).ready(function(){
 	}
 	now.ready(function(){
 		now.onclientload();
-		
 		$("#jquery_jplayer_1").jPlayer({
         		ready: function () {
           		$(this).jPlayer("setMedia", {
             		m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
             		oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
           	});
+		now.currentSong();
         },
         swfPath: "/",
         supplied: "m4a, oga"
@@ -91,7 +100,7 @@ $(document).ready(function(){
     </div>
   </div>
   
-  <div id="nextbutton"><button type="button" onclick="now.changeSong(3)">NEXT</button>
+  <div id="nextbutton"><button type="button" onclick="now.changeSong('/play/3.m4a')">NEXT</button>
 
 <div><input placeholder="Type your message ..." type="text" id="box"></div>
 </body> 

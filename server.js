@@ -39,9 +39,15 @@ console.log("Express server listening on port %d", server.address().port);
 var nowjs = require('now');
 var everyone = nowjs.initialize(server);
 
+var kinggroup = nowjs.getGroup("king");
+
 everyone.on('disconnect', function() {
 	delete user[this.user.clientId];
         everyone.now.deleteUser(this.user.clientId);
+	if (kinggroup.now.hasClient(this.user.clientId)) {
+		kinggroup.now.removeUser(clientId);
+		
+	}
 });
 
 everyone.now.onclientload = function() {
@@ -50,10 +56,17 @@ everyone.now.onclientload = function() {
 		this.now.onjoin(i, user[i]);
 	}
 	user[this.user.clientId] = "";
+	if (kinggroup.now.count < 1) {
+		kinggroup.now.addUser(this.user.clientId);
+	}
 }
 
 everyone.now.changeSong = function(songid) {
 	everyone.now.loadSong(songid, 0);
+}
+
+everyone.now.currentSong = function() {
+	this.now.loadSong(nowjs.getClient(i, function(){this.now.}), nowjs.getClient(i, this.now.giveTime()));
 }
 
 everyone.now.appendtext = function(text) {
