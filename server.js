@@ -50,11 +50,14 @@ everyone.on('disconnect', function() {
 everyone.on('connect', function() { });
 
 everyone.now.bugTest = function() {
-	console.log("KINGS: " + kingId);
+	console.log("KING: " + kingId);
 	console.log("EVERYONE: " + everyone.count);
-	console.log("King Song: " + nowjs.getClient(kingId, function() {this.now.giveSong()}));
-	console.log("King Time: " + nowjs.getClient(kingId, function() {this.now.giveTime()}));
-	
+	nowjs.getClient(kingId, function() {this.now.reportSong()});
+}
+
+everyone.now.songTest = function(songid, time) {
+	console.log("King Song: " + songid);
+	console.log("King Time: " + time);
 }
 
 everyone.now.becomeKing = function() {
@@ -75,6 +78,10 @@ everyone.now.onclientload = function() {
 	user[this.user.clientId] = "";
 }
 
+everyone.now.consolePrint = function(text) {
+	console.log(text);
+}
+
 everyone.now.changeSong = function(songid) {
 	everyone.now.loadSong(songid, 0);
 }
@@ -83,12 +90,9 @@ everyone.now.setSong = function(cId, songid, loc) {
 	nowjs.getClient(cId, function() {this.now.loadSong(songid, loc)});
 }
 
-everyone.now.myId = function() {
-	return this.now.clientId;
-}
-
-everyone.now.kingSong = function(cId) {
-	nowjs.getClient(kingId, function() {this.now.giveData(cId)});
+everyone.now.kingSong = function() {
+	var callerId = this.user.clientId;
+	nowjs.getClient(kingId, function() {this.now.giveData(callerId)});
 	//kinggroup.now.giveData(this.now.clientId);
 	//this.now.loadSong(nowjs.getClient(i, function(){this.now.}), nowjs.getClient(i, this.now.giveTime()));
 }
