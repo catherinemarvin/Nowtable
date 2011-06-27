@@ -11,19 +11,22 @@
 <script>
 $(document).ready(function(){
 	now.giveData = function(cId) {
-		now.setSong(
+		/*now.setSong(
 			cId, 
 			$("#jquery_jplayer_1").data("jPlayer").status.src, 
 			$("#jquery_jplayer_1").data("jPlayer").status.currentTime
-		);
+		);*/
+		now.setSong(cId,"/play/3.m4a",30);
 	}
 	
 	now.giveSong = function() { 
-		return $("#jquery_jplayer_1").data("jPlayer").status.src;
+		//return $("#jquery_jplayer_1").data("jPlayer").status.src;
+		return "/play/3.m4a";
 	}
 	
 	now.giveTime = function() {
-		return $("#jquery_jplayer_1").data("jPlayer").status.currentTime;
+		//return $("#jquery_jplayer_1").data("jPlayer").status.currentTime;
+		return 30;
 	}
 
 	now.loadSong = function(songid, position) {
