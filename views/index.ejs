@@ -46,15 +46,18 @@ $(document).ready(function(){
 	now.ready(function(){
 		now.onclientload();
 		$("#jquery_jplayer_1").jPlayer({
-        		ready: function () {
-          		$(this).jPlayer("setMedia", {
-            		m4a: "http://www.jplayer.org/audio/m4a/Miaow-07-Bubble.m4a",
-            		oga: "http://www.jplayer.org/audio/ogg/Miaow-07-Bubble.ogg"
-          	});
-        },
-        swfPath: "/",
-        supplied: "m4a, oga"
-      });
+        	ready: function () {
+         	$(this).jPlayer("setMedia", {
+         		mp3: "/play/1.mp3",
+         		mp3: "/play/2.mp3",
+         		m4a: "/play/3.m4a"
+         	});
+       	},
+       	swfPath: "/",
+        	supplied: "mp3, m4a, oga",
+        	preload: "auto",
+        	volume: 1
+		});
 	});
 
 	now.deleteUser = function(id){
@@ -104,7 +107,9 @@ $(document).ready(function(){
     </div>
   </div>
   
-<div id="buttons"><button type="button" onclick="now.loadSong('/play/3.m4a', 0)">NEXT</button>
+<div id="buttons"><button type="button" onclick="now.loadSong('/play/1.mp3', 0)">Song 1</button>
+<button type="button" onclick="now.loadSong('/play/2.mp3', 0)">Song 2</button>
+<button type="button" onclick="now.loadSong('/play/3.m4a', 0)">Song 3</button>
 <button type="button" onclick="now.changeSong('/play/3.m4a')">All New</button>
 <button type="button" onclick="now.becomeKing()">Become King</button>
 <button type="button" onclick="now.kingSong()">Sync</button>
