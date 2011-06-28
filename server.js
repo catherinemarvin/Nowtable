@@ -28,10 +28,10 @@ server.get('/', function(req, res){
 server.get('/play/:song', function(req, res) {
 	filePath = path.join(__dirname, "/static/music", req.param('song'));
 	stat = fs.statSync(filePath);
-	res.header('content-type', 'audio/m4a');
+	res.header('content-type', 'audio/mp3');
 	res.header('content-length', stat.size);
 	res.sendfile(filePath);
-	});
+});
 
 server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
@@ -44,10 +44,24 @@ var kingId = 0;
 
 everyone.on('disconnect', function() {
 	delete user[this.user.clientId];
+	if (everyone.count == 0) {
+   	kingId = 0;
+   } else {
+		if (kingId == this.user.clientId) {
+			for (var i in user) {
+				kingId = i;
+				break;
+			}
+   	}
+   }
    everyone.now.deleteUser(this.user.clientId);
 });
 
-everyone.on('connect', function() { });
+everyone.on('connect', function() {
+	if (kingId == 0) {
+		kingId = this.user.clientId;
+	}
+});
 
 everyone.now.bugTest = function() {
 	console.log("KING: " + kingId);
@@ -62,16 +76,17 @@ everyone.now.songTest = function(songid, time) {
 
 everyone.now.becomeKing = function() {
 	kingId = this.user.clientId;
-	
-	//kinggroup.addUser(this.user.clientId);
+	console.log("New King: " + this.user.clientId);
+}
+
+everyone.now.syncToMe = function(state) {
+	if (kingId == this.user.clientId) {
+		everyone.now.kingSong(state); //Need a function to do this to everyone except the caller (only exists in nowjs 0.7)
+	}
 }
 
 everyone.now.onclientload = function() {
-	everyone.now.onjoin(this.user.clientId, "");everyone.now.becomeKing = function() {
-	kingId = this.user.clientId;
-	
-	//kinggroup.addUser(this.user.clientId);
-}
+	everyone.now.onjoin(this.user.clientId, "");
 	for (var i in user) {
 		this.now.onjoin(i, user[i]);
 	}
@@ -83,18 +98,16 @@ everyone.now.consolePrint = function(text) {
 }
 
 everyone.now.changeSong = function(songid) {
-	everyone.now.loadSong(songid, 0);
+	everyone.now.loadSong(songid, 0, "play");
 }
 
-everyone.now.setSong = function(cId, songid, loc) {
-	nowjs.getClient(cId, function() {this.now.loadSong(songid, loc)});
+everyone.now.setSong = function(cId, songid, loc, state) {
+	nowjs.getClient(cId, function() {this.now.loadSong(songid, loc, state)});
 }
 
-everyone.now.kingSong = function() {
+everyone.now.kingSong = function(state) {
 	var callerId = this.user.clientId;
-	nowjs.getClient(kingId, function() {this.now.giveData(callerId)});
-	//kinggroup.now.giveData(this.now.clientId);
-	//this.now.loadSong(nowjs.getClient(i, function(){this.now.}), nowjs.getClient(i, this.now.giveTime()));
+	nowjs.getClient(kingId, function() {this.now.giveData(callerId, state)}); 
 }
 
 everyone.now.appendtext = function(text) {

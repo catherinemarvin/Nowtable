@@ -10,25 +10,22 @@
 <link rel="stylesheet" href="/master.css">
 <script>
 $(document).ready(function(){
-	now.giveData = function(cId) {
+	now.giveData = function(cId, state) {
 		now.setSong(
 			cId, 
 			$("#jquery_jplayer_1").data("jPlayer").status.src, 
-			$("#jquery_jplayer_1").data("jPlayer").status.currentTime
+			$("#jquery_jplayer_1").data("jPlayer").status.currentTime,
+			state
 		);
 	}
 	
 	now.reportSong = function() { 
 		now.songTest($("#jquery_jplayer_1").data("jPlayer").status.src, $("#jquery_jplayer_1").data("jPlayer").status.currentTime);
 	}
-	
-	now.giveTime = function() {
-		return 30;
-	}
 
-	now.loadSong = function(songid, position) {
+	now.loadSong = function(songid, position, state) {
 		$("#jquery_jplayer_1").jPlayer("setMedia", { m4a: songid });
-		$("#jquery_jplayer_1").jPlayer( "play", position);
+		$("#jquery_jplayer_1").jPlayer( state, position);
 	}
 
 	now.onjoin = function(id, text){
@@ -54,9 +51,14 @@ $(document).ready(function(){
          	});
        	},
         	supplied: "mp3, m4a, oga",
-        	solution: "flash, html",
         	preload: "auto",
         	volume: 1
+		});
+		$("#jquery_jplayer_1").bind($.jPlayer.event.play, function() { // Bind an event handler to the instance's play event.
+  			now.syncToMe("play"); // sync all other players to this one but play them.
+		});
+		$("#jquery_jplayer_1").bind($.jPlayer.event.pause, function() { // Bind an event handler to the instance's play event.
+  			now.syncToMe("pause"); // sync all other players to this one but pause them.
 		});
 	});
 
@@ -107,12 +109,12 @@ $(document).ready(function(){
     </div>
   </div>
   
-<div id="buttons"><button type="button" onclick="now.loadSong('/play/1.mp3', 0)">Song 1</button>
-<button type="button" onclick="now.loadSong('/play/2.mp3', 0)">Song 2</button>
-<button type="button" onclick="now.loadSong('/play/3.m4a', 0)">Song 3</button>
+<div id="buttons"><button type="button" onclick="now.loadSong('/play/1.mp3', 0, 'play')">Song 1</button>
+<button type="button" onclick="now.loadSong('/play/2.mp3', 0, 'play')">Song 2</button>
+<button type="button" onclick="now.loadSong('/play/3.m4a', 0, 'play')">Song 3</button>
 <button type="button" onclick="now.changeSong('/play/3.m4a')">All New</button>
 <button type="button" onclick="now.becomeKing()">Become King</button>
-<button type="button" onclick="now.kingSong()">Sync</button>
+<button type="button" onclick="now.kingSong('play')">Sync</button>
 <button type="button" onclick="now.bugTest()">Bug Test</button></div>
 
 <div id="testid"></div>
