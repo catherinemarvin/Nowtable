@@ -114,3 +114,19 @@ everyone.now.appendtext = function(text) {
 	user[this.user.clientId] += text;
 	everyone.now.refreshtext(this.user.clientId, text);
 }
+
+everyone.now.getSongList = function() {
+	var myId = this.user.clientId;
+	fs.readdir("static/music", function (err, files) {
+		nowjs.getClient(myId, function() {
+			for (var i in files) {
+				var pattern = new RegExp("(\.mp3|\.m4a|\.ogg|\.oga)$","i");
+				if (files[i].search(pattern) == -1) {
+				} else {
+					this.now.refreshtext("songlistdiv", files[i]);
+				}
+			}
+			this.now.refreshtext("songlistdiv", "hurr durr")
+                });
+	});
+}
