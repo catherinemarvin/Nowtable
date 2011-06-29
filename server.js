@@ -81,7 +81,12 @@ everyone.now.becomeKing = function() {
 
 everyone.now.syncToMe = function(state) {
 	if (kingId == this.user.clientId) {
-		everyone.now.kingSong(state); //Need a function to do this to everyone except the caller (only exists in nowjs 0.7)
+		for (var i in user) {
+			if (i == kingId) { } else {
+				nowjs.getClient(i, function() {this.now.kingSong(state)});
+			}
+		}
+		//everyone.now.kingSong(state); Need a function to do this to everyone except the caller (only exists in nowjs 0.7)
 	}
 }
 
