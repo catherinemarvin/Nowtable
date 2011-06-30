@@ -143,7 +143,6 @@ everyone.now.getSongList = function() {
 					this.now.appendSong(files[i]);
 				}
 			}
-			this.now.refreshtext("songlistdiv", "hurr durr")
-                });
+		});
 	});
 }
