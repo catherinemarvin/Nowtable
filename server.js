@@ -131,7 +131,6 @@ everyone.now.getSongList = function() {
 					this.now.refreshtext("songlistdiv", files[i]);
 				}
 			}
-			this.now.refreshtext("songlistdiv", "hurr durr")
-                });
+		});
 	});
 }
