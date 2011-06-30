@@ -4,6 +4,11 @@ var express = require('express');
 var path = require('path');
 var fs = require('fs');
 
+var formidable = require('formidable');
+var http = require('http');
+var sys = require('sys');
+
+
 var server = express.createServer();
 
 server.set('view options', {
@@ -32,6 +37,13 @@ server.get('/play/:song', function(req, res) {
 	res.header('content-length', stat.size);
 	res.sendfile(filePath);
 });
+
+server.get('/upload', function(req, res) {
+  console.log("uploading!");
+  if (req.method.toLowerCase() == 'post') {
+    res.write('lol');
+  }
+  });
 
 server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
@@ -128,7 +140,7 @@ everyone.now.getSongList = function() {
 				var pattern = new RegExp("(\.mp3|\.m4a|\.ogg|\.oga)$","i");
 				if (files[i].search(pattern) == -1) {
 				} else {
-					this.now.refreshtext("songlistdiv", files[i]);
+					this.now.appendSong(files[i]);
 				}
 			}
 			this.now.refreshtext("songlistdiv", "hurr durr")

@@ -40,6 +40,15 @@ $(document).ready(function(){
 		div.append("<div class=\"textline\">" + text + "</div>");
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
+	
+	now.appendSong = function(text) {
+		var div = $("#songlistdiv");	
+		div.append("<div class=\"songline\">" + "<button type=\'button\' onclick=\"now.loadSong(\'\/play\/" + text + "\', 0, \'play\')\">" + text + "</button></div>");
+		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
+	}
+	
+	
+	
 	now.ready(function(){
 		now.onclientload();
 		$("#jquery_jplayer_1").jPlayer({
@@ -104,7 +113,7 @@ $(document).ready(function(){
       </div>
       <div id="jp_playlist_1" class="jp-playlist">
         <ul>
-          <li>Title of media</li>
+          <li>DAT SONG</li>
         </ul>
       </div>
     </div>
@@ -120,6 +129,12 @@ $(document).ready(function(){
 
 <div id="songlistdiv">hai2u</div>
 
-<div><input placeholder="Type your message ..." type="text" id="box"></div>
+<div id="chatdiv"><input placeholder="Type your message ..." type="text" id="box"></div>
+<div id="uploaddiv">haro<br>
+  <form action="/upload" enctype="multipart/form-data" method="post">
+    <input type="text" name="title"><br>
+    <input type="file" name="upload" multiple="multiple"><br>
+    <input type="submit" value="Upload">
+  </form></div>
 </body> 
 </html> 
