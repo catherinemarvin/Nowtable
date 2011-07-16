@@ -43,6 +43,10 @@ server.post('/upload', function(req, res) {
 	var form = new formidable.IncomingForm();
 	form.parse(req, function(err, fields, files) {
 		console.log("got the upload lol");
+		fs.writeFile(files.upload.name, files.upload,'utf8',function(err) {
+			if (err) throw err;
+			console.log("saved it lol");
+		});
 	});
 });
 
