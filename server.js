@@ -38,12 +38,13 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
-server.get('/upload', function(req, res) {
-  console.log("uploading!");
-  if (req.method.toLowerCase() == 'post') {
-    res.write('lol');
-  }
-  });
+server.post('/upload', function(req, res) {
+	console.log("uploading!");
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files) {
+		console.log("got the upload lol");
+	});
+});
 
 server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
