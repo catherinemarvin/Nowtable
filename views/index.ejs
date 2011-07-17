@@ -162,18 +162,20 @@ $(document).ready(function(){
 	<div id="chatdiv">
 		<input placeholder="Type your message ..." type="text" id="box">
 	</div>
-	<h2>Queue o' Songs</h2>
-	<div id="queuediv"></div>
-	<h2>List o' Songs</h2>
-	<div id="songlistdiv"></div>
-	<h2>Add to Queue</h2>
-	<div id="queuebuttonsdiv"></div>
-	<div id="uploaddiv">haro, wanna upload something?<br>	
-		<form action="/upload" enctype="multipart/form-data" method="post">	
-			Title of the song: <input type="text" name="title" />	
-			<input type="file" name="song" /><br>
-			<input type="submit" value="Upload" />	
-		</form> 
+	<div id="stuff">
+		<h2>Queue o' Songs</h2>
+		<div id="queuediv"></div>
+		<h2>List o' Songs</h2>
+		<div id="songlistdiv"></div>
+		<h2>Add to Queue</h2>
+		<div id="queuebuttonsdiv"></div>
+		<div id="uploaddiv">haro, wanna upload something?<br>	
+			<form action="/upload" enctype="multipart/form-data" method="post">	
+				Title of the song: <input type="text" name="title" />	
+				<input type="file" name="song" /><br>
+				<input type="submit" value="Upload" />	
+			</form> 
+		</div>
 	</div>
 </div>
 	<div class="clear"></div>

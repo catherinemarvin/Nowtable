@@ -22,6 +22,10 @@ body {
 	float: left;
 }
 
+#stuff {
+	float: left;
+}
+
 #queuediv {
 	float: right;
 }
