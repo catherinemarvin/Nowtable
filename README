@@ -1,5 +1,6 @@
 NOWTABLE IS THE FUTURE!
 
-A real-time DJing service built on Node, Express, and Now.
+A real-time DJing service built on Node and Now!
 
-NowTable requires now, ejs, and express.
+Dependencies: Node, Express, Now, Connect-Form. 
+
