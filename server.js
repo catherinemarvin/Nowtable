@@ -68,6 +68,8 @@ server.post('/upload', function(req, res, next) {
 		} else {
 			//now rename the song!!!
 			fs.rename(files.song.path, __dirname + "/static/music/" + fields.title + ".mp3", function() {
+				everyone.now.wipeSongDiv();
+				everyone.now.getSongList();
 			});
 			res.redirect('back');
 		}
@@ -84,12 +86,12 @@ server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
 
 var nowjs = require('now');
-var everyone = nowjs.initialize(server);
+var everyone = nowjs.initialize(server, {socketio:{"log level": process.argv[2]}});
 
 var kinggroup = nowjs.getGroup("king");
 var kingId = 0;
 
-everyone.on('disconnect', function() {
+nowjs.on('disconnect', function() {
 	delete user[this.user.clientId];
 	if (everyone.count == 0) {
    	kingId = 0;
@@ -104,7 +106,7 @@ everyone.on('disconnect', function() {
    everyone.now.deleteUser(this.user.clientId);
 });
 
-everyone.on('connect', function() {
+nowjs.on('connect', function() {
 	if (kingId == 0) {
 		kingId = this.user.clientId;
 	}
