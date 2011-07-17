@@ -68,6 +68,8 @@ server.post('/upload', function(req, res, next) {
 		} else {
 			//now rename the song!!!
 			fs.rename(files.song.path, __dirname + "/static/music/" + fields.title + ".mp3", function() {
+				everyone.now.wipeSongDiv();
+				everyone.now.getSongList();
 			});
 			res.redirect('back');
 		}
