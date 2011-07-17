@@ -23,6 +23,9 @@ var user = {};
 var songs = {};
 var songQueue = [];
 
+var currentSonguId = 0;
+var currentSongsId = 0;
+
 server.set('view engine', 'ejs');
 
 // Configuration
@@ -177,23 +180,28 @@ everyone.now.appendtext = function(text) {
 
 everyone.now.playNextSong = function() {
 	if (this.user.clientId == kingId) {
-		everyone.now.changeSong(songQueue.shift().sId);
+		var nextSong = songQueue.shift();
+		everyone.now.changeSong(nextSong.sId);
 		everyone.now.wipeQueueDiv();
 		everyone.now.getQueueList();
+		currentSonguId = nextSong.uId;
+		currentSongsId = nextSong.sId;
+		everyone.now.setTitleSong(nextSong.uId, nextSong.sId);
 	}
 }
 
 everyone.now.getCurrentSong = function() {
 	myId = this.user.clientId;
 	if (kingId == myId) {
-		if (songQueue.length > 0) {
+		/*if (songQueue.length > 0) {
 			this.now.playNextSong();
 		} else {
 			
-		}
+		}*/
 	} else {
 		if (songQueue.length > 0) {
 			this.now.kingSong("play");
+			everyone.now.setTitleSong(currentSonguId, currentSongsId);
 		} else {
 			
 		}

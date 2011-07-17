@@ -67,6 +67,11 @@ $(document).ready(function(){
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
+	now.setTitleSong = function(uId, sId) {
+		$(".artist").replaceWith(uId);
+		$(".title").replaceWith(sId);
+	}
+	
 	now.wipeSongDiv = function() {
 		$("#songlistdiv").empty();
 	}
@@ -187,6 +192,7 @@ $(document).ready(function(){
   <div id="content">
   	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>
   	<div class="button" id="sync" onclick="now.getCurrentSong()">sync</div>
+  	<div class="button" id="sync" onclick="now.playNextSong()">next</div>
   	 <!--jplayer-->
 		<div id="jquery_jplayer_1" class="jp-jplayer"></div>
 			<div class="jp-audio">
