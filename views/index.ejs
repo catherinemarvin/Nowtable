@@ -11,6 +11,8 @@
 <script type="text/javascript" src="jquery.marquee.js"></script>
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script src="/nowjs/now.js"></script>
+
+<!-- begin the Javascript business -->
 <script type="text/javascript">
 
 var playing = false;
@@ -27,6 +29,7 @@ $(document).ready(function(){
 		);
 	}
 	
+	//this is a bug testing function. It simply prints out the King's song and time to the console.
 	now.reportSong = function() { 
 		now.songTest($("#jquery_jplayer_1").data("jPlayer").status.src, $("#jquery_jplayer_1").data("jPlayer").status.currentTime);
 	}
@@ -112,6 +115,7 @@ $(document).ready(function(){
 		$("#" + id).remove();
 	}
 
+	//this just means append your text when you press enter.
 	$("#box").keypress(function(e){
 		if(e.which == '13') {
 			now.appendtext($("#box").val());
@@ -135,7 +139,9 @@ $(document).ready(function(){
     }
     playing = !playing;
   });
+  /*
   $('#muteunmute').click(function(){
+  	console.log("Mute status: " + muted);
     var btn = $(this);
     if(muted) {
     	$("#jquery_jplayer_1").jPlayer("volumeMax");
@@ -149,6 +155,23 @@ $(document).ready(function(){
       });
     }
     muted = !muted;
+  });
+  */
+  $('#muteunmute').click(function() {
+  	console.log("Mute status: " + muted);
+  	var btn = $(this);
+  	if (muted) {
+  		$("#jquery_jplayer_1").jPlayer("unmute");
+  		btn.stop().animate({opacity: 0}, 150, function() {
+  			btn.text("mute").animate({opacity: 1}, 300);
+  		});
+  	} else {
+  		$("#jquery_jplayer_1").jPlayer("mute");
+  		btn.stop().animate({opacity: 0}, 150, function() {
+  			btn.text("unmute").animate({opacity: 1}, 300);
+  		});
+  	}
+  	muted = !muted;
   });
   
   $('#addbtn').click(function(){
