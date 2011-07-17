@@ -43,7 +43,7 @@ $(document).ready(function(){
 	
 	now.appendSong = function(text) {
 		var div = $("#songlistdiv");	
-		div.append("<div class=\"songline\">" + "<button type=\'button\' onclick=\"now.loadSong(\'\/play\/" + text + "\', 0, \'play\')\">" + text + "</button></div>");
+		div.append("<div class=\"songline\">" + "<button type=\'button\' onclick=\"now.loadSong(\'\/play\/" + text + "\', 0, \'play\')\">" + text.split(".mp3")[0].split(".m4a")[0] + "</button></div>");
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
@@ -132,9 +132,9 @@ $(document).ready(function(){
 		
 		<!--buttons-->
 	<div id="buttons">
-		<button type="button" onclick="now.becomeKing()">Become King</button>
-		<button type="button" onclick="now.kingSong('play')">Sync</button>
-		<button type="button" onclick="now.bugTest()">Bug Test</button>
+		<button type="button" class="button" onclick="now.becomeKing()">Become King</button>
+		<button type="button" class="button" onclick="now.kingSong('play')">Sync</button>
+		<button type="button" class="button" onclick="now.bugTest()">Bug Test</button>
 	</div>
 		<!--end buttons-->
 	
