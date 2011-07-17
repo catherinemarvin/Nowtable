@@ -2,6 +2,34 @@ body {
 	background-color: #666;
 }
 
+#wrapper {
+	width: 800px; 
+	margin: 0 auto;
+}
+
+#header {
+	padding: 10px;
+	font-family: Helvetica, Arial;
+	font-size: 32px;
+	line-height: 150%;
+}
+
+#main {
+	min-height: 500px;
+}
+
+#chatdiv {
+	float: left;
+}
+
+#queuediv {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
 #chatdiv input {
 	border:0;
 	font-size: 26px;
@@ -13,6 +41,12 @@ body {
 	box-shadow: #333 3px 3px 15px;
 	
 }
+
+#footer {
+	margin: 0 auto;
+	text-align: center;
+}
+
 
 .chat { 
 	color: #ccc;
