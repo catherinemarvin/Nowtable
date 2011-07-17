@@ -34,6 +34,7 @@ $(document).ready(function(){
 		console.log('state is: ' + state);
 		
 		console.log('playing is: ' + playing);
+		
 		var btn = $('#playpause');
 		if (state == 'play' && playing) {
 			//don't animate
@@ -149,22 +150,35 @@ $(document).ready(function(){
 		}
 		
 	});	
-	
+
+	/*
   $('#playpause').click(function(){
     var btn = $(this);
     if(playing) {
     	$("#jquery_jplayer_1").jPlayer("pause");
-      btn.stop().animate({opacity: 0}, 150, function(){
-        btn.text("pause").animate({opacity: 1}, 300);
+      //btn.stop().animate({opacity: 0}, 150, function(){
+      //  btn.text("pause").animate({opacity: 1}, 300);
       });
     } else {
     	$("#jquery_jplayer_1").jPlayer("play");
-      btn.stop().animate({opacity: 0}, 150, function(){
-        btn.text("play").animate({opacity: 1}, 300);
+      //btn.stop().animate({opacity: 0}, 150, function(){
+      //  btn.text("play").animate({opacity: 1}, 300);
       });
     }
     playing = !playing;
   });
+  
+  */
+  
+  $('#playpause').click(function() {
+  	if (playing) {
+  		now.syncToMe('pause');
+  	} else {
+  		now.syncToMe('play');
+  	}
+
+
+});
   /*
   $('#muteunmute').click(function(){
   	console.log("Mute status: " + muted);
