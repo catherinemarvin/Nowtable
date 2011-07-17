@@ -7,9 +7,13 @@ var fs = require('fs');
 var formidable = require('formidable');
 var http = require('http');
 var sys = require('sys');
+var form = require('connect-form');
 
 
-var server = express.createServer();
+
+var server = express.createServer(
+	form({keepExtensions: true, uploadDir: __dirname+"/static/music"})
+);
 
 server.set('view options', {
 layout: false
@@ -38,17 +42,41 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
+/*
 server.post('/upload', function(req, res) {
-	console.log("uploading!");
 	var form = new formidable.IncomingForm();
 	form.parse(req, function(err, fields, files) {
-		console.log("got the upload lol");
-		fs.writeFile(files.upload.name, files.upload,'utf8',function(err) {
+		console.log("GONNA PARSE THE UPLOAD!");
+		//var finalDestination = '/static/music/' + files.upload.name;
+		//console.log(finalDestination);
+		fs.writeFile(files.song.name, files.song, 'utf8', function(err) {
 			if (err) throw err;
 			console.log("saved it lol");
 		});
 	});
 });
+
+*/
+
+
+
+server.post('/upload', function(req, res, next) {
+	console.log("starting upload");
+	req.form.complete(function(err, fields, files) {
+		if (err) {
+			next(err);
+		} else {
+			console.log('\nuploaded %s to %s', files.song.filename, files.song.path);
+			res.redirect('back');
+		}
+	});
+	req.form.on('progress', function(bytesReceived, bytesExpected) {
+		var percent = (bytesReceived / bytesExpected * 100) | 0;
+		process.stdout.write('Uploading: %' + percent + '\r');
+	});
+});
+
+
 
 server.listen(80);
 console.log("Express server listening on port %d", server.address().port);

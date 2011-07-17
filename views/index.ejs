@@ -130,11 +130,12 @@ $(document).ready(function(){
 <div id="songlistdiv">list o' songs</div>
 
 <div id="chatdiv"><input placeholder="Type your message ..." type="text" id="box"></div>
+
 <div id="uploaddiv">haro, wanna upload something?<br>
   <form action="/upload" enctype="multipart/form-data" method="post">
-    <input type="text" name="title"><br>
-    <input type="file" name="upload" multiple="multiple"><br>
-    <input type="submit" value="Upload">
-  </form></div>
+    <input type="file" name="song" /><br>
+    <input type="submit" value="Upload" />
+  </form>
+</div>
 </body> 
 </html> 
