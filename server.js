@@ -66,7 +66,9 @@ server.post('/upload', function(req, res, next) {
 		if (err) {
 			next(err);
 		} else {
-			console.log('\nuploaded %s to %s', files.song.filename, files.song.path);
+			//now rename the song!!!
+			fs.rename(files.song.path, __dirname + "/static/music/" + fields.title + ".mp3", function() {
+			});
 			res.redirect('back');
 		}
 	});
