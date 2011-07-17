@@ -21,6 +21,7 @@ layout: false
 
 var user = {};
 var songs = {};
+var songQueue = [];
 
 server.set('view engine', 'ejs');
 
@@ -87,24 +88,27 @@ console.log("Express server listening on port %d", server.address().port);
 
 var nowjs = require('now');
 
-//herp logging shit
+//herp logging shit!
 var everyone = nowjs.initialize(server, {socketio:{"log level": process.argv[2]}});
 
 var kinggroup = nowjs.getGroup("king");
 var kingId = 0;
 
 nowjs.on('disconnect', function() {
+	var self = this;
 	delete user[this.user.clientId];
-	if (everyone.count == 0) {
-   	kingId = 0;
-   } else {
-		if (kingId == this.user.clientId) {
-			for (var i in user) {
-				kingId = i;
-				break;
-			}
+	everyone.count(function(count) {
+		if (count == 0) {
+   		kingId = 0;
+	   } else {
+			if (kingId == self.user.clientId) {
+				for (var i in user) {
+					kingId = i;
+					break;
+				}
+   		}
    	}
-   }
+   });
    everyone.now.deleteUser(this.user.clientId);
 });
 
@@ -116,7 +120,7 @@ nowjs.on('connect', function() {
 
 everyone.now.bugTest = function() {
 	console.log("KING: " + kingId);
-	console.log("EVERYONE: " + everyone.count);
+	everyone.count(function(count) {console.log("EVERYONE: " + count)});
 	nowjs.getClient(kingId, function() {this.now.reportSong()});
 }
 
@@ -163,12 +167,55 @@ everyone.now.setSong = function(cId, songid, loc, state) {
 
 everyone.now.kingSong = function(state) {
 	var callerId = this.user.clientId;
-	nowjs.getClient(kingId, function() {this.now.giveData(callerId, state)}); 
+	nowjs.getClient(kingId, function() {this.now.giveData(callerId, state)});
 }
 
 everyone.now.appendtext = function(text) {
 	user[this.user.clientId] += text;
 	everyone.now.refreshtext(this.user.clientId, text);
+}
+
+everyone.now.playNextSong = function() {
+	if (this.user.clientId == kingId) {
+		everyone.now.changeSong(songQueue.shift().sId);
+		everyone.now.wipeQueueDiv();
+		everyone.now.getQueueList();
+	}
+}
+
+everyone.now.getCurrentSong = function() {
+	myId = this.user.clientId;
+	if (kingId == myId) {
+		if (songQueue.length > 0) {
+			this.now.playNextSong();
+		} else {
+			
+		}
+	} else {
+		if (songQueue.length > 0) {
+			this.now.kingSong("play");
+		} else {
+			
+		}
+	}
+} 
+
+everyone.now.addToQueue = function(songid) {
+	var obj = {};
+	obj.uId = this.user.clientId;
+	obj.sId = songid;
+	songQueue.push(obj);
+	everyone.now.wipeQueueDiv();
+	everyone.now.getQueueList();
+}
+
+everyone.now.getQueueList = function() {
+	var myId = this.user.clientId;
+	nowjs.getClient(myId, function() {
+		for (var i in songQueue) {
+			this.now.displayQueueItem(songQueue[i].uId, songQueue[i].sId);
+		}
+	});
 }
 
 everyone.now.getSongList = function() {
@@ -180,6 +227,7 @@ everyone.now.getSongList = function() {
 				if (files[i].search(pattern) == -1) {
 				} else {
 					this.now.appendSong(files[i]);
+					this.now.appendQueue(files[i]);
 				}
 			}
 		});
