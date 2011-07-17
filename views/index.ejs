@@ -47,11 +47,25 @@ $(document).ready(function(){
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
+	now.appendQueue = function(text) {
+		var div = $("#queuebuttonsdiv");	
+		div.append("<div class=\"songline\">" + "<button type=\'button\' onclick=\"now.addToQueue(\'\/play\/" + text + "\')\">" + text + "</button></div>");
+		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
+	}
+	
+	now.displayQueueItem = function(uId, sId) {
+		var div = $("#queuediv");	
+		div.append("<h3>" + uId + ": " + sId + "</h3>");
+		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
+	}
+	
 	now.wipeSongDiv = function() {
 		$("#songlistdiv").empty();
 	}
 	
-	
+	now.wipeQueueDiv = function() {
+		$("#queuediv").empty();
+	}
 	
 	now.ready(function(){
 		now.onclientload();
@@ -73,7 +87,12 @@ $(document).ready(function(){
 		$("#jquery_jplayer_1").bind($.jPlayer.event.pause, function() { // Bind an event handler to the instance's play event.
   			now.syncToMe("pause"); // sync all other players to this one but pause them.
 		});
+		$("#jquery_jplayer_1").bind($.jPlayer.event.ended, function() { // Bind an event handler to the instance's play event.
+  			now.playNextSong(); // plays the next song, but checks to see if king. Only the king will tell everyone to change the song.
+		});
 		now.getSongList();
+		now.getQueueList();
+		now.getCurrentSong();
 	});
 
 	now.deleteUser = function(id){
@@ -123,15 +142,22 @@ $(document).ready(function(){
     </div>
   </div>
   
-<div id="buttons"><button type="button" onclick="now.loadSong('/play/1.mp3', 0, 'play')">Song 1</button>
-<button type="button" onclick="now.loadSong('/play/2.mp3', 0, 'play')">Song 2</button>
-<button type="button" onclick="now.loadSong('/play/3.m4a', 0, 'play')">Song 3</button>
-<button type="button" onclick="now.changeSong('/play/3.m4a')">All New</button>
-<button type="button" onclick="now.becomeKing()">Become King</button>
-<button type="button" onclick="now.kingSong('play')">Sync</button>
-<button type="button" onclick="now.bugTest()">Bug Test</button></div>
+<div id="buttons">
+	<button type="button" onclick="now.addToQueue('/play/1.mp3')">Song 1 to Queue</button>
+	<button type="button" onclick="now.changeSong('/play/3.m4a')">All New</button>
+	<button type="button" onclick="now.becomeKing()">Become King</button>
+	<button type="button" onclick="now.getCurrentSong()">Sync</button>
+	<button type="button" onclick="now.bugTest()">Bug Test</button>
+</div>
 
-<div id="songlistdiv">list o' songs</div>
+<h2>List o' Songs</h2>
+<div id="songlistdiv"></div>
+
+<h2>Add to Queue</h2>
+<div id="queuebuttonsdiv"></div>
+
+<h2>Queue o' Songs</h2>
+<div id="queuediv"></div>
 
 <div id="chatdiv"><input placeholder="Type your message ..." type="text" id="box"></div>
 
