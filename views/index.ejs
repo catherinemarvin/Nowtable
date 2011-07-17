@@ -1,15 +1,23 @@
 <!DOCTYPE HTML> 
 <html lang="en"> 
 <head> 
-<title>HERP CHAT</title> 
+<title>Nowtable - The future of music</title> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+<meta http-equiv="Content-Language" content="en-us"> 
 
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
-<script type="text/javascript" src="/jquery.jplayer.min.js"></script>
+<link href="/style.css" rel="stylesheet" type="text/css">
 <link type="text/css" href="/skin/jplayer.blue.monday.css" rel="stylesheet"/>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>  
+<script type="text/javascript" src="jquery.marquee.js"></script>
+<script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script src="/nowjs/now.js"></script>
-<link rel="stylesheet" href="/master.css">
-<script>
+<script type="text/javascript">
+
+var playing = false;
+var muted = false;
+
 $(document).ready(function(){
+	
 	now.giveData = function(cId, state) {
 		now.setSong(
 			cId, 
@@ -48,14 +56,14 @@ $(document).ready(function(){
 	}
 	
 	now.appendQueue = function(text) {
-		var div = $("#queuebuttonsdiv");	
+		var div = $("#addqueuelist");	
 		div.append("<div class=\"songline\">" + "<button type=\'button\' onclick=\"now.addToQueue(\'\/play\/" + text + "\')\">" + text + "</button></div>");
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
 	now.displayQueueItem = function(uId, sId) {
-		var div = $("#queuediv");	
-		div.append("<h3>" + uId + ": " + sId + "</h3>");
+		var div = $("#queue");	
+		div.append("<li><span class='artist'>" + uId + "</span> - <span class='title'>" + sId + "</span></li>");
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
@@ -64,7 +72,7 @@ $(document).ready(function(){
 	}
 	
 	now.wipeQueueDiv = function() {
-		$("#queuediv").empty();
+		$("#queue").empty();
 	}
 	
 	now.ready(function(){
@@ -105,19 +113,81 @@ $(document).ready(function(){
 			$("#box").val("");		
 		}
 		
-	});
+	});	
+	
+  $('#playpause').click(function(){
+    var btn = $(this);
+    if(playing) {
+    	$("#jquery_jplayer_1").jPlayer("pause");
+      btn.stop().animate({opacity: 0}, 150, function(){
+        btn.text("pause").animate({opacity: 1}, 300);
+      });
+    } else {
+    	$("#jquery_jplayer_1").jPlayer("play");
+      btn.stop().animate({opacity: 0}, 150, function(){
+        btn.text("play").animate({opacity: 1}, 300);
+      });
+    }
+    playing = !playing;
+  });
+  $('#muteunmute').click(function(){
+    var btn = $(this);
+    if(muted) {
+    	$("#jquery_jplayer_1").jPlayer("volumeMax");
+      btn.stop().animate({opacity: 0}, 150, function(){
+        btn.text("mute").animate({opacity: 1}, 300);
+      });
+    } else {
+    	$("#jquery_jplayer_1").jPlayer("volumeMin");
+      btn.stop().animate({opacity: 0}, 150, function(){
+        btn.text("unmute").animate({opacity: 1}, 300);
+      });
+    }
+    muted = !muted;
+  });
+  
+  $('#addbtn').click(function(){
+    $('#upload').slideUp(100);
+    $('#addqueue').slideToggle(300);
+  });
+ 
+  $('#uploadbtn').click(function(){
+    $('#addqueue').slideUp(100);
+    $('#upload').slideToggle(300);
+  });
+  
+  
 });
+
 </script>
+</head> 
+ 
+<body> 
 
 
-<body>
-
-<div id="wrapper">
-	<div id="header">
-	NOWTABLE
-	</div>
-	<div id ="main">
-		<!--jplayer-->
+<div id="main">
+  <div id="top">
+    <div id="text"><marquee scrollamount="4" width="575"><span class="artist">Cali Swag District</span> - <span class="title">Teach Me How To Dougie</span></marquee></div>
+    <div id="l"></div>
+    <div id="r"></div>
+  </div>
+  <div id="logo"><img src="images/logo.png"></div>
+  <div class="clear"></div>
+ 
+  <div id="upload">
+  	<div class="big">upload a new song</div>
+  	<form action="/upload" enctype="multipart/form-data" method="post">	
+				Title of the song: <input type="text" name="title" />	
+				<input type="file" name="song" /><br>
+				<input type="submit" value="Upload" />	
+	</form> 
+  </div>
+  <div id="addqueue"><div class="big">add to the song queue</div><div id="addqueuelist"></div></div>
+  
+  <div id="content">
+  	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>
+  	<div class="button" id="sync" onclick="now.getCurrentSong()">sync</div>
+  	 <!--jplayer-->
 		<div id="jquery_jplayer_1" class="jp-jplayer"></div>
 			<div class="jp-audio">
 			<div class="jp-type-single">
@@ -148,39 +218,22 @@ $(document).ready(function(){
 		</div>
 	</div>
 	<!--end jplayer-->
+	<div id="chatdiv"><input placeholder="Type your message ..." type="text" id="box"></div>
+  </div>
+  <div id="sidebar">
+    <div id="player">
+      <div class="button" id="uploadbtn">upload</div>
+    </div>
+    <div class="clear"></div>
+    <div class="big"><div class="left">queue</div><div class="right button" id="addbtn">+</div><div class="clear"></div></div>
+    <ul id="queue">
 		
-		<!--buttons-->
-	<div id="buttons">
-		<button type="button" onclick="now.becomeKing()">Become King</button>
-		<button type="button" onclick="now.getCurrentSong()">Sync</button>
-		<button type="button" onclick="now.bugTest()">Bug Test</button>
-	</div>
-		<!--end buttons-->
-	
-	<div class="clear"></div>
-	
-	<div id="chatdiv">
-		<input placeholder="Type your message ..." type="text" id="box">
-	</div>
-	<div id="stuff">
-		<h2>Queue o' Songs</h2>
-		<div id="queuediv"></div>
-		<h2>List o' Songs</h2>
-		<div id="songlistdiv"></div>
-		<h2>Add to Queue</h2>
-		<div id="queuebuttonsdiv"></div>
-		<div id="uploaddiv">haro, wanna upload something?<br>	
-			<form action="/upload" enctype="multipart/form-data" method="post">	
-				Title of the song: <input type="text" name="title" />	
-				<input type="file" name="song" /><br>
-				<input type="submit" value="Upload" />	
-			</form> 
-		</div>
-	</div>
+    </ul>
+    
+  </div>
+  
 </div>
-	<div class="clear"></div>
-   	<div id="footer">copyright lololol</div>
-</div> 
+
 
 
 </body> 

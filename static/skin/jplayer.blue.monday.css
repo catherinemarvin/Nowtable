@@ -429,6 +429,8 @@ div.jp-video-360p div.jp-video-play {
 div.jp-jplayer {
 	width:0px;
 	height:0px;
+	background-color: #000000;
+	margin-top: 55px;
 }
 div.jp-video div.jp-jplayer {
 	border:1px solid #009be3;
@@ -442,7 +444,4 @@ div.jp-video-270p div.jp-jplayer {
 div.jp-video-360p div.jp-jplayer {
 	width:640px;
 	height:360px;
-}
-div.jp-jplayer {
-	background-color: #000000;
 }
