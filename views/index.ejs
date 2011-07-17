@@ -29,6 +29,32 @@ $(document).ready(function(){
 		);
 	}
 	
+	now.setPlayButton = function(state) {
+	
+		console.log('state is: ' + state);
+		
+		console.log('playing is: ' + playing);
+		var btn = $('#playpause');
+		if (state == 'play' && playing) {
+			//don't animate
+			playing = true;
+		} else if (state == 'play' && !playing) {
+			//animate pause to play
+			btn.stop().animate({opacity: 0}, 150, function(){
+        		btn.text("play").animate({opacity: 1}, 300);
+      		});
+      		playing = true;
+		} else if (state == 'pause' && playing) {
+			//animate play to pause
+			btn.stop().animate({opacity: 0}, 150, function(){
+        		btn.text("pause").animate({opacity: 1}, 300);
+      		});
+      		playing = false;
+		} else  {
+			playing = false;
+		}
+	}
+	
 	//this is a bug testing function. It simply prints out the King's song and time to the console.
 	now.reportSong = function() { 
 		now.songTest($("#jquery_jplayer_1").data("jPlayer").status.src, $("#jquery_jplayer_1").data("jPlayer").status.currentTime);
