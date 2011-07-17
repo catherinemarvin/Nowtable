@@ -86,6 +86,8 @@ server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
 
 var nowjs = require('now');
+
+//herp logging shit
 var everyone = nowjs.initialize(server, {socketio:{"log level": process.argv[2]}});
 
 var kinggroup = nowjs.getGroup("king");
