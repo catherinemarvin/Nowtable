@@ -91,7 +91,7 @@ var everyone = nowjs.initialize(server);
 var kinggroup = nowjs.getGroup("king");
 var kingId = 0;
 
-everyone.on('disconnect', function() {
+nowjs.on('disconnect', function() {
 	delete user[this.user.clientId];
 	if (everyone.count == 0) {
    	kingId = 0;
@@ -106,7 +106,7 @@ everyone.on('disconnect', function() {
    everyone.now.deleteUser(this.user.clientId);
 });
 
-everyone.on('connect', function() {
+nowjs.on('connect', function() {
 	if (kingId == 0) {
 		kingId = this.user.clientId;
 	}
