@@ -21,6 +21,8 @@ var muted = false;
 $(document).ready(function(){
 	
 	now.giveData = function(cId, state) {
+		var state2 = "";
+		if ($("#jquery_jplayer_1").data("jPlayer").status.paused) {state2 = "pause";} else {state2 = "play";}
 		now.setSong(
 			cId, 
 			$("#jquery_jplayer_1").data("jPlayer").status.src, 
@@ -30,29 +32,25 @@ $(document).ready(function(){
 	}
 	
 	now.setPlayButton = function(state) {
-	
-		console.log('state is: ' + state);
-		
-		console.log('playing is: ' + playing);
-		
 		var btn = $('#playpause');
-		if (state == 'play' && playing) {
-			//don't animate
-			playing = true;
-		} else if (state == 'play' && !playing) {
-			//animate pause to play
-			btn.stop().animate({opacity: 0}, 150, function(){
-        		btn.text("play").animate({opacity: 1}, 300);
-      		});
-      		playing = true;
-		} else if (state == 'pause' && playing) {
+		if (state == 'play') {
 			//animate play to pause
 			btn.stop().animate({opacity: 0}, 150, function(){
         		btn.text("pause").animate({opacity: 1}, 300);
-      		});
-      		playing = false;
-		} else  {
-			playing = false;
+      	});
+		} else {
+			//animate play to pause
+			btn.stop().animate({opacity: 0}, 150, function(){
+        		btn.text("play").animate({opacity: 1}, 300);
+      	});
+		}
+	}
+	
+	now.setStateKing = function(state) {
+		if (state == 'play') {
+			$("#jquery_jplayer_1").jPlayer("play");
+		} else {
+			$("#jquery_jplayer_1").jPlayer("pause");
 		}
 	}
 	
@@ -64,6 +62,7 @@ $(document).ready(function(){
 	now.loadSong = function(songid, position, state) {
 		$("#jquery_jplayer_1").jPlayer("setMedia", { m4a: songid });
 		$("#jquery_jplayer_1").jPlayer( state, position);
+		everyone.now.setPlayButton(state);
 	}
 
 	now.onjoin = function(id, text){
@@ -124,12 +123,12 @@ $(document).ready(function(){
         	preload: "auto",
         	volume: 1
 		});
-		$("#jquery_jplayer_1").bind($.jPlayer.event.play, function() { // Bind an event handler to the instance's play event.
+		/*$("#jquery_jplayer_1").bind($.jPlayer.event.play, function() { // Bind an event handler to the instance's play event.
   			now.syncToMe("play"); // sync all other players to this one but play them.
 		});
 		$("#jquery_jplayer_1").bind($.jPlayer.event.pause, function() { // Bind an event handler to the instance's play event.
   			now.syncToMe("pause"); // sync all other players to this one but pause them.
-		});
+		});*/
 		$("#jquery_jplayer_1").bind($.jPlayer.event.ended, function() { // Bind an event handler to the instance's play event.
   			now.playNextSong(); // plays the next song, but checks to see if king. Only the king will tell everyone to change the song.
 		});
@@ -171,10 +170,11 @@ $(document).ready(function(){
   */
   
   $('#playpause').click(function() {
-  	if (playing) {
-  		now.syncToMe('pause');
+  	if ($("#jquery_jplayer_1").data("jPlayer").status.paused) {
+  		
+  		now.kingStateChange('play');
   	} else {
-  		now.syncToMe('play');
+  		now.kingStateChange('pause');
   	}
 
 
@@ -223,7 +223,6 @@ $(document).ready(function(){
     $('#addqueue').slideUp(100);
     $('#upload').slideToggle(300);
   });
-  
   
 });
 

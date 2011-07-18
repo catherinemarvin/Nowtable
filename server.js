@@ -139,15 +139,25 @@ everyone.now.becomeKing = function() {
 
 everyone.now.syncToMe = function(state) {
 	if (kingId == this.user.clientId) {
-		everyone.now.setPlayButton(state);
 		for (var i in user) {
-			if (i == kingId) { } else {
+			if (i == kingId) {
+				this.now.setStateKing(state);
+			} else {
 				nowjs.getClient(i, function() {this.now.kingSong(state)});
 			}
 		}
 		
 	}
+	everyone.now.setPlayButton(state);
 	
+}
+
+everyone.now.kingStateChange = function(state) {
+	if (kingId == this.user.clientId) {
+		this.now.syncToMe(state);
+	} else {
+		
+	}
 }
 
 everyone.now.onclientload = function() {
@@ -163,7 +173,8 @@ everyone.now.consolePrint = function(text) {
 }
 
 everyone.now.changeSong = function(songid) {
-	everyone.now.loadSong(songid, 0, "play");
+	this.now.loadSong(songid, 0, "play");
+
 }
 
 everyone.now.setSong = function(cId, songid, loc, state) {
@@ -183,7 +194,8 @@ everyone.now.appendtext = function(text) {
 everyone.now.playNextSong = function() {
 	if (this.user.clientId == kingId) {
 		var nextSong = songQueue.shift();
-		everyone.now.changeSong(nextSong.sId);
+		this.now.changeSong(nextSong.sId);
+		this.now.syncToMe("play");
 		everyone.now.wipeQueueDiv();
 		everyone.now.getQueueList();
 		currentSonguId = nextSong.uId;
