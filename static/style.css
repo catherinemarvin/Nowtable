@@ -86,7 +86,9 @@ html, body {
   float: left;
   font-size: 40px;
   width: 130px;
+  padding-right: 10px;
   color: #fff;
+  text-align: center;
   -webkit-transition:color 300ms ease-in;  
   -moz-transition:color 300ms ease-in;  
   -o-transition:color 300ms ease-in;  
@@ -197,4 +199,8 @@ html, body {
 .textline {
 	padding: 4px 0;
 	border-bottom: 1px dotted #444;
+}
+
+#muteunmute {
+	padding-right: 15px;
 }

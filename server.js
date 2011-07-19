@@ -59,7 +59,7 @@ server.post('/upload', function(req, res) {
 		});
 	});
 });
-
+pause
 */
 
 
@@ -192,7 +192,7 @@ everyone.now.appendtext = function(text) {
 }
 
 everyone.now.playNextSong = function() {
-	if (this.user.clientId == kingId) {
+	if (this.user.clientId == kingId && songQueue.length > 0) {
 		var nextSong = songQueue.shift();
 		this.now.changeSong(nextSong.sId);
 		this.now.syncToMe("play");
@@ -200,7 +200,7 @@ everyone.now.playNextSong = function() {
 		everyone.now.getQueueList();
 		currentSonguId = nextSong.uId;
 		currentSongsId = nextSong.sId;
-		everyone.now.setTitleSong(nextSong.uId, nextSong.sId);
+		everyone.now.setTitleSong(currentSonguId, currentSongsId);
 	}
 }
 
@@ -232,12 +232,11 @@ everyone.now.addToQueue = function(songid) {
 }
 
 everyone.now.getQueueList = function() {
-	var myId = this.user.clientId;
-	nowjs.getClient(myId, function() {
+
 		for (var i in songQueue) {
 			this.now.displayQueueItem(songQueue[i].uId, songQueue[i].sId);
 		}
-	});
+
 }
 
 everyone.now.getSongList = function() {
