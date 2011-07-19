@@ -92,12 +92,13 @@ $(document).ready(function(){
 	
 	now.displayQueueItem = function(uId, sId) {
 		var div = $("ul#queue");
-		div.append("<li><span class='artist'>" + uId + "</span> - <span class='title'>" + sId + "</span></li>");
+		div.append("<li><span class='qartist'>" + uId + "</span> - <span class='qtitle'>" + sId + "</span></li>");
 	}
 	
 	now.setTitleSong = function(uId, sId) {
-		$(".artist").replaceWith(uId);
-		$(".title").replaceWith(sId);
+		var div = $("#text");
+		div.empty();
+		div.append("<marquee scrollamount='6' width='575'><span class='artist'>" + uId + "</span> - <span class='title'>" + sId + "</span></marquee>");
 	}
 	
 	now.wipeSongDiv = function() {
@@ -108,15 +109,20 @@ $(document).ready(function(){
 		$("#queue").empty();
 	}
 	
+	now.displayUserItem = function(username) {
+		var div = $("#users");
+		div.append("<li><span class='username'>" + username + "</span></li>");
+	}
+	
+	now.wipeUsersDiv = function() {
+		$("#users").empty();
+	}
+	
+	
 	now.ready(function(){
 		now.onclientload();
 		$("#jquery_jplayer_1").jPlayer({
         	ready: function () {
-         	$(this).jPlayer("setMedia", {
-         		mp3: "/play/1.mp3",
-         		mp3: "/play/2.mp3",
-         		m4a: "/play/3.m4a"
-         	});
        	},
         	supplied: "mp3, m4a, oga",
         	preload: "auto",
@@ -133,6 +139,14 @@ $(document).ready(function(){
 		});
 		now.getSongList();
 		now.getQueueList();
+		var uname = "";
+		//while (uname == "") {
+			do {
+				uname = prompt("Please enter your name.","Slim Pickins");
+			}
+			while (uname == "");
+		//}
+		now.addToUsers(uname);
 		now.getCurrentSong();
 	});
 
@@ -233,7 +247,7 @@ $(document).ready(function(){
 
 <div id="main">
   <div id="top">
-    <div id="text"><marquee scrollamount="4" width="575"><span class="artist">Cali Swag District</span> - <span class="title">Teach Me How To Dougie</span></marquee></div>
+    <div id="text"><marquee scrollamount="4" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
     <div id="l"></div>
     <div id="r"></div>
   </div>
@@ -279,6 +293,10 @@ $(document).ready(function(){
     <div class="clear"></div>
     <div class="big"><div class="left">queue</div><div class="right button" id="addbtn">+</div><div class="clear"></div></div>
     <ul id="queue">
+		
+    </ul>
+    <div class="big"><div class="left">users</div><div class="right button" id="config">&#9881;</div><div class="clear"></div></div>
+    <ul id="users">
 		
     </ul>
     

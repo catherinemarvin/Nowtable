@@ -22,6 +22,7 @@ layout: false
 var user = {};
 var songs = {};
 var songQueue = [];
+var names = [];
 
 var currentSonguId = 0;
 var currentSongsId = 0;
@@ -113,6 +114,15 @@ nowjs.on('disconnect', function() {
    	}
    });
    everyone.now.deleteUser(this.user.clientId);
+   for (var i in names) {
+   	if (this.user.clientId == names[i].uId) {
+   		names.splice(i, 1)
+   		everyone.now.wipeUsersDiv();
+			everyone.now.getUserList();
+   	} else {
+   		//do nothing
+   	}
+   }
 });
 
 nowjs.on('connect', function() {
@@ -200,8 +210,24 @@ everyone.now.playNextSong = function() {
 		everyone.now.getQueueList();
 		currentSonguId = nextSong.uId;
 		currentSongsId = nextSong.sId;
+		console.log("uId: " + currentSonguId + ", sId: " + currentSongsId);
 		everyone.now.setTitleSong(currentSonguId, currentSongsId);
+	} else if (this.user.clientId == kingId) {
+		everyone.now.setTitleSong("nothing", "nothing");
+		currentSonguId = 0;
+		currentSongsId = 0;
+	} else {
+	
 	}
+}
+
+everyone.now.addToUsers = function(username) {
+	var obj = {};
+	obj.uId = this.user.clientId;
+	obj.username = username;
+	names.push(obj);
+	everyone.now.wipeUsersDiv();
+	everyone.now.getUserList();
 }
 
 everyone.now.getCurrentSong = function() {
@@ -224,7 +250,15 @@ everyone.now.getCurrentSong = function() {
 
 everyone.now.addToQueue = function(songid) {
 	var obj = {};
-	obj.uId = this.user.clientId;
+	var username = "";
+	for (var i in names) {
+		if (names[i].uId == this.user.clientId) {
+			username = names[i].username;
+		} else {
+			//do nothing
+		}
+	}
+	obj.uId = username;
 	obj.sId = songid;
 	songQueue.push(obj);
 	everyone.now.wipeQueueDiv();
@@ -232,11 +266,15 @@ everyone.now.addToQueue = function(songid) {
 }
 
 everyone.now.getQueueList = function() {
+	for (var i in songQueue) {
+		this.now.displayQueueItem(songQueue[i].uId, songQueue[i].sId);
+	}
+}
 
-		for (var i in songQueue) {
-			this.now.displayQueueItem(songQueue[i].uId, songQueue[i].sId);
-		}
-
+everyone.now.getUserList = function() {
+	for (var i in names) {
+		this.now.displayUserItem(names[i].username);
+	}
 }
 
 everyone.now.getSongList = function() {

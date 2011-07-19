@@ -133,6 +133,10 @@ html, body {
   width: auto;
 }
 
+#config {
+  width: auto;
+}
+
 #upload, #addqueue {
   background-color: #111;
   display: none;
@@ -162,6 +166,33 @@ html, body {
 
 #queue li:hover {
   background-color: #111;
+}
+
+#users li {
+  background-color: #000;
+  border-bottom: 1px solid #222;
+  white-space: nowrap;
+  padding: 5px 4px;
+  color: #fff;
+  height: 21px;
+  -webkit-transition:background-color 300ms ease-in;  
+  -moz-transition:background-color 300ms ease-in;  
+  -o-transition:background-color 300ms ease-in;  
+  transition:background-color 300ms ease-in;  
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  overflow-x: visible;
+}
+
+#users li:hover {
+  background-color: #111;
+}
+
+#config {
+	margin-top: 5px;
+	font-size: 22pt;
 }
 
 #chatdiv input {
