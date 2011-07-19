@@ -80,6 +80,7 @@ html, body {
 #sidebar {
   float: left;
   width: 270px;
+  overflow: hidden;
 }
 
 .button {
@@ -97,6 +98,19 @@ html, body {
   -webkit-user-select: none;
   -moz-user-select: none;
   user-select: none;
+}
+#uploadbtn {
+  text-align: left;
+}
+
+#submitname {
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.songline {
+	padding-left: 10px;
+	padding-right: 10px;
 }
 
 .button:hover {
@@ -137,7 +151,7 @@ html, body {
   width: auto;
 }
 
-#upload, #addqueue {
+#upload, #addqueue, #configdiv {
   background-color: #111;
   display: none;
   height: 300px;
@@ -184,6 +198,10 @@ html, body {
   user-select: none;
   cursor: pointer;
   overflow-x: visible;
+}
+
+.usernameme {
+  color: #01defe;
 }
 
 #users li:hover {

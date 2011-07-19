@@ -109,15 +109,34 @@ $(document).ready(function(){
 		$("#queue").empty();
 	}
 	
-	now.displayUserItem = function(username) {
+	now.displayUserItem = function(username, who) {
 		var div = $("#users");
-		div.append("<li><span class='username'>" + username + "</span></li>");
+		if (who) {
+			div.append("<li><span class='usernameme'>" + username + "</span></li>");
+		} else {
+			div.append("<li><span class='username'>" + username + "</span></li>");
+		}
 	}
 	
 	now.wipeUsersDiv = function() {
 		$("#users").empty();
 	}
 	
+	
+	now.requestNewUsername = function() {
+		var error = true;
+		var uname = "";
+		do {
+				if (error) {
+					uname = prompt("Username taken. Please enter a different name.","Slim Pickins");
+				} else {
+					uname = prompt("Please enter your name.","Slim Pickins");
+				}
+				error = false;
+			}
+			while (uname == "" || uname == null);
+			now.addToUsers(uname);
+	}
 	
 	now.ready(function(){
 		now.onclientload();
@@ -144,7 +163,7 @@ $(document).ready(function(){
 			do {
 				uname = prompt("Please enter your name.","Slim Pickins");
 			}
-			while (uname == "");
+			while (uname == "" || uname == null);
 		//}
 		now.addToUsers(uname);
 		now.getCurrentSong();
@@ -228,13 +247,21 @@ $(document).ready(function(){
   });
   
   $('#addbtn').click(function(){
-    $('#upload').slideUp(100);
-    $('#addqueue').slideToggle(300);
+    $('#upload').slideUp(200);
+    $('#configdiv').slideUp(200);
+    $('#addqueue').slideToggle(200);
   });
  
   $('#uploadbtn').click(function(){
-    $('#addqueue').slideUp(100);
-    $('#upload').slideToggle(300);
+    $('#addqueue').slideUp(200);
+    $('#configdiv').slideUp(200);
+    $('#upload').slideToggle(200);
+  });
+  
+  $('#config').click(function(){
+    $('#upload').slideUp(200);
+    $('#addqueue').slideUp(200);
+    $('#configdiv').slideToggle(200);
   });
   
 });
@@ -247,7 +274,7 @@ $(document).ready(function(){
 
 <div id="main">
   <div id="top">
-    <div id="text"><marquee scrollamount="4" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
+    <div id="text"><marquee scrollamount="6" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
     <div id="l"></div>
     <div id="r"></div>
   </div>
@@ -263,6 +290,14 @@ $(document).ready(function(){
 	</form> 
   </div>
   <div id="addqueue"><div class="big">add to the song queue</div><div id="addqueuelist"></div></div>
+  
+  <div id="configdiv">
+  	<div class="big">settings</div>
+  	<form name="namechangeform" action="" method="get">	
+				Change Username: <input type="text" name="uname"/>	
+				<input type="button" id="submitname" value="Submit" onclick="now.getCurrentSong()"/>	
+	</form> 
+  </div>
   
   <div id="content">
   	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>

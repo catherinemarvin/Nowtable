@@ -116,7 +116,7 @@ nowjs.on('disconnect', function() {
    everyone.now.deleteUser(this.user.clientId);
    for (var i in names) {
    	if (this.user.clientId == names[i].uId) {
-   		names.splice(i, 1)
+   		names[i].online = false;
    		everyone.now.wipeUsersDiv();
 			everyone.now.getUserList();
    	} else {
@@ -222,10 +222,28 @@ everyone.now.playNextSong = function() {
 }
 
 everyone.now.addToUsers = function(username) {
-	var obj = {};
-	obj.uId = this.user.clientId;
-	obj.username = username;
-	names.push(obj);
+	var test = false;
+	for (var i in names) {
+		if (username == names[i].username && !names[i].online) {
+			names[i].uId = this.user.clientId;
+			names[i].online = true;
+			test = true;
+		} else if (username == names[i].username && names[i].online) {
+			this.now.requestNewUsername();
+			test = true;
+		} else {
+			
+		}
+	}
+	if (!test) {
+		var obj = {};
+		obj.uId = this.user.clientId;
+		obj.username = username;
+		obj.online = true;
+		names.push(obj);
+	} else {
+	
+	}
 	everyone.now.wipeUsersDiv();
 	everyone.now.getUserList();
 }
@@ -273,7 +291,13 @@ everyone.now.getQueueList = function() {
 
 everyone.now.getUserList = function() {
 	for (var i in names) {
-		this.now.displayUserItem(names[i].username);
+		if (names[i].online) {
+			if (names[i].uId == this.user.clientId) {
+				this.now.displayUserItem(names[i].username, true);
+			} else {
+				this.now.displayUserItem(names[i].username, false);
+			}
+		}
 	}
 }
 
