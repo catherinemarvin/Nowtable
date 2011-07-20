@@ -75,7 +75,8 @@ $(document).ready(function(){
 	now.refreshtext = function(id, text) {
 		var div = $("#" + id);
 		div.append("<div class=\"textline\">" + text + "</div>");
-		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
+		//div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
+		$(".chat").scrollTop($(".chat")[0].scrollHeight);
 	}
 	
 	now.appendSong = function(text) {
@@ -178,7 +179,7 @@ $(document).ready(function(){
 	$("#box").keypress(function(e){
 		if(e.which == '13') {
 			now.appendtext($("#box").val());
-			$("#box").val("");		
+			$("#box").val("");
 		}
 		
 	});	
@@ -265,6 +266,24 @@ $(document).ready(function(){
     $('#configdiv').slideToggle(200);
   });
   
+  $('#closebtn').click(function(){
+    $('#upload').slideUp(200);
+    $('#addqueue').slideUp(200);
+    $('#configdiv').slideUp(200);
+  });
+  
+  $('#closebtn1').click(function(){
+    $('#upload').slideUp(200);
+    $('#addqueue').slideUp(200);
+    $('#configdiv').slideUp(200);
+  });
+  
+  $('#closebtn2').click(function(){
+    $('#upload').slideUp(200);
+    $('#addqueue').slideUp(200);
+    $('#configdiv').slideUp(200);
+  });
+  
 });
 
 </script>
@@ -283,6 +302,7 @@ $(document).ready(function(){
   <div class="clear"></div>
  
   <div id="upload">
+   <div class="right button" id="closebtn">close x</div>
   	<div class="big">upload a new song</div>
   	<form action="/upload" enctype="multipart/form-data" method="post">	
 				Title of the song: <input type="text" name="title" />	
@@ -290,9 +310,13 @@ $(document).ready(function(){
 				<input type="submit" value="Upload" />	
 	</form> 
   </div>
-  <div id="addqueue"><div class="big">add to the song queue</div><div id="addqueuelist"></div></div>
+  <div id="addqueue">
+  	<div class="right button" id="closebtn1">close x</div>
+  	<div class="big">add to the song queue</div><div id="addqueuelist"></div>
+  </div>
   
   <div id="configdiv">
+   <div class="right button" id="closebtn2">close x</div>
   	<div class="big">settings</div>
   	<form name="namechangeform" action="" method="get">	
 				Change Username: <input type="text" name="uname"/>	

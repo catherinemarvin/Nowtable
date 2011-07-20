@@ -26,12 +26,12 @@ mongoose.model('UserInfo', UserInfo);
 
 var user = db.model('UserInfo');
 
-/*
+
 var admin = new user();
 admin.username = "twilight sparkle";
 admin.password = "friendship is magic";
 admin.save();
-*/
+
 
 
 //here ends the MONGOOSE MAGIC
@@ -234,8 +234,16 @@ everyone.now.kingSong = function(state) {
 }
 
 everyone.now.appendtext = function(text) {
-	user[this.user.clientId] += text;
-	everyone.now.refreshtext(this.user.clientId, text);
+	var uname = "";
+	for (var i in names) {
+		if (names[i].uId == this.user.clientId) {
+			uname = names[i].username;
+		} else {
+			
+		}
+	}
+	user[this.user.clientId] += uname + ": " + text;
+	everyone.now.refreshtext(this.user.clientId, uname + ": " + text);
 }
 
 everyone.now.playNextSong = function() {
