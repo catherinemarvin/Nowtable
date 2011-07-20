@@ -112,12 +112,13 @@ server.post('/upload', function(req, res, next) {
 				everyone.now.wipeSongDiv();
 				everyone.now.getSongList();
 			});
-			res.redirect('back');
+			//res.redirect('back');
+			res.end("done");
 		}
 	});
 	req.form.on('progress', function(bytesReceived, bytesExpected) {
 		var percent = (bytesReceived / bytesExpected * 100) | 0;
-		process.stdout.write('Uploading: %' + percent + '\r');
+		process.stdout.write('Uploading: ' + percent + '\r');
 	});
 });
 

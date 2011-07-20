@@ -18,6 +18,8 @@
 }
 </script>
 
+<script type="text/javascript" src="/jquery.form.js"></script>
+
 <!-- begin the Javascript business -->
 <script type="text/javascript">
 
@@ -25,6 +27,15 @@ var playing = false;
 var muted = false;
 
 $(document).ready(function(){
+
+	//this is the binding for the ajax stuff
+	
+	$('#uploadForm').ajaxForm();
+	$('#myFormId').submit(function() {
+		$(this).ajaxSubmit();
+		return false;
+	});
+	
 	
 	now.giveData = function(cId, state) {
 		var state2 = "";
@@ -311,7 +322,7 @@ $(document).ready(function(){
   <div id="upload">
    <div class="right button" id="closebtn">close x</div>
   	<div class="big">upload a new song</div>
-  	<form action="/upload" enctype="multipart/form-data" method="post">	
+  	<form id="uploadForm" action="/upload" enctype="multipart/form-data" method="post">	
 				Title of the song: <input type="text" name="title" />	
 				<input type="file" name="song" /><br>
 				<input type="submit" value="Upload" />	
