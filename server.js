@@ -9,7 +9,32 @@ var http = require('http');
 var sys = require('sys');
 var form = require('connect-form');
 
+//here lies the MONGOOSE MAGIC
+var mongoose = require('mongoose');
+var db = mongoose.connect('mongodb://localhost/nowtable');
 
+var Schema = mongoose.Schema;
+
+
+//Schema definition. Delicious plaintext passwords (:
+var UserInfo = new Schema({
+	username : String,
+	password : String 
+});
+
+mongoose.model('UserInfo', UserInfo);
+
+var user = db.model('UserInfo');
+
+/*
+var admin = new user();
+admin.username = "twilight sparkle";
+admin.password = "friendship is magic";
+admin.save();
+*/
+
+
+//here ends the MONGOOSE MAGIC
 
 var server = express.createServer(
 	form({keepExtensions: true, uploadDir: __dirname+"/static/music"})
@@ -130,6 +155,13 @@ nowjs.on('connect', function() {
 		kingId = this.user.clientId;
 	}
 });
+
+//this is the command that adds you to the mongodb
+
+everyone.now.registerUser = function(usrname, pwd) {
+	console.log("This is the username: " + usrname);
+	console.log("This is the password: " + pwd);
+}
 
 everyone.now.bugTest = function() {
 	console.log("KING: " + kingId);

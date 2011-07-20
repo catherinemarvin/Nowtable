@@ -2,5 +2,5 @@ NOWTABLE IS THE FUTURE!
 
 A real-time DJing service built on Node and Now!
 
-Dependencies: Node, Express, Now, Connect-Form, Formidable
+Dependencies: Node, Express, Now, Connect-Form, Formidable, MongoDB, node-mongodb-native, Mongoose
 
