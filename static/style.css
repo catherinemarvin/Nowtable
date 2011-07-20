@@ -29,6 +29,9 @@ html, body {
   margin-right: 15px;
 }
 
+.firstqueue {
+	color: #01defe;
+}
 
 #text {
   bottom: 0;
@@ -86,8 +89,8 @@ html, body {
 .button {
   float: left;
   font-size: 40px;
-  width: 130px;
-  padding-right: 10px;
+  width: 180px;
+  padding-right: 0px;
   color: #fff;
   text-align: center;
   -webkit-transition:color 300ms ease-in;  

@@ -102,6 +102,11 @@ $(document).ready(function(){
 		div.append("<li><span class='qartist'>" + uId + "</span> - <span class='qtitle'>" + sId + "</span></li>");
 	}
 	
+	now.displayQueueItem1 = function(uId, sId) {
+		var div = $("ul#queue");
+		div.append("<li class='firstqueue' ><span class='q1artist'>" + uId + "</span> - <span class='q1title'>" + sId + "</span></li>");
+	}
+	
 	now.setTitleSong = function(uId, sId) {
 		var div = $("#text");
 		div.empty();
@@ -341,7 +346,7 @@ $(document).ready(function(){
   
   <div id="content">
   	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>
-  	<div class="button" id="sync" onclick="now.getCurrentSong()">sync</div>
+  	<!-- <div class="button" id="sync" onclick="now.getCurrentSong()">sync</div> -->
   	<div class="button" id="next" onclick="now.playNextSong()">next</div>
   	 <!--jplayer-->
 		<div id="jquery_jplayer_1" class="jp-jplayer"></div>
