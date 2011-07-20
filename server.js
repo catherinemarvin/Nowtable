@@ -161,6 +161,11 @@ nowjs.on('connect', function() {
 everyone.now.registerUser = function(usrname, pwd) {
 	console.log("This is the username: " + usrname);
 	console.log("This is the password: " + pwd);
+	
+	var admin = new user();
+	//admin.username = "twilight sparkle";
+	//admin.password = "friendship is magic";
+	//admin.save();
 }
 
 everyone.now.bugTest = function() {
