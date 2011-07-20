@@ -26,12 +26,12 @@ mongoose.model('UserInfo', UserInfo);
 
 var user = db.model('UserInfo');
 
-
+/*
 var admin = new user();
 admin.username = "twilight sparkle";
 admin.password = "friendship is magic";
 admin.save();
-
+*/
 
 
 //here ends the MONGOOSE MAGIC
@@ -70,6 +70,21 @@ server.get('/play/:song', function(req, res) {
 	res.header('content-type', 'audio/mp3');
 	res.header('content-length', stat.size);
 	res.sendfile(filePath);
+});
+
+server.post('/register', function(req, res) {
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files) {
+		console.log("GONNA REGISTER YOU!!!!");
+		console.log("Username: "+ fields.usrname);
+		console.log("Password: "+ fields.pwd);
+		
+		var userinfo = db.model('UserInfo');
+		var newUser = new userinfo();
+		newUser.username = fields.usrname;
+		newUser.password = fields.pwd;
+		newUser.save();
+	});
 });
 
 /*
@@ -155,18 +170,6 @@ nowjs.on('connect', function() {
 		kingId = this.user.clientId;
 	}
 });
-
-//this is the command that adds you to the mongodb
-
-everyone.now.registerUser = function(usrname, pwd) {
-	console.log("This is the username: " + usrname);
-	console.log("This is the password: " + pwd);
-	
-	//var admin = new user();
-	//admin.username = "twilight sparkle";
-	//admin.password = "friendship is magic";
-	//admin.save();
-}
 
 everyone.now.bugTest = function() {
 	console.log("KING: " + kingId);

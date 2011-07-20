@@ -12,6 +12,12 @@
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script src="/nowjs/now.js"></script>
 
+<script type="text/javascript">
+	registerUser = function(username, password) {
+		$.post('/register', { usrname: username, pwd: password});
+}
+</script>
+
 <!-- begin the Javascript business -->
 <script type="text/javascript">
 
@@ -160,15 +166,16 @@ $(document).ready(function(){
 		now.getSongList();
 		now.getQueueList();
 		var uname = "";
-		//while (uname == "") {
-			do {
-				uname = prompt("Please enter your name.","Slim Pickins");
-			}
-			while (uname == "" || uname == null);
-		//}
+		var pwd = "";
+		do {
+			uname = prompt("Please enter your name.","Slim Pickins");
+		} while (uname == "" || uname == null);
+		do {
+			pwd = prompt("Please enter a PLAINTEXT password","");
+		} while (pwd == "" || pwd == null);
 		now.addToUsers(uname);
 		now.getCurrentSong();
-		now.registerUser(uname, "default password");
+		registerUser(uname, pwd);
 	});
 
 	now.deleteUser = function(id){
