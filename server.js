@@ -293,6 +293,19 @@ everyone.now.addToUsers = function(username) {
 	everyone.now.getUserList();
 }
 
+everyone.now.getLogin = function() {
+	var loggedin = false;
+	if (loggedin) {
+		this.now.openSettings();
+	} else {
+		this.now.openLogin();
+	}
+}
+
+everyone.now.userLogin = function() {
+	//not written 
+}
+
 everyone.now.getCurrentSong = function() {
 	myId = this.user.clientId;
 	if (kingId == myId) {

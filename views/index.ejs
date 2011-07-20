@@ -36,6 +36,19 @@ $(document).ready(function(){
 		return false;
 	});
 	
+	now.openLogin = function() {
+		$('#addqueue').slideUp(200);
+   	$('#configdiv').slideUp(200);
+    	$('#upload').slideUp(200);
+   	$('#logindiv').slideToggle(200);
+	}
+	
+	now.openSettings = function() {
+		$('#addqueue').slideUp(200);
+   	$('#logindiv').slideUp(200);
+    	$('#upload').slideUp(200);
+   	$('#configdiv').slideToggle(200);
+	}
 	
 	now.giveData = function(cId, state) {
 		var state2 = "";
@@ -282,30 +295,32 @@ $(document).ready(function(){
   $('#addbtn').click(function(){
     $('#upload').slideUp(200);
     $('#configdiv').slideUp(200);
+    $('#logindiv').slideUp(200);
     $('#addqueue').slideToggle(200);
   });
  
   $('#uploadbtn').click(function(){
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
+    $('#logindiv').slideUp(200);
     $('#upload').slideToggle(200);
   });
   
   $('#config').click(function(){
-    $('#upload').slideUp(200);
-    $('#addqueue').slideUp(200);
-    $('#configdiv').slideToggle(200);
+  	 now.getLogin();
   });
   
   $('#closebtn').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
+    $('#logindiv').slideUp(200);
     $('#configdiv').slideUp(200);
   });
   
   $('#closebtn1').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
+    $('#logindiv').slideUp(200);
     $('#configdiv').slideUp(200);
   });
   
@@ -313,6 +328,14 @@ $(document).ready(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
+    $('#logindiv').slideUp(200);
+  });
+  
+  $('#closebtn3').click(function(){
+    $('#upload').slideUp(200);
+    $('#addqueue').slideUp(200);
+    $('#configdiv').slideUp(200);
+    $('#logindiv').slideUp(200);
   });
   
 });
@@ -352,6 +375,16 @@ $(document).ready(function(){
   	<form name="namechangeform" action="" method="get">	
 				Change Username: <input type="text" name="uname"/>	
 				<input type="button" id="submitname" value="Submit" onclick="now.getCurrentSong()"/>	
+	</form> 
+  </div>
+  
+  <div id="logindiv">
+   <div class="right button" id="closebtn3">close x</div>
+  	<div class="big">login</div>
+  	<form name="loginform" action="" method="get">	
+				Username: <input type="text" name="uname" placeholder="Slim Pickins"/>
+				Password: <input type="password" name="upass"/>
+				<input type="button" id="submitlogin" value="Submit" onclick="now.userLogin()"/>	
 	</form> 
   </div>
   
