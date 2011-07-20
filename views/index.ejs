@@ -127,12 +127,20 @@ $(document).ready(function(){
 		$("#queue").empty();
 	}
 	
-	now.displayUserItem = function(username, who) {
+	now.displayUserItem = function(username, who, king) {
 		var div = $("#users");
 		if (who) {
-			div.append("<li><span class='usernameme'>" + username + "</span></li>");
+			if (king) {
+				div.append("<li><span class='usernameme'>" + username + " " + "&#9812;" + "</span></li>");
+			} else {
+				div.append("<li><span class='usernameme'>" + username + "</span></li>");
+			}
 		} else {
-			div.append("<li><span class='username'>" + username + "</span></li>");
+			if (king) {
+				div.append("<li><span class='username'>" + username + " " + "&#9812;" + "</span></li>");
+			} else {
+				div.append("<li><span class='username'>" + username + "</span></li>");
+			}
 		}
 	}
 	

@@ -49,8 +49,8 @@ var songs = {};
 var songQueue = [];
 var names = [];
 
-var currentSonguId = 0;
-var currentSongsId = 0;
+var currentSonguId = "nothin";
+var currentSongsId = "nothing";
 
 server.set('view engine', 'ejs');
 
@@ -259,8 +259,8 @@ everyone.now.playNextSong = function() {
 		everyone.now.setTitleSong(currentSonguId, currentSongsId);
 	} else if (this.user.clientId == kingId) {
 		everyone.now.setTitleSong("nothing", "nothing");
-		currentSonguId = 0;
-		currentSongsId = 0;
+		currentSonguId = "nothing";
+		currentSongsId = "nothing";
 	} else {
 	
 	}
@@ -338,9 +338,17 @@ everyone.now.getUserList = function() {
 	for (var i in names) {
 		if (names[i].online) {
 			if (names[i].uId == this.user.clientId) {
-				this.now.displayUserItem(names[i].username, true);
+				if (names[i].uId == kingId) {
+					this.now.displayUserItem(names[i].username, true, true);
+				} else {
+					this.now.displayUserItem(names[i].username, true, false);
+				}
 			} else {
-				this.now.displayUserItem(names[i].username, false);
+				if (names[i].uId == kingId) {
+					this.now.displayUserItem(names[i].username, false, true);
+				} else {
+					this.now.displayUserItem(names[i].username, false, false);
+				}
 			}
 		}
 	}
