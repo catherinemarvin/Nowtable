@@ -147,6 +147,11 @@ html, body {
   width: auto;
 }
 
+#closebtn, #closebtn1, #closebtn2 {
+  width: auto;
+  font-size: 30px;
+}
+
 #config {
   width: auto;
 }
@@ -237,7 +242,7 @@ html, body {
 	font-weight: bold;
 	font-size: 15px;
 	float: left;
-	overflow-y: visible;
+	overflow-y: hidden;
 }
 
 #chatdiv {
