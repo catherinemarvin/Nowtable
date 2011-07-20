@@ -93,7 +93,7 @@ $(document).ready(function(){
 	
 	now.appendQueue = function(text) {
 		var div = $("#addqueuelist");	
-		div.append("<div class=\"songline\">" + "<button type=\'button\' onclick=\"now.addToQueue(\'\/play\/" + text + "\')\">" + text + "</button></div>");
+		div.append("<li><div class=\"songline\"" + "onclick=\"now.addToQueue(\'\/play\/" + text + "\')\">" + text + "</div></li>");
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
