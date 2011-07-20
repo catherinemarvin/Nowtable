@@ -75,10 +75,6 @@ server.get('/play/:song', function(req, res) {
 server.post('/register', function(req, res) {
 	var form = new formidable.IncomingForm();
 	form.parse(req, function(err, fields, files) {
-		console.log("GONNA REGISTER YOU!!!!");
-		console.log("Username: "+ fields.usrname);
-		console.log("Password: "+ fields.pwd);
-		
 		var userinfo = db.model('UserInfo');
 		var newUser = new userinfo();
 		newUser.username = fields.usrname;
