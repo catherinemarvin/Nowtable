@@ -49,7 +49,7 @@ var songs = {};
 var songQueue = [];
 var names = [];
 
-var currentSonguId = "nothin";
+var currentSonguId = "nothing";
 var currentSongsId = "nothing";
 
 server.set('view engine', 'ejs');
@@ -77,9 +77,21 @@ server.post('/register', function(req, res) {
 	form.parse(req, function(err, fields, files) {
 		var userinfo = db.model('UserInfo');
 		var newUser = new userinfo();
-		newUser.username = fields.usrname;
+		newUser.username = fields.uname;
 		newUser.password = fields.pwd;
 		newUser.save();
+	});
+});
+
+server.post('/login', function(req, res) {
+	var form = new formidable.IncomingForm();
+	form.parse(req, function(err, fields, files) {
+		var userinfo = db.model('UserInfo');
+		console.log("Username!test: " + fields.uname);
+		console.log("Username!test: " + fields.pwd);
+		var loggedinuser = userinfo.find({username: fields.uname});
+		console.log("Username!: " + loggedinuser.username);
+		console.log("Password!: " + loggedinuser.password);
 	});
 });
 
@@ -293,12 +305,14 @@ everyone.now.addToUsers = function(username) {
 	everyone.now.getUserList();
 }
 
-everyone.now.getLogin = function() {
+everyone.now.getLogin = function(loc) {
 	var loggedin = false;
-	if (loggedin) {
+	if (loggedin && !loc) {
 		this.now.openSettings();
-	} else {
+	} else if (!loggedin) {
 		this.now.openLogin();
+	} else {
+		//don't open the div
 	}
 }
 

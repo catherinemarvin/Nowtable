@@ -11,13 +11,6 @@
 <script type="text/javascript" src="jquery.marquee.js"></script>
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script src="/nowjs/now.js"></script>
-
-<script type="text/javascript">
-	registerUser = function(username, password) {
-		$.post('/register', { usrname: username, pwd: password});
-}
-</script>
-
 <script type="text/javascript" src="/jquery.form.js"></script>
 
 <!-- begin the Javascript business -->
@@ -48,6 +41,16 @@ $(document).ready(function(){
    	$('#logindiv').slideUp(200);
     	$('#upload').slideUp(200);
    	$('#configdiv').slideToggle(200);
+	}
+	
+	//registers a new username/password
+	registerUser = function(username, password) {
+		$.post('/register', {uname: username, pwd: password});
+	}
+	
+	//logs in said user
+	loginUser = function(username, password) {
+		$.post('/login', {uname: username, pwd: password}); 
 	}
 	
 	now.giveData = function(cId, state) {
@@ -117,13 +120,13 @@ $(document).ready(function(){
 	
 	now.appendQueue = function(text) {
 		var div = $("#addqueuelist");	
-		div.append("<li><div class=\"songline\"" + "onclick=\"now.addToQueue(\'\/play\/" + text + "\')\">" + text + "</div></li>");
+		div.append("<li><div class=\"songline\"" + "onclick=\"now.addToQueue(\'\/play\/" + text + "\')\">" + text.split(".mp3")[0].split(".m4a")[0] + "</div></li>");
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
 	now.displayQueueItem = function(uId, sId) {
 		var div = $("ul#queue");
-		div.append("<li><span class='qartist'>" + uId + "</span> - <span class='qtitle'>" + sId + "</span></li>");
+		div.append("<li><span class='qartist'>" + uId + "</span> - <span class='qtitle'>" + sId.split("\/play\/")[1].split(".mp3")[0].split(".m4a")[0] + "</span></li>");
 	}
 	
 	now.displayQueueItem1 = function(uId, sId) {
@@ -134,11 +137,11 @@ $(document).ready(function(){
 	now.setTitleSong = function(uId, sId) {
 		var div = $("#text");
 		div.empty();
-		div.append("<marquee scrollamount='6' width='575'><span class='artist'>" + uId + "</span> - <span class='title'>" + sId + "</span></marquee>");
+		div.append("<marquee scrollamount='6' width='575'><span class='artist'>" + uId + "</span> - <span class='title'>" + sId.split("\/play\/")[1].split(".mp3")[0].split(".m4a")[0] + "</span></marquee>");
 	}
 	
 	now.wipeSongDiv = function() {
-		$("#songlistdiv").empty();
+		$("#addqueuelist").empty();
 	}
 	
 	now.wipeQueueDiv = function() {
@@ -212,7 +215,8 @@ $(document).ready(function(){
 		} while (pwd == "" || pwd == null);
 		now.addToUsers(uname);
 		now.getCurrentSong();
-		registerUser(uname, pwd);
+		loginUser(uname, pwd);
+		now.getLogin(true);
 	});
 
 	now.deleteUser = function(id){
@@ -307,7 +311,7 @@ $(document).ready(function(){
   });
   
   $('#config').click(function(){
-  	 now.getLogin();
+  	 now.getLogin(false);
   });
   
   $('#closebtn').click(function(){
@@ -381,10 +385,10 @@ $(document).ready(function(){
   <div id="logindiv">
    <div class="right button" id="closebtn3">close x</div>
   	<div class="big">login</div>
-  	<form name="loginform" action="" method="get">	
-				Username: <input type="text" name="uname" placeholder="Slim Pickins"/>
-				Password: <input type="password" name="upass"/>
-				<input type="button" id="submitlogin" value="Submit" onclick="now.userLogin()"/>	
+  	<form name="loginform" action="/login" method="post">	
+				Username: <input type="text" name="uname" placeholder="Slim Pickins"/></br>
+				Password: <input type="password" name="pwd"/></br>
+				<input type="submit" value="Login"/>	
 	</form> 
   </div>
   
@@ -423,6 +427,7 @@ $(document).ready(function(){
     <ul id="users">
 		
     </ul>
+    <input type="button" id="resetlogin" value="Reset" onclick="loginform.form.reset()"/>
     
   </div>
   
