@@ -420,6 +420,10 @@ everyone.now.addToQueue = function(songid) {
 				} else {
 				obj.uId = doc.username;
 				obj.sId = songid;
+				obj.downvotes = 0;
+				obj.upvotes = 0;
+				obj.upvoteList = [];
+				obj.downvoteList = [];
 				songQueue.push(obj);
 				}
 				everyone.now.wipeQueueDiv();
@@ -430,6 +434,78 @@ everyone.now.addToQueue = function(songid) {
 		});
 	//});
 }
+
+everyone.now.voteQueue = function(song, voted) {
+	var self = this;
+	collection.findOne({uId: self.user.clientId}, function (err, doc) {
+		for (var i in songQueue) {
+			if (songQueue[i].sId == song) {
+				console.log("Found the song");
+				if (voted == "up") {
+					console.log("Voted up");
+					var inUpvoteList = false;
+					var inDownvoteList = false;
+					var downvoteuserloc;
+					for (var j in songQueue[i].upvoteList) {
+						if (songQueue[i].upvoteList[j] == doc.username) {
+							inUpvoteList = true;
+						}
+					}
+					for (var j in songQueue[i].downvoteList) {
+						if (songQueue[i].downvoteList[j] == doc.username) {
+							inDownvoteList = true;
+							downvoteuserloc = j;
+						}
+					}
+					if (inUpvoteList) {
+						//do nothing
+					} else if (inDownvoteList) {
+						songQueue[i].downvoteList.splice(j,1);
+						songQueue[i].upvoteList.push(doc.username);
+						songQueue[i].upvotes++;
+						songQueue[i].downvotes--;
+					} else { //were in neither list
+						songQueue[i].upvoteList.push(doc.username);
+						songQueue[i].upvotes++;
+					}
+					console.log("******SONG INFORMATION*******");
+					console.log(songQueue[i]);
+				} else { //else voted down
+					var inUpvoteList = false;
+					var inDownvoteList = false;
+					var upvoteuserloc;
+					for (var j in songQueue[i].downvoteList) {
+						if (songQueue[i].downvoteList[j] == doc.username) {
+							inDownvoteList = true;
+						}
+					}
+					for (var j in songQueue[i].upvoteList) {
+						if (songQueue[i].upvoteList[j] == doc.username) {
+							inUpvoteList = true;
+							upvoteuserloc = j;
+						}
+					}
+					if (inDownvoteList) {
+						//do nothing
+					} else if (inUpvoteList) {
+						songQueue[i].upvoteList.splice(j,1);
+						songQueue[i].downvoteList.push(doc.username);
+						songQueue[i].downvotes++;
+						songQueue[i].upvotes--;
+					} else { //were in neither list
+						songQueue[i].downvoteList.push(doc.username);
+						songQueue[i].downvotes++;
+					}
+					console.log("******SONG INFORMATION*******");
+					console.log(songQueue[i]);
+				}
+			}
+			
+			
+		}
+	});
+}
+
 
 everyone.now.getQueueList = function() {
 	for (var i in songQueue) {

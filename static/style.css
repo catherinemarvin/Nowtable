@@ -190,6 +190,12 @@ html, body {
   background-color: #111;
 }
 
+a {
+	color: #fff;
+	font-weight: bold;
+	text-decoration: none;
+}
+
 #addqueuelist li {
   background-color: #111;
   border-bottom: 1px solid #222;

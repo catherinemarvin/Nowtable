@@ -130,7 +130,18 @@ $(document).ready(function(){
 	
 	now.displayQueueItem = function(uId, sId) {
 		var div = $("ul#queue");
-		div.append("<li><span class='qartist'>" + uId + "</span> - <span class='qtitle'>" + sId.split("\/play\/")[1].split(".mp3")[0].split(".m4a")[0] + "</span></li>");
+		var button1 = $("<a></a>").attr('href', '#').click(function(){
+			now.voteQueue(sId, 'up');
+		}).html('&#8679;');
+		var button2 = $("<a></a>").attr('href', '#').click(function(){
+			now.voteQueue(sId, 'down');
+		}).html('&#8681;');
+		
+		var li = $("<li></li>");
+		var s1 = $("<span></span>").addClass('qartist').text(uId);
+		var s2 = $("<span></span>").addClass('qtitle').text(sId.split("\/play\/")[1].split(".mp3")[0].split(".m4a")[0]);
+		li.append(button1).append(" - ").append(button2).append(" - ").append(s1).append(" - ").append(s2);
+	    div.append(li);	
 	}
 	
 	now.displayQueueItem1 = function(uId, sId) {
@@ -476,7 +487,6 @@ $(document).ready(function(){
 		
     </ul>
     <input type="button" id="becomeAristocrat" value="Become Aristocrat" onclick="now.becomeAristocrat()"/>
-    
   </div>
   
 </div>
