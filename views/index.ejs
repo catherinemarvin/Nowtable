@@ -11,7 +11,7 @@
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>  
 -->
 <script type="text/javascript" src="/jquery-1.6.2.min.js"></script>
-<script type="text/javascript" src="jquery.marquee.js"></script>
+<script type="text/javascript" src="/jquery.marquee.js"></script>
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script src="/nowjs/now.js"></script>
 <script type="text/javascript" src="/jquery.form.js"></script>
@@ -173,7 +173,7 @@ $(document).ready(function(){
 	}
 	
 	
-	now.requestNewUsername = function() {
+	/*now.requestNewUsername = function() {
 		var error = true;
 		var uname = "";
 		do {
@@ -186,7 +186,7 @@ $(document).ready(function(){
 			}
 			while (uname == "" || uname == null);
 			now.addToUsers(uname);
-	}
+	}*/
 	
 	now.reLoginAlert = function () {
 		alert("Wrong information");
@@ -196,7 +196,7 @@ $(document).ready(function(){
 		alert("Pick another username");
 	}
 	now.ready(function(){
-		now.onclientload();
+		//now.onclientload();
 		$("#jquery_jplayer_1").jPlayer({
         	ready: function () {
        	},
@@ -217,9 +217,9 @@ $(document).ready(function(){
 		now.getQueueList();
 		var uname = "";
 		var pwd = "";
-		now.getCurrentSong();
+		//now.getCurrentSong();
 		//loginUser(uname, pwd);
-		now.getLogin(true);
+		//now.getLogin(true);
 	});
 
 	now.deleteUser = function(id){
@@ -317,8 +317,7 @@ $(document).ready(function(){
   	 $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
-  	 now.getLogin(false);
-  	 $('#logindiv').slideUp(200);
+  	 $('#logindiv').slideToggle(200);
   	 $('#registerdiv').slideToggle(200);
   });
   
@@ -457,7 +456,7 @@ $(document).ready(function(){
     <ul id="users">
 		
     </ul>
-    <input type="button" id="resetlogin" value="Reset" onclick="loginform.form.reset()"/>
+    <input type="button" id="becomeAristocrat" value="Become Aristocrat" onclick="now.becomeAristocrat()"/>
     
   </div>
   
