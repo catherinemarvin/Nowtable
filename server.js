@@ -34,10 +34,13 @@ Connection = require('mongodb').Connection,
 Server = require('mongodb').Server,
 BSON = require('mongodb').BSONNative;
 
-
+var collection;
 var db = new Db('nowtable', new Server("localhost", 27017, {}), {native_parser:false});
 db.open(function(err, conn) {
 	db = conn;
+	db.collection('userinfo', function(err, coll) {
+		collection = coll;
+	});
 });
 /*
 var admin = new user();
@@ -153,7 +156,7 @@ var numAristocrats = 0;
 
 everyone.now.tryLogin = function(uname, pwd) {
 	var self = this;
-	db.collection('userinfo', function(err, collection){
+	//db.collection('userinfo', function(err, collection){
 		collection.findOne({username: uname}, function(err, doc){
 			if (doc.password == pwd) {
 				self.now.finishLogin(uname);
@@ -161,13 +164,13 @@ everyone.now.tryLogin = function(uname, pwd) {
 				self.now.reLogin();
 			}
 		});
-	});
+	//});
 }
 
 
 everyone.now.tryRegister = function(uname, pwd) {
 	var self = this;
-	db.collection('userinfo', function(err, collection){
+	//db.collection('userinfo', function(err, collection){
 		collection.findOne({username: uname}, function(err, doc){
 			if (doc) {
 				self.now.reRegister();
@@ -176,44 +179,42 @@ everyone.now.tryRegister = function(uname, pwd) {
 				self.now.finishRegister();
 			}
 		});
-	});
+	//});
 }
 
 nowjs.on('disconnect', function() {
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({uId: self.user.clientId}, function(err, doc) {
 			if (doc) {
-			doc.loggedIn = false;
-			doc.uId = 0;
-			if (doc.isAristocrat == true) {
-				doc.isAristocrat = false;
-				numAristocrats--;
-				if (doc.isKing == true) {
-					doc.isKing = false;
-					collection.find({isAristocrat: true}, function(err, docs) {
-						if (docs) {
-							var newKing = docs[0];
-							newKing.isKing = true;
-							collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
-							});
-						} else {
-							numKings = 0;
-						}
-					});
-				} else {
+				doc.loggedIn = false;
+				doc.uId = 0;
+				if (doc.isAristocrat == true) {
+					doc.isAristocrat = false;
+					numAristocrats--;
+					if (doc.isKing == true) {
+						doc.isKing = false;
+						collection.find({isAristocrat: true}, function(err, docs) {
+							if (docs) {
+								var newKing = docs[0];
+								newKing.isKing = true;
+								collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
+								});
+							} else {
+								numKings = 0;
+							}
+						});
+					} else {
 					
-				}
-			} else {
+					}
+				} else {
 				
-			}
-			collection.update({uId: self.user.clientId}, doc, function (err, doc) {
-			});
+				}
+				collection.update({uId: self.user.clientId}, doc, function (err, doc) {
+				});
 			}
 		});
-	});
-	delete user[this.user.clientId];
-   everyone.now.deleteUser(this.user.clientId);
+	//});
 	everyone.now.wipeUsersDiv();
 	everyone.now.getUserList();
 });
@@ -229,7 +230,7 @@ everyone.now.songTest = function(songid, time) {
 
 everyone.now.syncToMe = function(state) {
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({uId: self.user.clientId}, function(err, doc) {
 			if (doc.isKing == true) {
 				collection.find({loggedIn: true}, function(err, docs) {
@@ -245,12 +246,12 @@ everyone.now.syncToMe = function(state) {
 			}
 			
 		});
-	});
+	//});
 }
 
 everyone.now.kingStateChange = function(state) {
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({uId: self.user.clientId}, function(err, doc) {
 			if (doc.isKing == true) {
 				self.now.syncToMe(state);
@@ -258,7 +259,7 @@ everyone.now.kingStateChange = function(state) {
 		
 			}
 		});
-	});
+	//});
 }
 
 /*everyone.now.onclientload = function() {
@@ -285,11 +286,11 @@ everyone.now.setSong = function(cId, songid, loc, state) {
 everyone.now.kingSong = function(state) {
 	var callerId = this.user.clientId;
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({isKing: true}, function(err, doc) {
 			nowjs.getClient(doc.uId, function() {this.now.giveData(callerId, state)});
 		});
-	});
+	//});
 }
 
 everyone.now.appendtext = function(text) {
@@ -299,7 +300,7 @@ everyone.now.appendtext = function(text) {
 
 everyone.now.playNextSong = function() {
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({uId: self.user.clientId}, function(err, doc) {
 			if (doc.isKing == true && songQueue.length > 0) {
 				var nextSong = songQueue.shift();
@@ -319,7 +320,7 @@ everyone.now.playNextSong = function() {
 	
 			}
 		});
-	});
+	//});
 }
 
 everyone.now.addToUsers = function(username) {
@@ -366,7 +367,7 @@ everyone.now.userLogin = function() {
 
 everyone.now.getCurrentSong = function() {
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({uId: self.user.clientId}, function(err, doc) {
 			if (doc.isKing == true) {
 				/*if (songQueue.length > 0) {
@@ -385,13 +386,13 @@ everyone.now.getCurrentSong = function() {
 				
 			}
 		});
-	});
+	//});
 } 
 
 everyone.now.addToQueue = function(songid) {
 	var obj = {};
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({uId: self.user.clientId}, function(err, doc) {
 			if (doc.isAristocrat == true) {
 				obj.uId = doc.username;
@@ -403,7 +404,7 @@ everyone.now.addToQueue = function(songid) {
 				
 			}
 		});
-	});
+	//});
 }
 
 everyone.now.getQueueList = function() {
@@ -414,27 +415,27 @@ everyone.now.getQueueList = function() {
 
 everyone.now.getUserList = function() {
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.find({loggedIn: true}, function(err, docs) {
 			if (docs) {
-			for (var i in docs) {
-				if (docs[i].uId == self.user.clientId) {
-					if (docs[i].isKing == true) {
-						self.now.displayUserItem(docs[i].username, true, true);
+				for (var i in docs) {
+					if (docs[i].uId == self.user.clientId) {
+						if (docs[i].isKing == true) {
+							self.now.displayUserItem(docs[i].username, true, true);
+						} else {
+							self.now.displayUserItem(docs[i].username, true, false);
+						}
 					} else {
-						self.now.displayUserItem(docs[i].username, true, false);
-					}
-				} else {
-					if (docs[i].isKing == true) {
-						self.now.displayUserItem(docs[i].username, false, true);
-					} else {
-						self.now.displayUserItem(docs[i].username, false, false);
+						if (docs[i].isKing == true) {
+							self.now.displayUserItem(docs[i].username, false, true);
+						} else {
+							self.now.displayUserItem(docs[i].username, false, false);
+						}
 					}
 				}
 			}
-			}
 		});
-	});
+	//});
 }
 
 everyone.now.getSongList = function() {
@@ -455,7 +456,7 @@ everyone.now.getSongList = function() {
 
 everyone.now.finishLogin = function(uname) {
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({username: uname}, function(err, doc) {
 			console.log("this is what we found: ",doc);
 			doc.loggedIn = true;
@@ -473,12 +474,16 @@ everyone.now.finishLogin = function(uname) {
 				console.log("too many aristocrats");
 			}*/
 			collection.update({username: uname}, doc, function (err, doc) {
+				process.nextTick(function () {
+					everyone.now.wipeUsersDiv();
+					everyone.now.getUserList();
+					self.now.getCurrentSong();
+				});
 			});
-			everyone.now.wipeUsersDiv();
-			everyone.now.getUserList();
-			self.now.getCurrentSong();
+			
 		});
-	});
+	//});	
+	
 };
 
 everyone.now.finishRegister = function() {
@@ -495,7 +500,7 @@ everyone.now.reRegister = function() {
 
 everyone.now.becomeAristocrat = function() {
 	var self = this;
-	db.collection('userinfo', function(err, collection) {
+	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({uId: self.user.clientId}, function(err, doc) {
 			if (doc) {
 				if (numAristocrats < 5) {
@@ -511,5 +516,5 @@ everyone.now.becomeAristocrat = function() {
 				});
 			}
 		});
-	});
+	//});
 }
