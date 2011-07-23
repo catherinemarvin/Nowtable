@@ -159,6 +159,17 @@ html, body {
   width: auto;
 }
 
+
+#i {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	border: 0;
+	outline: 0;
+	
+}
+
+
 #upload, #addqueue, #configdiv, #logindiv, #registerdiv{
   background-color: #111;
   display: none;
