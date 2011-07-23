@@ -151,19 +151,36 @@ $(document).ready(function(){
 		$("#queue").empty();
 	}
 	
-	now.displayUserItem = function(username, who, king) {
+	
+	now.displayUserItem = function(username, who, king, aristocrat) {
 		var div = $("#users");
 		if (who) {
 			if (king) {
-				div.append("<li><span class='usernameme'>" + username + " " + "&#9812;" + "</span></li>");
+				if (aristocrat) {
+					div.append("<li><span class='usernameme'>" + username + " " + "&#9815" + " " + "&#9812;" + "</span></li>");
+				} else {
+					div.append("<li><span class='usernameme'>" + username + " " + "&#9812;" + "</span></li>");
+				}
 			} else {
-				div.append("<li><span class='usernameme'>" + username + "</span></li>");
+				if (aristocrat) {
+					div.append("<li><span class='usernameme'>" + username + " " + "&#9815" + "</span></li>");
+				} else {
+					div.append("<li><span class='usernameme'>" + username + "</span></li>");
+				}
 			}
 		} else {
 			if (king) {
-				div.append("<li><span class='username'>" + username + " " + "&#9812;" + "</span></li>");
+				if (aristocrat) {
+					div.append("<li><span class='username'>" + username + " " + "&#9815" + " " + "&#9812;" + "</span></li>");
+				} else {
+					div.append("<li><span class='username'>" + username + " " + "&#9812;" + "</span></li>");
+				}
 			} else {
-				div.append("<li><span class='username'>" + username + "</span></li>");
+				if (aristocrat) {
+					div.append("<li><span class='username'>" + username + " " + "&#9815" + "</span></li>");
+				} else {
+					div.append("<li><span class='username'>" + username + "</span></li>");
+				}
 			}
 		}
 	}
