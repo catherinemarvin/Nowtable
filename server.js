@@ -294,7 +294,9 @@ everyone.now.kingSong = function(state) {
 	var self = this;
 	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({isKing: true}, function(err, doc) {
-			nowjs.getClient(doc.uId, function() {this.now.giveData(callerId, state)});
+			if (doc) {
+				nowjs.getClient(doc.uId, function() {this.now.giveData(callerId, state)});
+			}
 		});
 	//});
 }

@@ -95,9 +95,9 @@ $(document).ready(function(){
 	}
 
 	now.loadSong = function(songid, position, state) {
-		$("#jquery_jplayer_1").jPlayer("setMedia", { m4a: songid });
+		$("#jquery_jplayer_1").jPlayer("setMedia", { mp3: songid });
 		$("#jquery_jplayer_1").jPlayer( state, position);
-		everyone.now.setPlayButton(state);
+		now.setPlayButton(state);
 	}
 
 	now.onjoin = function(id, text){
@@ -108,6 +108,7 @@ $(document).ready(function(){
 		mydiv.slideDown(1000);
 	}
 	now.refreshtext = function(id, text) {
+	   text = $('<div/>').text(text).html();
 		var div = $("#chatmessagediv");
 		//var div = $("#" + id);
 		div.append("<div class=\"textline\">" + id + ": "+ text + "</div>");
