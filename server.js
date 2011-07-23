@@ -300,8 +300,15 @@ everyone.now.kingSong = function(state) {
 }
 
 everyone.now.appendtext = function(text) {
-	user[this.user.clientId] += text;
-	everyone.now.refreshtext(this.user.clientId, text);
+	//user[this.user.clientId] += text;
+	var self = this;
+	var usrname;
+	collection.findOne({uId: self.user.clientId}, function (err, doc) {
+		if (doc) {
+			usrname = doc.username;
+			everyone.now.refreshtext(usrname, text);
+		}
+	});
 }
 
 everyone.now.playNextSong = function() {

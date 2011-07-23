@@ -108,8 +108,9 @@ $(document).ready(function(){
 		mydiv.slideDown(1000);
 	}
 	now.refreshtext = function(id, text) {
-		var div = $("#" + id);
-		div.append("<div class=\"textline\">" + text + "</div>");
+		var div = $("#chatmessagediv");
+		//var div = $("#" + id);
+		div.append("<div class=\"textline\">" + id + ": "+ text + "</div>");
 		//div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 		$(".chat").scrollTop($(".chat")[0].scrollHeight);
 	}
@@ -468,6 +469,7 @@ $(document).ready(function(){
 	</div>
 	<!--end jplayer-->
 	<div id="chatdiv"><input placeholder="Type your message ..." type="text" id="box"></div>
+	<div id="chatmessagediv" class="chat"></div>  
   </div>
   <div id="sidebar">
     <div id="player">
