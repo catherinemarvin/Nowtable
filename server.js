@@ -143,7 +143,7 @@ server.post('/upload', function(req, res, next) {
 
 
 
-server.listen(80);
+server.listen(1337);
 console.log("Express server listening on port %d", server.address().port);
 
 var nowjs = require('now');
