@@ -21,12 +21,12 @@ var muted = false;
 
 $(document).ready(function(){
 
-	//this is the binding for the ajax stuff
+	$('#loginsubmit').click(function() {
+		now.tryLogin($('#uname').val(), $('#pwd').val());
+	});
 	
-	$('#uploadForm').ajaxForm();
-	$('#myFormId').submit(function() {
-		$(this).ajaxSubmit();
-		return false;
+	$('#registersubmit').click(function() {
+		now.tryRegister($('#unamereg').val(), $('#pwdreg').val());
 	});
 	
 	now.openLogin = function() {
@@ -44,14 +44,14 @@ $(document).ready(function(){
 	}
 	
 	//registers a new username/password
-	registerUser = function(username, password) {
+	/*registerUser = function(username, password) {
 		$.post('/register', {uname: username, pwd: password});
-	}
+	}*/
 	
 	//logs in said user
-	loginUser = function(username, password) {
+	/*loginUser = function(username, password) {
 		$.post('/login', {uname: username, pwd: password}); 
-	}
+	}*/
 	
 	now.giveData = function(cId, state) {
 		var state2 = "";
@@ -207,15 +207,16 @@ $(document).ready(function(){
 		now.getQueueList();
 		var uname = "";
 		var pwd = "";
-		do {
+		/*do {
 			uname = prompt("Please enter your name.","Slim Pickins");
 		} while (uname == "" || uname == null);
 		do {
 			pwd = prompt("Please enter a PLAINTEXT password","");
 		} while (pwd == "" || pwd == null);
 		now.addToUsers(uname);
+		*/
 		now.getCurrentSong();
-		loginUser(uname, pwd);
+		//loginUser(uname, pwd);
 		now.getLogin(true);
 	});
 
@@ -311,7 +312,12 @@ $(document).ready(function(){
   });
   
   $('#config').click(function(){
+  	 $('#upload').slideUp(200);
+    $('#addqueue').slideUp(200);
+    $('#configdiv').slideUp(200);
   	 now.getLogin(false);
+  	 $('#logindiv').slideUp(200);
+  	 $('#registerdiv').slideToggle(200);
   });
   
   $('#closebtn').click(function(){
@@ -319,6 +325,7 @@ $(document).ready(function(){
     $('#addqueue').slideUp(200);
     $('#logindiv').slideUp(200);
     $('#configdiv').slideUp(200);
+    $('#registerdiv').slideUp(200);
   });
   
   $('#closebtn1').click(function(){
@@ -326,6 +333,7 @@ $(document).ready(function(){
     $('#addqueue').slideUp(200);
     $('#logindiv').slideUp(200);
     $('#configdiv').slideUp(200);
+    $('#registerdiv').slideUp(200);
   });
   
   $('#closebtn2').click(function(){
@@ -333,6 +341,7 @@ $(document).ready(function(){
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
     $('#logindiv').slideUp(200);
+    $('#registerdiv').slideUp(200);
   });
   
   $('#closebtn3').click(function(){
@@ -340,6 +349,15 @@ $(document).ready(function(){
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
     $('#logindiv').slideUp(200);
+    $('#registerdiv').slideUp(200);
+  });
+  
+  $('#closebtn4').click(function(){
+    $('#upload').slideUp(200);
+    $('#addqueue').slideUp(200);
+    $('#configdiv').slideUp(200);
+    $('#logindiv').slideUp(200);
+    $('#registerdiv').slideUp(200);
   });
   
 });
@@ -386,9 +404,19 @@ $(document).ready(function(){
    <div class="right button" id="closebtn3">close x</div>
   	<div class="big">login</div>
   	<form name="loginform" action="/login" method="post">	
-				Username: <input type="text" name="uname" placeholder="Slim Pickins"/></br>
-				Password: <input type="password" name="pwd"/></br>
-				<input type="submit" value="Login"/>	
+				Username: <input type="text" id="uname" name="uname" placeholder="Slim Pickins"/></br>
+				Password: <input type="password" id="pwd" name="pwd"/></br>
+				<input type="button" id="loginsubmit" value="Login"/>	
+	</form> 
+  </div>
+  
+  <div id="registerdiv">
+   <div class="right button" id="closebtn4">close x</div>
+  	<div class="big">register</div>
+  	<form name="registerform" action="/register" method="post">	
+				Username: <input type="text" id="unamereg" name="uname" placeholder="Slim Pickins"/></br>
+				Password: <input type="password" id="pwdreg" name="pwd"/></br>
+				<input type="button" id="registersubmit" value="Register"/>	
 	</form> 
   </div>
   

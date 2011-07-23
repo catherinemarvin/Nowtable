@@ -10,22 +10,34 @@ var sys = require('sys');
 var form = require('connect-form');
 
 //here lies the MONGOOSE MAGIC
-var mongoose = require('mongoose');
-var db = mongoose.connect('mongodb://localhost/nowtable');
+//var mongoose = require('mongoose');
+//var db = mongoose.connect('mongodb://localhost/nowtable');
 
-var Schema = mongoose.Schema;
+//var Schema = mongoose.Schema;
 
 
 //Schema definition. Delicious plaintext passwords (:
-var UserInfo = new Schema({
+/*var UserInfo = new Schema({
 	username : String,
-	password : String 
+	password : String,
+	loggedin : Boolean
 });
+*/
 
-mongoose.model('UserInfo', UserInfo);
+//mongoose.model('UserInfo', UserInfo);
 
-var user = db.model('UserInfo');
+//var user = db.model('UserInfo');
 
+var Db = require('mongodb').Db,
+Connection = require('mongodb').Connection,
+Server = require('mongodb').Server,
+BSON = require('mongodb').BSONNative;
+
+
+var db = new Db('nowtable', new Server("localhost", 27017, {}), {native_parser:false});
+db.open(function(err, conn) {
+	db = conn;
+});
 /*
 var admin = new user();
 admin.username = "twilight sparkle";
@@ -72,18 +84,9 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
-server.post('/register', function(req, res) {
-	var form = new formidable.IncomingForm();
-	form.parse(req, function(err, fields, files) {
-		var userinfo = db.model('UserInfo');
-		var newUser = new userinfo();
-		newUser.username = fields.uname;
-		newUser.password = fields.pwd;
-		newUser.save();
-	});
-});
 
-server.post('/login', function(req, res) {
+
+/*server.post('/login', function(req, res) {
 	var form = new formidable.IncomingForm();
 	form.parse(req, function(err, fields, files) {
 		var userinfo = db.model('UserInfo');
@@ -93,7 +96,7 @@ server.post('/login', function(req, res) {
 		console.log("Username!: " + loggedinuser.username);
 		console.log("Password!: " + loggedinuser.password);
 	});
-});
+});*/
 
 /*
 server.post('/upload', function(req, res) {
@@ -146,6 +149,32 @@ var everyone = nowjs.initialize(server, {socketio:{"log level": process.argv[2]}
 
 var kinggroup = nowjs.getGroup("king");
 var kingId = 0;
+
+everyone.now.tryLogin = function(uname, pwd) {
+	db.collection('userinfo', function(err, collection){
+		collection.findOne({username: uname}, function(err, doc){
+			if (doc.password == pwd) {
+				this.now.finishLogin();
+			} else {
+				this.now.reLogin();
+			}
+		});
+	});
+}
+
+
+everyone.now.tryRegister = function(uname, pwd) {
+	db.collection('userinfo', function(err, collection){
+		collection.findOne({username: uname}, function(err, doc){
+			if (doc) {
+				this.now.reRegister();
+			} else {
+				collection.insert({username: uname, password: pwd, loggedin: false});
+				this.now.finishRegister();
+			}
+		});
+	});
+}
 
 nowjs.on('disconnect', function() {
 	var self = this;
