@@ -7,7 +7,10 @@
 
 <link href="/style.css" rel="stylesheet" type="text/css">
 <link type="text/css" href="/skin/jplayer.blue.monday.css" rel="stylesheet"/>
+<!--
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>  
+-->
+<script type="text/javascript" src="/jquery-1.6.2.min.js"></script>
 <script type="text/javascript" src="jquery.marquee.js"></script>
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script src="/nowjs/now.js"></script>
@@ -185,6 +188,13 @@ $(document).ready(function(){
 			now.addToUsers(uname);
 	}
 	
+	now.reLoginAlert = function () {
+		alert("Wrong information");
+	}
+	
+	now.reRegisterAlert = function () {
+		alert("Pick another username");
+	}
 	now.ready(function(){
 		now.onclientload();
 		$("#jquery_jplayer_1").jPlayer({

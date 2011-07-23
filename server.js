@@ -9,6 +9,7 @@ var http = require('http');
 var sys = require('sys');
 var form = require('connect-form');
 
+
 //here lies the MONGOOSE MAGIC
 //var mongoose = require('mongoose');
 //var db = mongoose.connect('mongodb://localhost/nowtable');
@@ -147,16 +148,17 @@ var nowjs = require('now');
 //herp logging shit!
 var everyone = nowjs.initialize(server, {socketio:{"log level": process.argv[2]}});
 
-var kinggroup = nowjs.getGroup("king");
 var kingId = 0;
+var numAristocrats = 0;
 
 everyone.now.tryLogin = function(uname, pwd) {
+	var self = this;
 	db.collection('userinfo', function(err, collection){
 		collection.findOne({username: uname}, function(err, doc){
 			if (doc.password == pwd) {
-				this.now.finishLogin();
+				self.now.finishLogin(uname);
 			} else {
-				this.now.reLogin();
+				self.now.reLogin();
 			}
 		});
 	});
@@ -164,13 +166,14 @@ everyone.now.tryLogin = function(uname, pwd) {
 
 
 everyone.now.tryRegister = function(uname, pwd) {
+	var self = this;
 	db.collection('userinfo', function(err, collection){
 		collection.findOne({username: uname}, function(err, doc){
 			if (doc) {
-				this.now.reRegister();
+				self.now.reRegister();
 			} else {
-				collection.insert({username: uname, password: pwd, loggedin: false});
-				this.now.finishRegister();
+				collection.insert({username: uname, password: pwd, loggedIn: false, uId: 0, isKing: false, isAristocrat: false});
+				self.now.finishRegister();
 			}
 		});
 	});
@@ -424,4 +427,41 @@ everyone.now.getSongList = function() {
 			}
 		});
 	});
+}
+
+everyone.now.finishLogin = function(uname) {
+	var self = this;
+	db.collection('userinfo', function(err, collection) {
+		collection.findOne({username: uname}, function(err, doc) {
+			console.log("this is what we found: ",doc);
+			doc.loggedIn = true;
+			doc.uId = self.user.clientId;
+			if (numAristocrats < 5) {
+				doc.isAristocrat = true;
+				numAristocrats++;
+				console.log("number of aristocrats now: "+numAristocrats);
+				if (kingId == 0) {
+					doc.isKing = true;
+					kingId = self.user.clientId;
+				}
+			}
+			else {
+				console.log("too many aristocrats");
+			}
+			collection.update({username: uname}, doc, function (err, doc) {
+				});
+		});
+	});
+};
+
+everyone.now.finishRegister = function() {
+	
+}
+
+everyone.now.reLogin = function() {
+	this.now.reLoginAlert();
+}
+
+everyone.now.reRegister = function() {
+	this.now.reRegisterAlert();
 }

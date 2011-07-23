@@ -159,7 +159,7 @@ html, body {
   width: auto;
 }
 
-#upload, #addqueue, #configdiv, #logindiv {
+#upload, #addqueue, #configdiv, #logindiv, #registerdiv{
   background-color: #111;
   display: none;
   height: 300px;
