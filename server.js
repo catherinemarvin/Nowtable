@@ -9,26 +9,6 @@ var http = require('http');
 var sys = require('sys');
 var form = require('connect-form');
 
-
-//here lies the MONGOOSE MAGIC
-//var mongoose = require('mongoose');
-//var db = mongoose.connect('mongodb://localhost/nowtable');
-
-//var Schema = mongoose.Schema;
-
-
-//Schema definition. Delicious plaintext passwords (:
-/*var UserInfo = new Schema({
-	username : String,
-	password : String,
-	loggedin : Boolean
-});
-*/
-
-//mongoose.model('UserInfo', UserInfo);
-
-//var user = db.model('UserInfo');
-
 var Db = require('mongodb').Db,
 Connection = require('mongodb').Connection,
 Server = require('mongodb').Server,
@@ -42,15 +22,6 @@ db.open(function(err, conn) {
 		collection = coll;
 	});
 });
-/*
-var admin = new user();
-admin.username = "twilight sparkle";
-admin.password = "friendship is magic";
-admin.save();
-*/
-
-
-//here ends the MONGOOSE MAGIC
 
 var server = express.createServer(
 	form({keepExtensions: true, uploadDir: __dirname+"/static/music"})
@@ -88,38 +59,6 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
-
-
-/*server.post('/login', function(req, res) {
-	var form = new formidable.IncomingForm();
-	form.parse(req, function(err, fields, files) {
-		var userinfo = db.model('UserInfo');
-		console.log("Username!test: " + fields.uname);
-		console.log("Username!test: " + fields.pwd);
-		var loggedinuser = userinfo.find({username: fields.uname});
-		console.log("Username!: " + loggedinuser.username);
-		console.log("Password!: " + loggedinuser.password);
-	});
-});*/
-
-/*
-server.post('/upload', function(req, res) {
-	var form = new formidable.IncomingForm();
-	form.parse(req, function(err, fields, files) {
-		console.log("GONNA PARSE THE UPLOAD!");
-		//var finalDestination = '/static/music/' + files.upload.name;
-		//console.log(finalDestination);
-		fs.writeFile(files.song.name, files.song, 'utf8', function(err) {
-			if (err) throw err;
-			console.log("saved it lol");
-		});
-	});
-});
-pause
-*/
-
-
-
 server.post('/upload', function(req, res, next) {
 	console.log("starting upload");
 	req.form.complete(function(err, fields, files) {
@@ -131,7 +70,7 @@ server.post('/upload', function(req, res, next) {
 				everyone.now.wipeSongDiv();
 				everyone.now.getSongList();
 			});
-			//res.redirect('back');
+			res.redirect('back');
 			res.end("done");
 		}
 	});
@@ -141,14 +80,12 @@ server.post('/upload', function(req, res, next) {
 	});
 });
 
-
-
-server.listen(1337);
+server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
 
 var nowjs = require('now');
 
-//herp logging shit!
+//Logging stuff. It's on a scale from 1-5.
 var everyone = nowjs.initialize(server, {socketio:{"log level": process.argv[2]}});
 
 var numKings = 0;

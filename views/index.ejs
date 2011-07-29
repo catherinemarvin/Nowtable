@@ -1,21 +1,23 @@
 <!DOCTYPE HTML> 
 <html lang="en"> 
 <head> 
-<title>Nowtable - The future of music</title> 
+<title>Nowtable - The Future of Music!</title> 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
 <meta http-equiv="Content-Language" content="en-us"> 
 
 <link href="/style.css" rel="stylesheet" type="text/css">
 <link type="text/css" href="/skin/jplayer.blue.monday.css" rel="stylesheet"/>
-<!--
+
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>  
--->
+<!-- Uncomment this for a local version of jquery. Useful only if you have terrible Internet.
 <script type="text/javascript" src="/jquery-1.6.2.min.js"></script>
+-->
 <script type="text/javascript" src="/jquery.marquee.js"></script>
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script src="/nowjs/now.js"></script>
 <script type="text/javascript" src="/jquery.form.js"></script>
 <!-- begin the Javascript business -->
+
 <script type="text/javascript">
 
 var playing = false;
@@ -44,17 +46,7 @@ $(document).ready(function(){
     	$('#upload').slideUp(200);
    	$('#configdiv').slideToggle(200);
 	}
-	
-	//registers a new username/password
-	/*registerUser = function(username, password) {
-		$.post('/register', {uname: username, pwd: password});
-	}*/
-	
-	//logs in said user
-	/*loginUser = function(username, password) {
-		$.post('/login', {uname: username, pwd: password}); 
-	}*/
-	
+		
 	now.giveData = function(cId, state) {
 		var state2 = "";
 		if ($("#jquery_jplayer_1").data("jPlayer").status.paused) {state2 = "pause";} else {state2 = "play";}
@@ -110,9 +102,7 @@ $(document).ready(function(){
 	now.refreshtext = function(id, text) {
 	   text = $('<div/>').text(text).html();
 		var div = $("#chatmessagediv");
-		//var div = $("#" + id);
 		div.append("<div class=\"textline\">" + id + ": "+ text + "</div>");
-		//div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 		$(".chat").scrollTop($(".chat")[0].scrollHeight);
 	}
 	
@@ -163,13 +153,10 @@ $(document).ready(function(){
 		$("#queue").empty();
 	}
 
-
-	
+	//don't think this is ever used lol
 	function update() {
 		try {
-			//$("#t").text(window);
 		} catch (e) {
-		
 		}
 		setTimeout(update, 500);
 	}
@@ -211,31 +198,14 @@ $(document).ready(function(){
 		$("#users").empty();
 	}
 	
-	
-	/*now.requestNewUsername = function() {
-		var error = true;
-		var uname = "";
-		do {
-				if (error) {
-					uname = prompt("Username taken. Please enter a different name.","Slim Pickins");
-				} else {
-					uname = prompt("Please enter your name.","Slim Pickins");
-				}
-				error = false;
-			}
-			while (uname == "" || uname == null);
-			now.addToUsers(uname);
-	}*/
-	
 	now.reLoginAlert = function () {
-		alert("Wrong information");
+		alert("Username or password is incorrect.");
 	}
 	
 	now.reRegisterAlert = function () {
-		alert("Pick another username");
+		alert("Username is already taken.");
 	}
 	now.ready(function(){
-		//now.onclientload();
 		$("#jquery_jplayer_1").jPlayer({
         	ready: function () {
        	},
@@ -254,11 +224,6 @@ $(document).ready(function(){
 		});
 		now.getSongList();
 		now.getQueueList();
-		var uname = "";
-		var pwd = "";
-		//now.getCurrentSong();
-		//loginUser(uname, pwd);
-		//now.getLogin(true);
 	});
 
 	now.deleteUser = function(id){
@@ -273,25 +238,6 @@ $(document).ready(function(){
 		}
 		
 	});	
-
-	/*
-  $('#playpause').click(function(){
-    var btn = $(this);
-    if(playing) {
-    	$("#jquery_jplayer_1").jPlayer("pause");
-      //btn.stop().animate({opacity: 0}, 150, function(){
-      //  btn.text("pause").animate({opacity: 1}, 300);
-      });
-    } else {
-    	$("#jquery_jplayer_1").jPlayer("play");
-      //btn.stop().animate({opacity: 0}, 150, function(){
-      //  btn.text("play").animate({opacity: 1}, 300);
-      });
-    }
-    playing = !playing;
-  });
-  
-  */
   
   $('#playpause').click(function() {
   	if ($("#jquery_jplayer_1").data("jPlayer").status.paused) {
@@ -303,24 +249,7 @@ $(document).ready(function(){
 
 
 });
-  /*
-  $('#muteunmute').click(function(){
-  	console.log("Mute status: " + muted);
-    var btn = $(this);
-    if(muted) {
-    	$("#jquery_jplayer_1").jPlayer("volumeMax");
-      btn.stop().animate({opacity: 0}, 150, function(){
-        btn.text("mute").animate({opacity: 1}, 300);
-      });
-    } else {
-    	$("#jquery_jplayer_1").jPlayer("volumeMin");
-      btn.stop().animate({opacity: 0}, 150, function(){
-        btn.text("unmute").animate({opacity: 1}, 300);
-      });
-    }
-    muted = !muted;
-  });
-  */
+
   $('#muteunmute').click(function() {
   	console.log("Mute status: " + muted);
   	var btn = $(this);
@@ -500,8 +429,6 @@ $(document).ready(function(){
   </div>
   
 </div>
-
-<iframe src="http://localhost/index.html" width="250" height="200" id="i"></iframe>
 
 </body> 
 </html>
