@@ -59,6 +59,18 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
+
+server.post('/upload', function(req, res, next) {
+	console.log("STARTING TO UPLOAD");
+	formidable.parse(req, function (err, fields, files) {
+		fs.writeFile('derp.mp3', files.upload, 'utf8', function (err) {
+			if (err) throw err;
+			console.log("Saved lol");
+		});
+	});
+});
+
+/*
 server.post('/upload', function(req, res, next) {
 	console.log("starting upload");
 	req.form.complete(function(err, fields, files) {
@@ -79,6 +91,7 @@ server.post('/upload', function(req, res, next) {
 		process.stdout.write('Uploading: ' + percent + '\r');
 	});
 });
+*/
 
 server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
@@ -554,6 +567,8 @@ everyone.now.reLogin = function() {
 everyone.now.reRegister = function() {
 	this.now.reRegisterAlert();
 }
+
+//this is testing stuff
 
 everyone.now.becomeAristocrat = function() {
 	var self = this;

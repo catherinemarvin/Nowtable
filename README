@@ -1,4 +1,4 @@
 Nowtable is a real-time DJing service built on Node and Now! Upload music and listen to it together!
 
-Dependencies: Node, Express, Now, Connect-Form, Formidable, MongoDB, node-mongodb-native, Mongoose
+Dependencies: Node, Express, Now, Connect-Form, Formidable, MongoDB, node-mongodb-native 
 
