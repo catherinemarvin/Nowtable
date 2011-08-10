@@ -302,7 +302,7 @@ $(document).ready(function(){
   	 $('#registerdiv').slideToggle(200);
   });
   
-  $('#closebtn').click(function(){
+  $('#closeupload').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#logindiv').slideUp(200);
@@ -310,7 +310,7 @@ $(document).ready(function(){
     $('#registerdiv').slideUp(200);
   });
   
-  $('#closebtn1').click(function(){
+  $('#closequeue').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#logindiv').slideUp(200);
@@ -318,7 +318,7 @@ $(document).ready(function(){
     $('#registerdiv').slideUp(200);
   });
   
-  $('#closebtn2').click(function(){
+  $('#closesettings').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
@@ -326,7 +326,7 @@ $(document).ready(function(){
     $('#registerdiv').slideUp(200);
   });
   
-  $('#closebtn3').click(function(){
+  $('#closelogin').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
@@ -334,7 +334,7 @@ $(document).ready(function(){
     $('#registerdiv').slideUp(200);
   });
   
-  $('#closebtn4').click(function(){
+  $('#closeregister').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
@@ -360,7 +360,7 @@ $(document).ready(function(){
   <div class="clear"></div>
  
   <div id="upload">
-   <div class="right button" id="closebtn">close x</div>
+   <div class="right button" id="closeupload">close x</div>
   	<div class="big">upload a new song</div>
   	<form id="uploadForm" action="/upload" enctype="multipart/form-data" method="post">	
 				Title of the song: <input type="text" name="title" />	
@@ -369,12 +369,12 @@ $(document).ready(function(){
 	</form> 
   </div>
   <div id="addqueue">
-  	<div class="right button" id="closebtn1">close x</div>
+  	<div class="right button" id="closequeue">close x</div>
   	<div class="big">add to the song queue</div><div id="addqueuelist"></div>
   </div>
   
   <div id="configdiv">
-   <div class="right button" id="closebtn2">close x</div>
+   <div class="right button" id="closesettings">close x</div>
   	<div class="big">settings</div>
   	<form name="namechangeform" action="" method="get">	
 				Change Username: <input type="text" name="uname"/>	
@@ -383,7 +383,7 @@ $(document).ready(function(){
   </div>
   
   <div id="logindiv">
-   <div class="right button" id="closebtn3">close x</div>
+   <div class="right button" id="closelogin">close x</div>
   	<div class="big">login</div>
   	<form name="loginform" action="/login" method="post">	
 				Username: <input type="text" id="uname" name="uname" placeholder="Slim Pickins"/></br>
@@ -393,7 +393,7 @@ $(document).ready(function(){
   </div>
   
   <div id="registerdiv">
-   <div class="right button" id="closebtn4">close x</div>
+   <div class="right button" id="closeregister">close x</div>
   	<div class="big">register</div>
   	<form name="registerform" action="/register" method="post">	
 				Username: <input type="text" id="unamereg" name="uname" placeholder="Slim Pickins"/></br>
