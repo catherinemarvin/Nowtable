@@ -62,7 +62,8 @@ server.get('/play/:song', function(req, res) {
 
 server.post('/upload', function(req, res, next) {
 	console.log("STARTING TO UPLOAD");
-	formidable.parse(req, function (err, fields, files) {
+	var form = new formidable.IncomingForm(); //not sure this line is right
+	form.parse(req, function (err, fields, files) {
 		fs.writeFile('derp.mp3', files.upload, 'utf8', function (err) {
 			if (err) throw err;
 			console.log("Saved lol");
