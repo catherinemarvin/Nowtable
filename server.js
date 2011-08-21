@@ -3,7 +3,6 @@ var version = 0.1;
 var express = require('express');
 var path = require('path');
 var fs = require('fs');
-
 var formidable = require('formidable');
 var http = require('http');
 var sys = require('sys');
@@ -14,6 +13,8 @@ Connection = require('mongodb').Connection,
 Server = require('mongodb').Server,
 BSON = require('mongodb').BSONNative;
 
+//All user login data is stored in the "nowtable" database
+//in the "userinfo" collection
 var collection;
 var db = new Db('nowtable', new Server("localhost", 27017, {}), {native_parser:false});
 db.open(function(err, conn) {
@@ -102,33 +103,7 @@ var nowjs = require('now');
 //Logging stuff. It's on a scale from 1-5.
 var everyone = nowjs.initialize(server, {socketio:{"log level": process.argv[2]}});
 
-var numKings = 0;
-var numAristocrats = 0;
-
-everyone.now.tryLogin = function(uname, pwd) {
-	var self = this;
-		collection.findOne({username: uname}, function(err, doc){
-		if (doc.password == pwd) {
-			self.now.finishLogin(uname);
-		} else {
-			self.now.reLogin();
-		}
-	});
-};
-
-
-everyone.now.tryRegister = function(uname, pwd) {
-	var self = this;
-	collection.findOne({username: uname}, function(err, doc){
-		if (doc) {
-			self.now.reRegister();
-		} else {
-			collection.insert({username: uname, password: pwd, loggedIn: false, uId: 0, isKing: false, isAristocrat: false});
-			self.now.finishRegister();
-		}
-	});
-}
-
+//what to do when a client disconnects
 nowjs.on('disconnect', function() {
 	var self = this;
 	collection.findOne({uId: self.user.clientId}, function(err, doc) {
@@ -168,9 +143,101 @@ nowjs.on('disconnect', function() {
 	});
 });
 
+//what to do when a client connects
 nowjs.on('connect', function() {
-	
+	//should have them open login box here.
 });
+
+//this number should never go above 1
+var numKings = 0;
+
+//this can be up to 5 at the moment
+var numAristocrats = 0;
+
+//This function will run in the background to make sure that a song will be played 
+//the instant it is added to the queue if there were previously no songs.
+var t;
+function checkToPlay() {
+	if (songQueue.length == 0) {
+		//wait until a song is added
+	} else {
+		//tell king to play next song or just keep playing the current
+	}
+	t=setTimeout("checkToPlay()",1000);
+}
+
+//================================================================
+//Logging-in/Register Section
+//================================================================
+
+//obselete (no longer used)
+/*
+everyone.now.tryLogin = function(uname, pwd) {
+	var self = this;
+	collection.findOne({username: uname}, function(err, doc){
+		if (doc.password == pwd) {
+			self.now.finishLogin(uname);
+		} else {
+			self.now.reLogin();
+		}
+	});
+};
+*/
+
+//this function is run by the client to attempt to login
+//password is checked and then if it is, ones is page is
+//updated to reflect being logged in
+everyone.now.tryLogin = function(uname, pwd) {
+	var self = this;
+	collection.findOne({username: uname}, function(err, doc) {
+		if (doc.password == pwd) {
+			self.now.finishLogin(uname);
+			console.log("this is what we found: ",doc);
+			doc.loggedIn = true;
+			doc.uId = self.user.clientId;
+			collection.update({username: uname}, doc, function (err, doc) {
+				process.nextTick(function () {
+					everyone.now.wipeUsersDiv();
+					everyone.now.getUserList();
+					self.now.getCurrentSong();
+				});
+			});
+		} else {
+			self.now.reLogin();
+		}
+				
+	});
+};
+
+everyone.now.tryRegister = function(uname, pwd) {
+	var self = this;
+	collection.findOne({username: uname}, function(err, doc){
+		if (doc) {
+			self.now.reRegister();
+		} else {
+			collection.insert({username: uname, password: pwd, loggedIn: false, uId: 0, isKing: false, isAristocrat: false});
+			self.now.finishRegister();
+		}
+	});
+}
+
+//unused
+everyone.now.finishRegister = function() { }
+
+//tells client to reloggin because password was bad
+everyone.now.reLogin = function() {
+	this.now.reLoginAlert();
+}
+
+//tells client to reloggin because error occured (duplicate username etc.)
+everyone.now.reRegister = function() {
+	this.now.reRegisterAlert();
+}
+
+//================================================================
+//End of Logging-in/Register Section
+//================================================================
+
 
 everyone.now.songTest = function(songid, time) {
 	console.log("King Song: " + songid);
@@ -506,34 +573,6 @@ everyone.now.getSongList = function() {
 			}
 		});
 	});
-}
-
-everyone.now.finishLogin = function(uname) {
-	var self = this;
-	collection.findOne({username: uname}, function(err, doc) {
-		console.log("this is what we found: ",doc);
-		doc.loggedIn = true;
-		doc.uId = self.user.clientId;
-		collection.update({username: uname}, doc, function (err, doc) {
-			process.nextTick(function () {
-				everyone.now.wipeUsersDiv();
-				everyone.now.getUserList();
-				self.now.getCurrentSong();
-			});
-		});		
-	});
-};
-
-everyone.now.finishRegister = function() {
-	
-}
-
-everyone.now.reLogin = function() {
-	this.now.reLoginAlert();
-}
-
-everyone.now.reRegister = function() {
-	this.now.reRegisterAlert();
 }
 
 //this is testing stuff
