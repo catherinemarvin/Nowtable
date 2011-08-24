@@ -283,14 +283,14 @@ $(document).ready(function(){
   $('#addbtn').click(function(){
     $('#upload').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#logindiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
     $('#addqueue').slideToggle(200);
   });
  
   $('#uploadbtn').click(function(){
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#logindiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
     $('#upload').slideToggle(200);
   });
   
@@ -298,34 +298,30 @@ $(document).ready(function(){
   	 $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
-  	 $('#logindiv').slideToggle(200);
-  	 $('#registerdiv').slideToggle(200);
+  	 $('#loginregisterdiv').slideToggle(200);
   });
   
   $('#closeupload').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
-    $('#logindiv').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#registerdiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
   });
   
   $('#closequeue').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
-    $('#logindiv').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#registerdiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
   });
   
   $('#closesettings').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#logindiv').slideUp(200);
-    $('#registerdiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
   });
-  
+  /*
   $('#closelogin').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
@@ -341,6 +337,13 @@ $(document).ready(function(){
     $('#logindiv').slideUp(200);
     $('#registerdiv').slideUp(200);
   });
+*/
+	$('#closeloginregister').click(function () {
+		$('#upload').slideUp(200);
+	    $('#addqueue').slideUp(200);
+	    $('#configdiv').slideUp(200);
+	    $('#loginregisterdiv').slideUp(200);
+	})
   
 });
 
@@ -351,22 +354,23 @@ $(document).ready(function(){
 
 
 <div id="main">
-  <div id="top">
-    <div id="text"><marquee scrollamount="6" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
-    <div id="l"></div>
-    <div id="r"></div>
-  </div>
-  <div id="logo"><img src="images/logo.png"></div>
-  <div class="clear"></div>
+	<div id="top">
+    	<div id="text"><marquee scrollamount="6" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
+		<div id="l"></div>
+    	<div id="r"></div>
+	</div>
+
+	<div id="logo"><img src="images/logo.png"></div>
+  	<div class="clear"></div>
  
-  <div id="upload">
-   <div class="right button" id="closeupload">close x</div>
-  	<div class="big">upload a new song</div>
-  	<form id="uploadForm" action="/upload" enctype="multipart/form-data" method="post">	
-				Title of the song: <input type="text" name="title" />	
-				<input type="file" name="song" /><br>
-				<input type="submit" value="Upload" />	
-	</form> 
+  	<div id="upload">
+   		<div class="right button" id="closeupload">close x</div>
+  		<div class="big">upload a new song</div>
+  		<form id="uploadForm" action="/upload" enctype="multipart/form-data" method="post">	
+			Title of the song: <input type="text" name="title" />	
+			<input type="file" name="song" /><br>
+			<input type="submit" value="Upload" />	
+		</form> 
   </div>
   <div id="addqueue">
   	<div class="right button" id="closequeue">close x</div>
@@ -381,7 +385,29 @@ $(document).ready(function(){
 				<input type="button" id="submitname" value="Submit" onclick="now.getCurrentSong()"/>	
 	</form> 
   </div>
-  
+
+
+<div id="loginregisterdiv">
+	<div class="right button" id="closeloginregister">close X</div>
+	<div class="big">Login</div>
+	<form name="loginform" action="/login" method="post">
+		Username: <input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>
+		Password: <input type="password" id="pwd" name="pwd"/></br>
+		<input type="button" id="loginsubmit" value="Login"/>
+	</form>
+	
+	<br>
+	
+	<div class="big">Register</div>
+	<form name="registerform" action="/register" method="post">
+		Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>
+		Password: <input type="password" id="pwd" name="pwd"></br>
+		<input type="button" id="registersubmit" value="Register"/>
+	</form>
+</div>
+
+		
+  <!--
   <div id="logindiv">
    <div class="right button" id="closelogin">close x</div>
   	<div class="big">login</div>
@@ -401,6 +427,7 @@ $(document).ready(function(){
 				<input type="button" id="registersubmit" value="Register"/>	
 	</form> 
   </div>
+-->
   
   <div id="content">
   	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>

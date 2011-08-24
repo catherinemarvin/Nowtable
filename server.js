@@ -1,4 +1,4 @@
-var version = 0.1;
+var version = 0.1; //when do we ever use this??? -Kevin
 
 var express = require('express');
 var path = require('path');
@@ -11,7 +11,7 @@ var form = require('connect-form');
 var Db = require('mongodb').Db,
 Connection = require('mongodb').Connection,
 Server = require('mongodb').Server,
-BSON = require('mongodb').BSONNative;
+BSON = require('mongodb').BSONNative; 
 
 //All user login data is stored in the "nowtable" database
 //in the "userinfo" collection
@@ -24,12 +24,13 @@ db.open(function(err, conn) {
 	});
 });
 
+//Keep extensions and put uploaded files in /static/music if you should use Formidable.
 var server = express.createServer(
 	form({keepExtensions: true, uploadDir: __dirname+"/static/music"})
 );
 
 server.set('view options', {
-layout: false
+	layout: false
 });
 
 var user = {};
@@ -60,7 +61,7 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
-
+//Almost certain this doesn't work. -Kevin
 server.post('/upload', function(req, res, next) {
 	console.log("STARTING TO UPLOAD");
 	var form = new formidable.IncomingForm(); //not sure this line is right
@@ -73,6 +74,12 @@ server.post('/upload', function(req, res, next) {
 });
 
 /*
+**********************************************
+AFAIK this is the only version of uploading that works, but it's not async.
+
+Perhaps what we want to do is to have an iframe that will post to /upload. -Kevin
+**********************************************
+
 server.post('/upload', function(req, res, next) {
 	console.log("starting upload");
 	req.form.complete(function(err, fields, files) {
@@ -170,7 +177,7 @@ function checkToPlay() {
 //Logging-in/Register Section
 //================================================================
 
-//obselete (no longer used)
+//obsolete (no longer used)
 /*
 everyone.now.tryLogin = function(uname, pwd) {
 	var self = this;
