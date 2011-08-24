@@ -216,6 +216,11 @@ everyone.now.tryLogin = function(uname, pwd) {
 	});
 };
 
+everyone.now.finishLogin = function () {
+	self.now.cleanLoginRegister();
+	
+}
+
 everyone.now.tryRegister = function(uname, pwd) {
 	var self = this;
 	collection.findOne({username: uname}, function(err, doc){
@@ -223,13 +228,27 @@ everyone.now.tryRegister = function(uname, pwd) {
 			self.now.reRegister();
 		} else {
 			collection.insert({username: uname, password: pwd, loggedIn: false, uId: 0, isKing: false, isAristocrat: false});
-			self.now.finishRegister();
+			self.now.finishRegister(uname, pwd);
 		}
 	});
 }
 
-//unused
-everyone.now.finishRegister = function() { }
+//Now that you're registered, you need to be logged in.
+everyone.now.finishRegister = function(uname, pwd) { 
+	var self = this;
+	collection.findOne({username: uname}, function (err, doc) {
+		doc.loggedIn = true;
+		doc.uId = self.user.clientId;
+		collection.update({username: uname}, doc, function (err, doc) {
+			process.nextTick(function () {
+				everyone.now.wipeUsersDiv();
+				everyone.now.getUserList();
+				self.now.getCurrentSong();
+			});
+		});
+	});
+	self.now.cleanLoginRegister();
+}
 
 //tells client to reloggin because password was bad
 everyone.now.reLogin = function() {

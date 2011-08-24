@@ -218,6 +218,14 @@ $(document).ready(function(){
 	now.reRegisterAlert = function () {
 		alert("Username is already taken.");
 	}
+	
+	now.cleanLoginRegister = function () {
+		$('#loginregisterdiv').slideUp(200);
+		$('#unamereg').val("");
+		$('#pwdreg').val("");
+		$('#uname').val("");
+		$('#pwd').val("");
+	}
 	now.ready(function(){
 		$("#jquery_jplayer_1").jPlayer({
         	ready: function () {
@@ -401,7 +409,7 @@ $(document).ready(function(){
 	<div class="big">Register</div>
 	<form name="registerform" action="/register" method="post">
 		Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>
-		Password: <input type="password" id="pwd" name="pwd"></br>
+		Password: <input type="password" id="pwdreg" name="pwd"></br>
 		<input type="button" id="registersubmit" value="Register"/>
 	</form>
 </div>
