@@ -61,6 +61,7 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
+/*
 //Almost certain this doesn't work. -Kevin
 server.post('/upload', function(req, res, next) {
 	console.log("STARTING TO UPLOAD");
@@ -72,6 +73,7 @@ server.post('/upload', function(req, res, next) {
 		});
 	});
 });
+*/
 
 /*
 **********************************************
@@ -79,6 +81,7 @@ AFAIK this is the only version of uploading that works, but it's not async.
 
 Perhaps what we want to do is to have an iframe that will post to /upload. -Kevin
 **********************************************
+*/
 
 server.post('/upload', function(req, res, next) {
 	console.log("starting upload");
@@ -91,8 +94,6 @@ server.post('/upload', function(req, res, next) {
 				everyone.now.wipeSongDiv();
 				everyone.now.getSongList();
 			});
-			res.redirect('back');
-			res.end("done");
 		}
 	});
 	req.form.on('progress', function(bytesReceived, bytesExpected) {
@@ -100,7 +101,7 @@ server.post('/upload', function(req, res, next) {
 		process.stdout.write('Uploading: ' + percent + '\r');
 	});
 });
-*/
+
 
 server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
@@ -217,8 +218,7 @@ everyone.now.tryLogin = function(uname, pwd) {
 };
 
 everyone.now.finishLogin = function () {
-	self.now.cleanLoginRegister();
-	
+	this.now.cleanLoginRegister();
 }
 
 everyone.now.tryRegister = function(uname, pwd) {
