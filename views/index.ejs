@@ -17,9 +17,82 @@
 <script src="/nowjs/now.js"></script>
 <script type="text/javascript" src="/jquery.form.js"></script>
 
-<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.15/themes/base/jquery-ui.css" id="theme">
-
 <!-- begin the Javascript business -->
+
+<script type="text/javascript">
+var TCNDDU = {};
+
+
+  TCNDDU.setup = function () {
+
+    //if(typeof window["FileReader"] === "function") {
+      // File API interaction goes here
+    //} else {
+      // No File API support fallback to file input
+      //dropArea.prepend(fileInput);
+      $("#uploadsong").bind("change", TCNDDU.handleDrop);
+    //}
+  };
+
+
+
+  TCNDDU.handleDrop = function (evt) {
+    var files = evt.target.files;
+
+    for(var i = 0, len = files.length; i < len; i++) {
+
+      //domElements[1].appendChild(document.createTextNode(files[i].fileName + " " + Math.round((files[i].fileSize/1024*100000)/100000)+"K "));
+      //domElements[0].id = "item"+i;
+
+      if(files[i].fileSize != 0) {
+
+        // Use xhr to send files to server async both Chrome and Safari support xhr2 upload and progress events
+        TCNDDU.processXHR(files[i], i);
+
+      }
+    }
+  };
+
+  TCNDDU.processXHR = function (file, index) {
+    var xhr = new XMLHttpRequest(),
+      loader;
+      fileUpload = xhr.upload,
+
+
+
+    fileUpload.addEventListener("progress", function(event) {
+      if (event.lengthComputable) {
+        var percentage = Math.round((event.loaded * 100) / event.total);
+        if (percentage < 100) {
+          console.log("THIS IS PERCENTAGE: ", percentage);
+        }
+      }
+    }, false);
+
+    fileUpload.addEventListener("load", function(event) {
+   
+    }, false);
+
+    fileUpload.addEventListener("error", function(evt) {
+     
+    }, false);
+
+    xhr.open("POST", "/upload");
+	
+    xhr.setRequestHeader("If-Modified-Since", "Mon, 26 Jul 1997 05:00:00 GMT");
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.setRequestHeader("X-File-Name", file.fileName);
+    xhr.setRequestHeader("X-File-Size", file.fileSize);
+
+    //xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    var formData = new FormData();
+	formData.append('files', file);
+	xhr.send(formData);
+
+  };
+
+</script>
 
 <script type="text/javascript">
 
@@ -27,6 +100,7 @@ var playing = false;
 var muted = false;
 
 $(document).ready(function(){
+	TCNDDU.setup();
 
 	$('#loginsubmit').click(function() {
 		now.tryLogin($('#uname').val(), $('#pwd').val());
@@ -361,15 +435,10 @@ $(document).ready(function(){
 	<div id="logo"><img src="images/logo.png"></div>
   	<div class="clear"></div>
 
- 
   	<div id="upload">
    		<div class="right button" id="closeupload">close x</div>
-  		<div class="big">upload a new song</div>
-  		<form id="uploadForm" action="/upload" enctype="multipart/form-data" method="post">	
-			Title of the song: <input type="text" name="title" />	
-			<input type="file" name="song" /><br>
-			<input type="submit" value="Upload" />	
-		</form> 
+  		<div class="big">upload a new song</div>	
+		<input type="file" id="uploadsong" name="uploadsong" /><br>	
   </div>
 	
   <div id="addqueue">

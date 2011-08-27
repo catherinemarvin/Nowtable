@@ -83,6 +83,7 @@ Perhaps what we want to do is to have an iframe that will post to /upload. -Kevi
 **********************************************
 */
 
+/*
 server.post('/upload', function(req, res, next) {
 	console.log("starting upload");
 	req.form.complete(function(err, fields, files) {
@@ -100,6 +101,54 @@ server.post('/upload', function(req, res, next) {
 		var percent = (bytesReceived / bytesExpected * 100) | 0;
 		process.stdout.write('Uploading: ' + percent + '\r');
 	});
+});
+*/
+/*
+server.post('/upload', function(req, res, next) {
+	console.log("STARTING TO UPLOAD");
+	req.form.complete(function(err, fields, files) {
+		if (err) {
+			console.log("ERROR OMG");
+			next(err);
+		} else {
+			console.log("hi");
+			console.log("THIS IS WHAT YOU UPLOADED: ", files);
+			console.log("LOLOLOL: ", files.songs.name);
+			fs.rename(files.songs.path, __dirname + "/static/music/" + files.songs.name, function () {
+				everyone.now.wipeSongDiv();
+				everyone.now.getSongList();
+			});
+			res.end("FUCK YOU");
+		}
+	});
+	
+});
+*/
+
+server.post('/upload', function(req, res) {
+  var form = new formidable.IncomingForm();
+  form.uploadDir = __dirname + '/static/music';
+  form.encoding = 'binary';
+
+  form.addListener('file', function(name, file) {
+	console.log(file.path);
+	console.log(file.name);
+	fs.rename(file.path, __dirname + "/static/music/" + file.name, function () {
+		console.log(arguments);
+		everyone.now.wipeSongDiv();
+		everyone.now.getSongList();
+	});
+  });
+
+  form.addListener('end', function() {
+    res.end();
+  });
+
+  form.parse(req, function(err, fields, files) {
+    if (err) {
+      console.log(err);
+    }
+  });
 });
 
 
