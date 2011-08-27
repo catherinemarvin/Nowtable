@@ -289,7 +289,13 @@ $(document).ready(function(){
 		$('#pwdreg').val("");
 		$('#uname').val("");
 		$('#pwd').val("");
+		$('#loginregisterdiv').html("<a href='#' onclick='now.tryLogout()'>Logout</a>");
 	}
+	
+	now.finishLogout = function () {
+		$('#loginregisterdiv').html('<div class="right button" id="closeloginregister">close X</div><div class="big">Login</div><form name="loginform" action="/login" method="post">Username: <input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>Password: <input type="password" id="pwd" name="pwd"/></br><input type="button" id="loginsubmit" value="Login"/></form><br><div class="big">Register</div><form name="registerform" action="/register" method="post">Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>Password: <input type="password" id="pwdreg" name="pwd"></br><input type="button" id="registersubmit" value="Register"/></form>');
+	};
+	
 	now.ready(function(){
 		$("#jquery_jplayer_1").jPlayer({
         	ready: function () {

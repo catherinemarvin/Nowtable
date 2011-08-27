@@ -309,6 +309,24 @@ everyone.now.reRegister = function() {
 	this.now.reRegisterAlert();
 }
 
+everyone.now.tryLogout = function () {
+	var self = this;
+	var theUID = self.user.clientId;
+	collection.findOne({uId: theUID}, function (err, doc) {
+		doc.loggedIn = false;
+		doc.uId = 0;
+		doc.isKing = false;
+		doc.isAristocrat = false;
+		collection.update({uId: theUID}, doc, function (err, doc) {
+			self.now.finishLogout();
+			process.nextTick(function () {
+				everyone.now.wipeUsersDiv();
+				everyone.now.getUserList();
+			});
+		});
+	});
+};
+
 //================================================================
 //End of Logging-in/Register Section
 //================================================================
