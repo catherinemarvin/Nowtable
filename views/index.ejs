@@ -399,6 +399,14 @@ $(document).ready(function(){
     $('#configdiv').slideUp(200);
     $('#loginregisterdiv').slideUp(200);
   });
+
+	$('#becomeAristocrat').click(function () {
+		now.becomeAristocrat();
+	});
+	
+	$('#unAristocrat').click(function () {
+		now.unAristocrat();
+	});
   /*
   $('#closelogin').click(function(){
     $('#upload').slideUp(200);
@@ -544,6 +552,8 @@ $(document).ready(function(){
 <input type="button" id="becomeAristocrat" value="Become Aristocrat" onclick="now.becomeAristocrat()"/>
 -->
 	<div class="big"><div class="left">ascend</div><div class="right button" id="becomeAristocrat">&#9834;</div><div class="clear"></div></div>
+	
+	<div class="big"><div class="left">abdicate</div><div class="right button" id="unAristocrat">&#9773;</div><div class="clear"></div></div>
   </div>
   
 </div>
