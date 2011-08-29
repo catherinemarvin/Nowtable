@@ -17,3 +17,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Dependencies: node express now connect-form formidable mongodb ejs
 
+To run the code, simply run server.js.

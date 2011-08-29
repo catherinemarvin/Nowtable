@@ -299,6 +299,7 @@ $(document).ready(function(){
 		$('#loginregisterdiv').html("<a href='#' onclick='now.tryLogout()'>Logout</a>");
 		$('#ascend').css('display', 'inline');
 		$('#uploadbtn').css('display', 'inline');
+		$('#queuediv').css('display', 'inline');
 		$('#queue').css('display', 'inline');
 	}
 	
@@ -493,18 +494,24 @@ $(document).ready(function(){
 	<div class="right button" id="closeloginregister">close X</div>
 	<div class="big">Login</div>
 	<form name="loginform" action="/login" method="post">
-		Username: <input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>
-		Password: <input type="password" id="pwd" name="pwd"/></br>
-		<input type="button" id="loginsubmit" value="Login"/>
+		Username
+		<br><input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>
+		<br>Password
+		<br><input type="password" id="pwd" name="pwd"/>
+		<br>
+		<br><input type="button" id="loginsubmit" value="Login"/>
 	</form>
 	
 	<br>
 	
 	<div class="big">Register</div>
 	<form name="registerform" action="/register" method="post">
-		Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>
-		Password: <input type="password" id="pwdreg" name="pwd"></br>
-		<input type="button" id="registersubmit" value="Register"/>
+		Username
+		<br><input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/>
+		<br>Password
+		<br><input type="password" id="pwdreg" name="pwd">
+		<br>
+		<br><input type="button" id="registersubmit" value="Register"/>
 	</form>
 </div>
 
@@ -559,7 +566,7 @@ $(document).ready(function(){
       <div class="button" id="uploadbtn">upload</div>
     </div>
     <div class="clear"></div>
-    <div class="big" id="queue"><div class="left">queue</div><div class="right button" id="addbtn">+</div><div class="clear"></div></div>
+    <div class="big" id="queuediv"><div class="left">queue</div><div class="right button" id="addbtn">+</div><div class="clear"></div></div>
     <ul id="queue">
 		
     </ul>
