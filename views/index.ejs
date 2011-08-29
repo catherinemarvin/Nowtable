@@ -291,6 +291,8 @@ $(document).ready(function(){
 		$('#pwd').val("");
 		$('#loginregisterdiv').html("<a href='#' onclick='now.tryLogout()'>Logout</a>");
 		$('#ascend').css('display', 'inline');
+		$('#uploadbtn').css('display', 'inline');
+		$('#queue').css('display', 'inline');
 	}
 	
 	now.finishLogout = function () {
@@ -550,7 +552,7 @@ $(document).ready(function(){
       <div class="button" id="uploadbtn">upload</div>
     </div>
     <div class="clear"></div>
-    <div class="big"><div class="left">queue</div><div class="right button" id="addbtn">+</div><div class="clear"></div></div>
+    <div class="big" id="queue"><div class="left">queue</div><div class="right button" id="addbtn">+</div><div class="clear"></div></div>
     <ul id="queue">
 		
     </ul>

@@ -187,7 +187,7 @@ html, body {
   margin: 15px 0;
 }
 
-#ascend, #abdicate {
+#ascend, #abdicate, #uploadbtn, #queue {
 	display: none;
 	overflow-y: auto;
 }
