@@ -687,6 +687,7 @@ everyone.now.becomeAristocrat = function() {
 			}
 			collection.update({uId: self.user.clientId}, doc, function (err, doc) {
 				process.nextTick(function () {
+					self.now.cleanAristocrat();
 					everyone.now.wipeUsersDiv();
 					everyone.now.getUserList();
 				});
@@ -707,15 +708,19 @@ everyone.now.unAristocrat = function () {
 					doc.isKing = false;
 					collection.find({isAristocrat: true}, function(err, cursor) {
 						cursor.toArray(function (err, docs) {
-							if (docs) {
+							if (docs[0]) {
 								var newKing = docs[0];
 								newKing.isKing = true;
 								collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
+									self.now.cleanUnaristocrat();
 									everyone.now.wipeUsersDiv();
 									everyone.now.getUserList();
 								});
 							} else {
 								numKings = 0;
+								self.now.cleanUnaristocrat();
+								everyone.now.wipeUsersDiv();
+								everyone.now.getUserList();
 							}
 						});
 					});

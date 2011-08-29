@@ -290,11 +290,21 @@ $(document).ready(function(){
 		$('#uname').val("");
 		$('#pwd').val("");
 		$('#loginregisterdiv').html("<a href='#' onclick='now.tryLogout()'>Logout</a>");
+		$('#ascend').css('display', 'inline');
 	}
 	
 	now.finishLogout = function () {
 		$('#loginregisterdiv').html('<div class="right button" id="closeloginregister">close X</div><div class="big">Login</div><form name="loginform" action="/login" method="post">Username: <input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>Password: <input type="password" id="pwd" name="pwd"/></br><input type="button" id="loginsubmit" value="Login"/></form><br><div class="big">Register</div><form name="registerform" action="/register" method="post">Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>Password: <input type="password" id="pwdreg" name="pwd"></br><input type="button" id="registersubmit" value="Register"/></form>');
 	};
+	
+	now.cleanAristocrat = function () {
+		$('#abdicate').css('display', 'inline');
+		$('#ascend').css('display', 'none');
+	}
+	now.cleanUnaristocrat = function () {
+		$('#abdicate').css('display', 'none');
+		$('#ascend').css('display', 'inline');
+	}
 	
 	now.ready(function(){
 		$("#jquery_jplayer_1").jPlayer({
@@ -551,9 +561,9 @@ $(document).ready(function(){
     <!--
 <input type="button" id="becomeAristocrat" value="Become Aristocrat" onclick="now.becomeAristocrat()"/>
 -->
-	<div class="big"><div class="left">ascend</div><div class="right button" id="becomeAristocrat">&#9834;</div><div class="clear"></div></div>
+	<div class="big" id="ascend"><div class="left">ascend</div><div class="right button" id="becomeAristocrat">&#9834;</div><div class="clear"></div></div>
 	
-	<div class="big"><div class="left">abdicate</div><div class="right button" id="unAristocrat">&#9773;</div><div class="clear"></div></div>
+	<div class="big" id="abdicate"><div class="left">abdicate</div><div class="right button" id="unAristocrat">&#9773;</div><div class="clear"></div></div>
   </div>
   
 </div>

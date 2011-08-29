@@ -178,13 +178,18 @@ html, body {
 }
 
 
-#upload, #addqueue, #configdiv, #logindiv, #registerdiv{
+#upload, #addqueue, #configdiv, #logindiv, #registerdiv {
   background-color: #111;
   display: none;
   height: 300px;
   overflow-y: auto;
   padding: 20px;
   margin: 15px 0;
+}
+
+#ascend, #abdicate {
+	display: none;
+	overflow-y: auto;
 }
 
 #queue li {
