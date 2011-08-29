@@ -27,20 +27,87 @@
 <!-- begin the Javascript business -->
 
 <script type="text/javascript">
+var TCNDDU = {};
+
+
+  TCNDDU.setup = function () {
+
+    //if(typeof window["FileReader"] === "function") {
+      // File API interaction goes here
+    //} else {
+      // No File API support fallback to file input
+      //dropArea.prepend(fileInput);
+      $("#uploadsong").bind("change", TCNDDU.handleDrop);
+    //}
+  };
+
+
+
+  TCNDDU.handleDrop = function (evt) {
+    var files = evt.target.files;
+
+    for(var i = 0, len = files.length; i < len; i++) {
+
+      //domElements[1].appendChild(document.createTextNode(files[i].fileName + " " + Math.round((files[i].fileSize/1024*100000)/100000)+"K "));
+      //domElements[0].id = "item"+i;
+
+      if(files[i].fileSize != 0) {
+
+        // Use xhr to send files to server async both Chrome and Safari support xhr2 upload and progress events
+        TCNDDU.processXHR(files[i], i);
+
+      }
+    }
+  };
+
+  TCNDDU.processXHR = function (file, index) {
+    var xhr = new XMLHttpRequest(),
+      loader;
+      fileUpload = xhr.upload,
+
+
+
+    fileUpload.addEventListener("progress", function(event) {
+      if (event.lengthComputable) {
+        var percentage = Math.round((event.loaded * 100) / event.total);
+        if (percentage < 100) {
+          console.log("THIS IS PERCENTAGE: ", percentage);
+        }
+      }
+    }, false);
+
+    fileUpload.addEventListener("load", function(event) {
+   
+    }, false);
+
+    fileUpload.addEventListener("error", function(evt) {
+     
+    }, false);
+
+    xhr.open("POST", "/upload");
+	
+    xhr.setRequestHeader("If-Modified-Since", "Mon, 26 Jul 1997 05:00:00 GMT");
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+    xhr.setRequestHeader("X-File-Name", file.fileName);
+    xhr.setRequestHeader("X-File-Size", file.fileSize);
+
+    //xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    var formData = new FormData();
+	formData.append('files', file);
+	xhr.send(formData);
+
+  };
+
+</script>
+
+<script type="text/javascript">
 
 var playing = false;
 var muted = false;
 
 $(document).ready(function(){
-	
-	var uploader = new qq.FileUploader({
-		//pass the dom node
-		element: document.getElementById('uploadForm'),
-		//additional data to send to the server
-		params: {title : "asdf"},
-		//path to server-side upload script
-		action: '/upload'
-	});
+	TCNDDU.setup();
 
 	$('#loginsubmit').click(function() {
 		now.tryLogin($('#uname').val(), $('#pwd').val());
@@ -222,6 +289,32 @@ $(document).ready(function(){
 	now.reRegisterAlert = function () {
 		alert("Username is already taken.");
 	}
+	
+	now.cleanLoginRegister = function () {
+		$('#loginregisterdiv').slideUp(200);
+		$('#unamereg').val("");
+		$('#pwdreg').val("");
+		$('#uname').val("");
+		$('#pwd').val("");
+		$('#loginregisterdiv').html("<a href='#' onclick='now.tryLogout()'>Logout</a>");
+		$('#ascend').css('display', 'inline');
+		$('#uploadbtn').css('display', 'inline');
+		$('#queue').css('display', 'inline');
+	}
+	
+	now.finishLogout = function () {
+		$('#loginregisterdiv').html('<div class="right button" id="closeloginregister">close X</div><div class="big">Login</div><form name="loginform" action="/login" method="post">Username: <input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>Password: <input type="password" id="pwd" name="pwd"/></br><input type="button" id="loginsubmit" value="Login"/></form><br><div class="big">Register</div><form name="registerform" action="/register" method="post">Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>Password: <input type="password" id="pwdreg" name="pwd"></br><input type="button" id="registersubmit" value="Register"/></form>');
+	};
+	
+	now.cleanAristocrat = function () {
+		$('#abdicate').css('display', 'inline');
+		$('#ascend').css('display', 'none');
+	}
+	now.cleanUnaristocrat = function () {
+		$('#abdicate').css('display', 'none');
+		$('#ascend').css('display', 'inline');
+	}
+	
 	now.ready(function(){
 		$("#jquery_jplayer_1").jPlayer({
         	ready: function () {
@@ -287,14 +380,14 @@ $(document).ready(function(){
   $('#addbtn').click(function(){
     $('#upload').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#logindiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
     $('#addqueue').slideToggle(200);
   });
  
   $('#uploadbtn').click(function(){
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#logindiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
     $('#upload').slideToggle(200);
   });
   
@@ -302,34 +395,38 @@ $(document).ready(function(){
   	 $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
-  	 $('#logindiv').slideToggle(200);
-  	 $('#registerdiv').slideToggle(200);
+  	 $('#loginregisterdiv').slideToggle(200);
   });
   
   $('#closeupload').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
-    $('#logindiv').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#registerdiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
   });
   
   $('#closequeue').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
-    $('#logindiv').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#registerdiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
   });
   
   $('#closesettings').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
     $('#configdiv').slideUp(200);
-    $('#logindiv').slideUp(200);
-    $('#registerdiv').slideUp(200);
+    $('#loginregisterdiv').slideUp(200);
   });
-  
+
+	$('#becomeAristocrat').click(function () {
+		now.becomeAristocrat();
+	});
+	
+	$('#unAristocrat').click(function () {
+		now.unAristocrat();
+	});
+  /*
   $('#closelogin').click(function(){
     $('#upload').slideUp(200);
     $('#addqueue').slideUp(200);
@@ -345,6 +442,13 @@ $(document).ready(function(){
     $('#logindiv').slideUp(200);
     $('#registerdiv').slideUp(200);
   });
+*/
+	$('#closeloginregister').click(function () {
+		$('#upload').slideUp(200);
+	    $('#addqueue').slideUp(200);
+	    $('#configdiv').slideUp(200);
+	    $('#loginregisterdiv').slideUp(200);
+	})
   
 });
 
@@ -355,23 +459,21 @@ $(document).ready(function(){
 
 
 <div id="main">
-  <div id="top">
-    <div id="text"><marquee scrollamount="6" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
-    <div id="l"></div>
-    <div id="r"></div>
+	<div id="top">
+    	<div id="text"><marquee scrollamount="6" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
+		<div id="l"></div>
+    	<div id="r"></div>
+	</div>
+
+	<div id="logo"><img src="images/logo.png"></div>
+  	<div class="clear"></div>
+
+  	<div id="upload">
+   		<div class="right button" id="closeupload">close x</div>
+  		<div class="big">upload a new song</div>	
+		<input type="file" id="uploadsong" name="uploadsong" /><br>	
   </div>
-  <div id="logo"><img src="images/logo.png"></div>
-  <div class="clear"></div>
- 
-  <div id="upload">
-   <div class="right button" id="closeupload">close x</div>
-  	<div class="big">upload a new song</div>
-  	<form id="uploadForm" action="/upload" enctype="multipart/form-data" method="post">	
-				Title of the song: <input type="text" name="title" />	
-				<input type="file" name="song" /><br>
-				<input type="submit" value="Upload" />	
-	</form> 
-  </div>
+	
   <div id="addqueue">
   	<div class="right button" id="closequeue">close x</div>
   	<div class="big">add to the song queue</div><div id="addqueuelist"></div>
@@ -385,7 +487,29 @@ $(document).ready(function(){
 				<input type="button" id="submitname" value="Submit" onclick="now.getCurrentSong()"/>	
 	</form> 
   </div>
-  
+
+
+<div id="loginregisterdiv">
+	<div class="right button" id="closeloginregister">close X</div>
+	<div class="big">Login</div>
+	<form name="loginform" action="/login" method="post">
+		Username: <input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>
+		Password: <input type="password" id="pwd" name="pwd"/></br>
+		<input type="button" id="loginsubmit" value="Login"/>
+	</form>
+	
+	<br>
+	
+	<div class="big">Register</div>
+	<form name="registerform" action="/register" method="post">
+		Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>
+		Password: <input type="password" id="pwdreg" name="pwd"></br>
+		<input type="button" id="registersubmit" value="Register"/>
+	</form>
+</div>
+
+		
+  <!--
   <div id="logindiv">
    <div class="right button" id="closelogin">close x</div>
   	<div class="big">login</div>
@@ -405,6 +529,7 @@ $(document).ready(function(){
 				<input type="button" id="registersubmit" value="Register"/>	
 	</form> 
   </div>
+-->
   
   <div id="content">
   	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>
@@ -434,7 +559,7 @@ $(document).ready(function(){
       <div class="button" id="uploadbtn">upload</div>
     </div>
     <div class="clear"></div>
-    <div class="big"><div class="left">queue</div><div class="right button" id="addbtn">+</div><div class="clear"></div></div>
+    <div class="big" id="queue"><div class="left">queue</div><div class="right button" id="addbtn">+</div><div class="clear"></div></div>
     <ul id="queue">
 		
     </ul>
@@ -442,7 +567,12 @@ $(document).ready(function(){
     <ul id="users">
 		
     </ul>
-    <input type="button" id="becomeAristocrat" value="Become Aristocrat" onclick="now.becomeAristocrat()"/>
+    <!--
+<input type="button" id="becomeAristocrat" value="Become Aristocrat" onclick="now.becomeAristocrat()"/>
+-->
+	<div class="big" id="ascend"><div class="left">ascend</div><div class="right button" id="becomeAristocrat">&#9834;</div><div class="clear"></div></div>
+	
+	<div class="big" id="abdicate"><div class="left">abdicate</div><div class="right button" id="unAristocrat">&#9773;</div><div class="clear"></div></div>
   </div>
   
 </div>

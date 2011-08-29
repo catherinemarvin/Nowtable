@@ -1,4 +1,4 @@
-var version = 0.1;
+var version = 0.1; //when do we ever use this??? -Kevin
 
 var express = require('express');
 var path = require('path');
@@ -11,7 +11,7 @@ var form = require('connect-form');
 var Db = require('mongodb').Db,
 Connection = require('mongodb').Connection,
 Server = require('mongodb').Server,
-BSON = require('mongodb').BSONNative;
+BSON = require('mongodb').BSONNative; 
 
 //All user login data is stored in the "nowtable" database
 //in the "userinfo" collection
@@ -24,12 +24,13 @@ db.open(function(err, conn) {
 	});
 });
 
+//Keep extensions and put uploaded files in /static/music if you should use Formidable.
 var server = express.createServer(
 	form({keepExtensions: true, uploadDir: __dirname+"/static/music"})
 );
 
 server.set('view options', {
-layout: false
+	layout: false
 });
 
 var user = {};
@@ -60,7 +61,8 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
-
+/*
+//Almost certain this doesn't work. -Kevin
 server.post('/upload', function(req, res, next) {
 	console.log("STARTING TO UPLOAD");
 	var form = new formidable.IncomingForm(); //not sure this line is right
@@ -71,6 +73,15 @@ server.post('/upload', function(req, res, next) {
 		});
 	});
 });
+*/
+
+/*
+**********************************************
+AFAIK this is the only version of uploading that works, but it's not async.
+
+Perhaps what we want to do is to have an iframe that will post to /upload. -Kevin
+**********************************************
+*/
 
 /*
 server.post('/upload', function(req, res, next) {
@@ -84,8 +95,6 @@ server.post('/upload', function(req, res, next) {
 				everyone.now.wipeSongDiv();
 				everyone.now.getSongList();
 			});
-			res.redirect('back');
-			res.end("done");
 		}
 	});
 	req.form.on('progress', function(bytesReceived, bytesExpected) {
@@ -94,6 +103,54 @@ server.post('/upload', function(req, res, next) {
 	});
 });
 */
+/*
+server.post('/upload', function(req, res, next) {
+	console.log("STARTING TO UPLOAD");
+	req.form.complete(function(err, fields, files) {
+		if (err) {
+			console.log("ERROR OMG");
+			next(err);
+		} else {
+			console.log("hi");
+			console.log("THIS IS WHAT YOU UPLOADED: ", files);
+			console.log("LOLOLOL: ", files.songs.name);
+			fs.rename(files.songs.path, __dirname + "/static/music/" + files.songs.name, function () {
+				everyone.now.wipeSongDiv();
+				everyone.now.getSongList();
+			});
+			res.end("FUCK YOU");
+		}
+	});
+	
+});
+*/
+
+server.post('/upload', function(req, res) {
+  var form = new formidable.IncomingForm();
+  form.uploadDir = __dirname + '/static/music';
+  form.encoding = 'binary';
+
+  form.addListener('file', function(name, file) {
+	console.log(file.path);
+	console.log(file.name);
+	fs.rename(file.path, __dirname + "/static/music/" + file.name, function () {
+		console.log(arguments);
+		everyone.now.wipeSongDiv();
+		everyone.now.getSongList();
+	});
+  });
+
+  form.addListener('end', function() {
+    res.end();
+  });
+
+  form.parse(req, function(err, fields, files) {
+    if (err) {
+      console.log(err);
+    }
+  });
+});
+
 
 server.listen(80);
 console.log("Express server listening on port %d", server.address().port);
@@ -170,7 +227,7 @@ function checkToPlay() {
 //Logging-in/Register Section
 //================================================================
 
-//obselete (no longer used)
+//obsolete (no longer used)
 /*
 everyone.now.tryLogin = function(uname, pwd) {
 	var self = this;
@@ -190,6 +247,7 @@ everyone.now.tryLogin = function(uname, pwd) {
 everyone.now.tryLogin = function(uname, pwd) {
 	var self = this;
 	collection.findOne({username: uname}, function(err, doc) {
+		if (doc) {
 		if (doc.password == pwd) {
 			self.now.finishLogin(uname);
 			console.log("this is what we found: ",doc);
@@ -205,9 +263,16 @@ everyone.now.tryLogin = function(uname, pwd) {
 		} else {
 			self.now.reLogin();
 		}
+	} else {
+		self.now.reLogin();
+	}
 				
 	});
 };
+
+everyone.now.finishLogin = function () {
+	this.now.cleanLoginRegister();
+}
 
 everyone.now.tryRegister = function(uname, pwd) {
 	var self = this;
@@ -216,13 +281,27 @@ everyone.now.tryRegister = function(uname, pwd) {
 			self.now.reRegister();
 		} else {
 			collection.insert({username: uname, password: pwd, loggedIn: false, uId: 0, isKing: false, isAristocrat: false});
-			self.now.finishRegister();
+			self.now.finishRegister(uname, pwd);
 		}
 	});
 }
 
-//unused
-everyone.now.finishRegister = function() { }
+//Now that you're registered, you need to be logged in.
+everyone.now.finishRegister = function(uname, pwd) { 
+	var self = this;
+	collection.findOne({username: uname}, function (err, doc) {
+		doc.loggedIn = true;
+		doc.uId = self.user.clientId;
+		collection.update({username: uname}, doc, function (err, doc) {
+			process.nextTick(function () {
+				everyone.now.wipeUsersDiv();
+				everyone.now.getUserList();
+				self.now.getCurrentSong();
+			});
+		});
+	});
+	self.now.cleanLoginRegister();
+}
 
 //tells client to reloggin because password was bad
 everyone.now.reLogin = function() {
@@ -233,6 +312,24 @@ everyone.now.reLogin = function() {
 everyone.now.reRegister = function() {
 	this.now.reRegisterAlert();
 }
+
+everyone.now.tryLogout = function () {
+	var self = this;
+	var theUID = self.user.clientId;
+	collection.findOne({uId: theUID}, function (err, doc) {
+		doc.loggedIn = false;
+		doc.uId = 0;
+		doc.isKing = false;
+		doc.isAristocrat = false;
+		collection.update({uId: theUID}, doc, function (err, doc) {
+			self.now.finishLogout();
+			process.nextTick(function () {
+				everyone.now.wipeUsersDiv();
+				everyone.now.getUserList();
+			});
+		});
+	});
+};
 
 //================================================================
 //End of Logging-in/Register Section
@@ -575,11 +672,9 @@ everyone.now.getSongList = function() {
 	});
 }
 
-//this is testing stuff
-
 everyone.now.becomeAristocrat = function() {
 	var self = this;
-	collection.findOne({uId: self.user.clientId}, function(err, doc) {
+	collection.findOne({uId: self.user.clientId}, function (err, doc) {
 		if (doc && doc.isAristocrat == false) {
 			if (numAristocrats < 5) {
 				doc.isAristocrat = true;
@@ -592,10 +687,54 @@ everyone.now.becomeAristocrat = function() {
 			}
 			collection.update({uId: self.user.clientId}, doc, function (err, doc) {
 				process.nextTick(function () {
+					self.now.cleanAristocrat();
 					everyone.now.wipeUsersDiv();
 					everyone.now.getUserList();
 				});
 			});
 		}
 	});
-}
+};
+
+everyone.now.unAristocrat = function () {
+	var self = this;
+	collection.findOne({uId: self.user.clientId}, function(err, doc) {
+		if (doc) {
+			if (doc.isAristocrat == true) {
+				doc.isAristocrat = false;
+				numAristocrats--;
+				console.log("Number of aristocrats now: "+numAristocrats);
+				if (doc.isKing == true) {
+					doc.isKing = false;
+					collection.find({isAristocrat: true}, function(err, cursor) {
+						cursor.toArray(function (err, docs) {
+							if (docs[0]) {
+								var newKing = docs[0];
+								newKing.isKing = true;
+								collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
+									self.now.cleanUnaristocrat();
+									everyone.now.wipeUsersDiv();
+									everyone.now.getUserList();
+								});
+							} else {
+								numKings = 0;
+								self.now.cleanUnaristocrat();
+								everyone.now.wipeUsersDiv();
+								everyone.now.getUserList();
+							}
+						});
+					});
+				} else {
+				
+				}
+			} else {
+				console.log('wat');
+			}
+			collection.update({uId: self.user.clientId}, doc, function (err, doc) {
+				process.nextTick(function () {
+					everyone.now.wipeUsersDiv();
+				});
+			});
+		}
+	});
+};
