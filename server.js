@@ -311,19 +311,43 @@ everyone.now.reRegister = function() {
 }
 
 everyone.now.tryLogout = function () {
+	console.log('gonna logout');
 	var self = this;
-	var theUID = self.user.clientId;
-	collection.findOne({uId: theUID}, function (err, doc) {
-		doc.loggedIn = false;
-		doc.uId = 0;
-		doc.isKing = false;
-		doc.isAristocrat = false;
-		collection.update({uId: theUID}, doc, function (err, doc) {
-			self.now.finishLogout();
-			process.nextTick(function () {
-				everyone.now.wipeUsersDiv();
+	collection.findOne({uId: self.user.clientId}, function (err, doc) {
+		if (doc) {
+			doc.loggedIn = false;
+			//doc.uId = 0;
+			if (doc.isAristocrat == true) {
+				doc.isAristocrat = false;
+				numAristocrats--;
+				if (doc.isKing == true) {
+					doc.isKing = false;
+					collection.find({isAristocrat: true}, function(err, cursor) {
+						cursor.toArray(function (err, docs) {
+							if (docs[0]) {
+								var newKing = docs[0];
+								newKing.isKing = true;
+								collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
+								});
+							} else {
+								numKings = 0;
+							}
+						});
+					});
+				} else {
+
+				}
+			} else {
+
+			}
+			collection.update({uId: self.user.clientId}, doc, function (err, doc) {
+				process.nextTick(function () {
+					self.now.finishLogout();
+					everyone.now.wipeUsersDiv();
+					everyone.now.getUserList();
+				});
 			});
-		});
+		}
 	});
 };
 

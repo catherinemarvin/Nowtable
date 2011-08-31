@@ -306,6 +306,7 @@ $(document).ready(function(){
 		$('#uploadbtn').css('display', 'inline');
 		$('#queuediv').css('display', 'inline');
 		$('#queue').css('display', 'inline');
+		$('#config').unbind('click');
 		$('#config').click(function(){
 	  		$('#upload').slideUp(200);
 	    	$('#addqueue').slideUp(200);
@@ -316,6 +317,19 @@ $(document).ready(function(){
 	
 	now.finishLogout = function () {
 		$('#loginregisterdiv').slideDown(200);
+		$('#logoutdiv').slideUp(200);
+		$('#ascend').css('display', 'none');
+		$('#abdicate').css('display', 'none');
+		$('#uploadbtn').css('display', 'none');
+		$('#queuediv').css('display', 'none');
+		$('#queue').css('display', 'none');
+		$('#config').unbind('click');
+		$('#config').click(function(){
+	  		$('#upload').slideUp(200);
+	    	$('#addqueue').slideUp(200);
+	    	$('#configdiv').slideUp(200);
+	  	 	$('#loginregisterdiv').slideToggle(200);
+	  });
 	};
 	
 	now.cleanAristocrat = function () {
@@ -468,6 +482,13 @@ $(document).ready(function(){
 	    $('#addqueue').slideUp(200);
 	    $('#configdiv').slideUp(200);
 	    $('#loginregisterdiv').slideUp(200);
+	});
+	
+	$('#closelogout').click(function () {
+		$('#upload').slideUp(200);
+	    $('#addqueue').slideUp(200);
+	    $('#configdiv').slideUp(200);
+	    $('#logoutdiv').slideUp(200);
 	})
   
 });
@@ -535,6 +556,7 @@ $(document).ready(function(){
 </div>
 
 <div id="logoutdiv">
+	<div class="right button" id="closelogout">close X</div>
 	<a href="#" onclick='now.tryLogout()'>LOGOUT</a>
 </div>
   
