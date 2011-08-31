@@ -293,7 +293,7 @@ $(document).ready(function(){
 		$('#pwdreg').val("");
 		$('#uname').val("");
 		$('#pwd').val("");
-		$('#loginregisterdiv').html("<a href='#' onclick='now.tryLogout()'>Logout</a>");
+		$('#loginregisterdiv').slideUp(200);
 		$('#ascend').css('display', 'inline');
 		$('#uploadbtn').css('display', 'inline');
 		$('#queuediv').css('display', 'inline');
@@ -301,8 +301,7 @@ $(document).ready(function(){
 	}
 	
 	now.finishLogout = function () {
-		var toPut = '<div class="right button" id="closeloginregister">close X</div><div class="big">Login</div><form name="loginform" action="/login" method="post">Username<br><input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br><br>Password<br><input type="password" id="pwd" name="pwd"/><br><br><input type="button" id="loginsubmit" value="Login"/></form><br><div class="big">Register</div><form name="registerform" action="/register" method="post">Username<br><input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/><br>Password<br><input type="password" id="pwdreg" name="pwd"><br><br><input type="button" id="registersubmit" value="Register"/></form>'
-		$('#loginregisterdiv').replaceWith(toPut);
+		$('#loginregisterdiv').slideDown(200);
 	};
 	
 	now.cleanAristocrat = function () {
@@ -521,28 +520,9 @@ $(document).ready(function(){
 	</form>
 </div>
 
-		
-  <!--
-  <div id="logindiv">
-   <div class="right button" id="closelogin">close x</div>
-  	<div class="big">login</div>
-  	<form name="loginform" action="/login" method="post">	
-				Username: <input type="text" id="uname" name="uname" placeholder="Slim Pickins"/></br>
-				Password: <input type="password" id="pwd" name="pwd"/></br>
-				<input type="button" id="loginsubmit" value="Login"/>	
-	</form> 
-  </div>
-  
-  <div id="registerdiv">
-   <div class="right button" id="closeregister">close x</div>
-  	<div class="big">register</div>
-  	<form name="registerform" action="/register" method="post">	
-				Username: <input type="text" id="unamereg" name="uname" placeholder="Slim Pickins"/></br>
-				Password: <input type="password" id="pwdreg" name="pwd"/></br>
-				<input type="button" id="registersubmit" value="Register"/>	
-	</form> 
-  </div>
--->
+<div id="logoutdiv">
+	<a href="#" onclick='now.tryLogout()'>LOGOUT</a>
+</div>
   
   <div id="content">
   	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>

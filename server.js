@@ -227,20 +227,6 @@ function checkToPlay() {
 //Logging-in/Register Section
 //================================================================
 
-//obsolete (no longer used)
-/*
-everyone.now.tryLogin = function(uname, pwd) {
-	var self = this;
-	collection.findOne({username: uname}, function(err, doc){
-		if (doc.password == pwd) {
-			self.now.finishLogin(uname);
-		} else {
-			self.now.reLogin();
-		}
-	});
-};
-*/
-
 //this function is run by the client to attempt to login
 //password is checked and then if it is, ones is page is
 //updated to reflect being logged in
@@ -326,7 +312,6 @@ everyone.now.tryLogout = function () {
 			self.now.finishLogout();
 			process.nextTick(function () {
 				everyone.now.wipeUsersDiv();
-				//everyone.now.getUserList();
 			});
 		});
 	});
