@@ -29,3 +29,5 @@ sudo node server.js
 
 Make sure that you have MongoDB on your system! If you have installed MongoDB for the first time make sure that it is running and set up properly before you run the code. Make sure /data/db exists. If not, run:
 mkdir -p /data/db.
+
+Also note that shutting down the server while clients are still connected will corrupt your users database, so if this is the case you should clear the database. The DB is called "nowtable" and the collection is called "userinfo".

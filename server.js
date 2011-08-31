@@ -177,7 +177,6 @@ everyone.now.tryLogin = function(uname, pwd) {
 		if (doc) {
 		if (doc.password == pwd) {
 			self.now.finishLogin(uname);
-			console.log("this is what we found: ",doc);
 			doc.loggedIn = true;
 			doc.uId = self.user.clientId;
 			collection.update({username: uname}, doc, function (err, doc) {
@@ -443,9 +442,7 @@ everyone.now.voteQueue = function(song, voted) {
 	collection.findOne({uId: self.user.clientId}, function (err, doc) {
 		for (var i in songQueue) {
 			if (songQueue[i].sId == song) {
-				console.log("Found the song");
 				if (voted == "up") {
-					console.log("Voted up");
 					var inUpvoteList = false;
 					var inDownvoteList = false;
 					var downvoteuserloc;
@@ -473,8 +470,6 @@ everyone.now.voteQueue = function(song, voted) {
 						songQueue[i].upvotes++;
 						sortQueue();
 					}
-					console.log("******SONG INFORMATION*******");
-					console.log(songQueue[i]);
 				} else { //else voted down
 					var inUpvoteList = false;
 					var inDownvoteList = false;
@@ -503,8 +498,6 @@ everyone.now.voteQueue = function(song, voted) {
 						songQueue[i].downvotes++;
 						sortQueue();
 					}
-					console.log("******SONG INFORMATION*******");
-					console.log(songQueue[i]);
 				}
 			}
 			
@@ -607,7 +600,6 @@ everyone.now.becomeAristocrat = function() {
 			if (numAristocrats < 5) {
 				doc.isAristocrat = true;
 				numAristocrats++;
-				console.log("number of aristocrats now: "+numAristocrats);
 				if (numKings == 0) {
 					doc.isKing = true;
 					numKings++;
