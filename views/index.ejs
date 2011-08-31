@@ -165,6 +165,14 @@ $(document).ready(function(){
 		}
 	}
 	
+	now.startPlaylist = function(sId) {
+		if (state == 'play') {
+			//do nothing
+		} else {
+			now.playNextSong();
+		}
+	}
+	
 	//this is a bug testing function. It simply prints out the King's song and time to the console.
 	now.reportSong = function() { 
 		now.songTest($("#jquery_jplayer_1").data("jPlayer").status.src, $("#jquery_jplayer_1").data("jPlayer").status.currentTime);

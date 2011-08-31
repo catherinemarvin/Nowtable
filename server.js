@@ -216,12 +216,20 @@ var numAristocrats = 0;
 var t;
 function checkToPlay() {
 	if (songQueue.length == 0) {
-		//wait until a song is added
+		console.log("nothing in the playlist");
 	} else {
 		//tell king to play next song or just keep playing the current
+		collection.findOne({isKing: true}, function(err, doc) {
+			if (err) {
+				console.log("There was no king when trying to check if there was shit in playlist. YOU DONE GOOFED!");
+			} else {
+				nowjs.getClient(doc.uId, function() {this.now.startPlaylist()});
+			}
+		});
 	}
 	t=setTimeout("checkToPlay()",1000);
 }
+checkToPlay();
 
 //================================================================
 //Logging-in/Register Section
