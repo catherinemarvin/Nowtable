@@ -174,7 +174,7 @@ nowjs.on('disconnect', function() {
 					doc.isKing = false;
 					collection.find({isAristocrat: true}, function(err, cursor) {
 						cursor.toArray(function (err, docs) {
-							if (docs) {
+							if (docs[0]) {
 								var newKing = docs[0];
 								newKing.isKing = true;
 								collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
