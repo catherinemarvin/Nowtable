@@ -214,12 +214,13 @@ var numAristocrats = 0;
 //This function will run in the background to make sure that a song will be played 
 //the instant it is added to the queue if there were previously no songs.
 var t;
-checkToPlay = function() {
+checkToPlay = function () {
 	if (songQueue.length == 0) {
 		console.log("nothing in the playlist");
 	} else {
 		//tell king to play next song or just keep playing the current
 		collection.findOne({isKing: true}, function(err, doc) {
+			console.log("king found and", err);
 			if (err) {
 				console.log("There was no king when trying to check if there was shit in playlist. YOU DONE GOOFED!");
 			} else {
