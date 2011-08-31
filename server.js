@@ -235,24 +235,11 @@ checkToPlay();
 //Logging-in/Register Section
 //================================================================
 
-//obsolete (no longer used)
-/*
-everyone.now.tryLogin = function(uname, pwd) {
-	var self = this;
-	collection.findOne({username: uname}, function(err, doc){
-		if (doc.password == pwd) {
-			self.now.finishLogin(uname);
-		} else {
-			self.now.reLogin();
-		}
-	});
-};
-*/
-
 //this function is run by the client to attempt to login
 //password is checked and then if it is, ones is page is
 //updated to reflect being logged in
 everyone.now.tryLogin = function(uname, pwd) {
+	console.log('gonna log in');
 	var self = this;
 	collection.findOne({username: uname}, function(err, doc) {
 		if (doc) {
@@ -333,7 +320,6 @@ everyone.now.tryLogout = function () {
 			self.now.finishLogout();
 			process.nextTick(function () {
 				everyone.now.wipeUsersDiv();
-				everyone.now.getUserList();
 			});
 		});
 	});
@@ -706,6 +692,58 @@ everyone.now.becomeAristocrat = function() {
 
 everyone.now.unAristocrat = function () {
 	var self = this;
+	var actuallyDoSomething = false;
+	collection.findOne({uId: self.user.clientId}, function (err, doc) {
+		if (doc) {
+			if (doc.isAristocrat == true) {
+				doc.isAristocrat = false;
+				numAristocrats--;
+				console.log("Number of aristocrats now: "+numAristocrats);
+				if (doc.isKing == true) {
+					actuallyDoSomething = true;
+					doc.isKing = false;
+					numKings = 0;
+				} else {
+				}
+				collection.update({uId: self.user.clientId}, doc, function (err, doc) {
+					process.nextTick(function () {
+						self.now.cleanUnaristocrat();
+						self.now.needNewKing(actuallyDoSomething);
+						everyone.now.wipeUsersDiv();
+						everyone.now.getUserList();
+					});
+				});
+			} else {
+				console.log("You were not an aristocrat for some reason.");
+			}
+		} else {
+			console.log("Couldn't find you in the DB for some reason.");
+		}
+	});
+};
+
+everyone.now.tryNewKing = function () {
+	collection.find({isAristocrat: true}, function (err, cursor) {
+		cursor.toArray(function (err, docs) {
+			if (docs[0]) {
+				console.log("LONG LIVE THE NEW KING");
+				var newKing = docs[0];
+				newKing.isKing = true;
+				collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
+					process.nextTick(function () {
+						everyone.now.wipeUsersDiv();
+						everyone.now.getUserList();
+					});
+				});
+			} else {
+				console.log("could not find a new king");
+			}
+		});
+	});
+};
+/*
+everyone.now.unAristocrat = function () {
+	var self = this;
 	collection.findOne({uId: self.user.clientId}, function(err, doc) {
 		if (doc) {
 			if (doc.isAristocrat == true) {
@@ -745,4 +783,10 @@ everyone.now.unAristocrat = function () {
 			});
 		}
 	});
+	process.nextTick(function () {
+		self.now.cleanUnaristocrat();
+		everyone.now.wipeUsersDiv();
+		everyone.now.getUserList();
+	})
 };
+*/

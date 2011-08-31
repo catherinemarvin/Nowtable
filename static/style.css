@@ -178,7 +178,7 @@ html, body {
 }
 
 
-#upload, #addqueue, #configdiv, #logindiv, #registerdiv {
+#upload, #addqueue, #configdiv, #logoutdiv {
   background-color: #111;
   display: none;
   height: 300px;

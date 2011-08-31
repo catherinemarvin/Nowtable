@@ -17,9 +17,6 @@
 <script src="/nowjs/now.js"></script>
 <script type="text/javascript" src="/jquery.form.js"></script>
 
-<script type="text/javascript" src="/fileuploader.js"></script>
-<link href="/fileuploader.css" rel="stylesheet" type="text/css">
-
 <link rel="icon" 
       type="image/ico" 
       href="images/favicon.ico">
@@ -304,7 +301,7 @@ $(document).ready(function(){
 		$('#pwdreg').val("");
 		$('#uname').val("");
 		$('#pwd').val("");
-		$('#loginregisterdiv').html("<a href='#' onclick='now.tryLogout()'>Logout</a>");
+		$('#loginregisterdiv').slideUp(200);
 		$('#ascend').css('display', 'inline');
 		$('#uploadbtn').css('display', 'inline');
 		$('#queuediv').css('display', 'inline');
@@ -312,7 +309,7 @@ $(document).ready(function(){
 	}
 	
 	now.finishLogout = function () {
-		$('#loginregisterdiv').html('<div class="right button" id="closeloginregister">close X</div><div class="big">Login</div><form name="loginform" action="/login" method="post">Username: <input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>Password: <input type="password" id="pwd" name="pwd"/></br><input type="button" id="loginsubmit" value="Login"/></form><br><div class="big">Register</div><form name="registerform" action="/register" method="post">Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>Password: <input type="password" id="pwdreg" name="pwd"></br><input type="button" id="registersubmit" value="Register"/></form>');
+		$('#loginregisterdiv').slideDown(200);
 	};
 	
 	now.cleanAristocrat = function () {
@@ -323,6 +320,14 @@ $(document).ready(function(){
 		$('#abdicate').css('display', 'none');
 		$('#ascend').css('display', 'inline');
 	}
+	
+	now.needNewKing = function (dostuff) {
+		if (dostuff) {
+			now.tryNewKing();
+		} else {
+			//do nothing
+		}
+	};
 	
 	now.ready(function(){
 		$("#jquery_jplayer_1").jPlayer({
@@ -523,28 +528,9 @@ $(document).ready(function(){
 	</form>
 </div>
 
-		
-  <!--
-  <div id="logindiv">
-   <div class="right button" id="closelogin">close x</div>
-  	<div class="big">login</div>
-  	<form name="loginform" action="/login" method="post">	
-				Username: <input type="text" id="uname" name="uname" placeholder="Slim Pickins"/></br>
-				Password: <input type="password" id="pwd" name="pwd"/></br>
-				<input type="button" id="loginsubmit" value="Login"/>	
-	</form> 
-  </div>
-  
-  <div id="registerdiv">
-   <div class="right button" id="closeregister">close x</div>
-  	<div class="big">register</div>
-  	<form name="registerform" action="/register" method="post">	
-				Username: <input type="text" id="unamereg" name="uname" placeholder="Slim Pickins"/></br>
-				Password: <input type="password" id="pwdreg" name="pwd"/></br>
-				<input type="button" id="registersubmit" value="Register"/>	
-	</form> 
-  </div>
--->
+<div id="logoutdiv">
+	<a href="#" onclick='now.tryLogout()'>LOGOUT</a>
+</div>
   
   <div id="content">
   	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>
