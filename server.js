@@ -544,6 +544,7 @@ everyone.now.addToQueue = function(songid) {
 				obj.downvoteList = [];
 				songQueue.push(obj);
 				}
+				sortQueue();
 				everyone.now.wipeQueueDiv();
 				everyone.now.getQueueList();
 			} else {
@@ -582,9 +583,11 @@ everyone.now.voteQueue = function(song, voted) {
 						songQueue[i].upvoteList.push(doc.username);
 						songQueue[i].upvotes++;
 						songQueue[i].downvotes--;
+						sortQueue();
 					} else { //were in neither list
 						songQueue[i].upvoteList.push(doc.username);
 						songQueue[i].upvotes++;
+						sortQueue();
 					}
 					console.log("******SONG INFORMATION*******");
 					console.log(songQueue[i]);
@@ -610,9 +613,11 @@ everyone.now.voteQueue = function(song, voted) {
 						songQueue[i].downvoteList.push(doc.username);
 						songQueue[i].downvotes++;
 						songQueue[i].upvotes--;
+						sortQueue();
 					} else { //were in neither list
 						songQueue[i].downvoteList.push(doc.username);
 						songQueue[i].downvotes++;
+						sortQueue();
 					}
 					console.log("******SONG INFORMATION*******");
 					console.log(songQueue[i]);
@@ -622,15 +627,26 @@ everyone.now.voteQueue = function(song, voted) {
 			
 		}
 	});
-	sortQueue();
 }
 
 function sortQueueItem(a,b) {
-	return ((a.upvotes - a.downvotes) - (b.upvotes - b.downvotes));
+	console.log("SONG QUEUE", songQueue);
+	var sumA = (a.upvotes - a.downvotes);
+	var sumB = (b.upvotes - b.downvotes);
+	console.log("sumA: ", sumA);
+	console.log("sumB: ", sumB);
+	if (sumA < sumB) {
+		return 1;
+	} else if (sumA == sumB) {
+		return 0;
+	} else {
+		return -1;
+	}
 }
 
 function sortQueue() {
-	songQueue = songQueue.sort(sortQueueItem);
+	songQueue.sort(sortQueueItem);
+	console.log("SONG QUEUE SORTED", songQueue);
 	everyone.now.wipeQueueDiv();
 	everyone.now.getQueueList();
 }
