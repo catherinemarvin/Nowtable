@@ -306,6 +306,12 @@ $(document).ready(function(){
 		$('#uploadbtn').css('display', 'inline');
 		$('#queuediv').css('display', 'inline');
 		$('#queue').css('display', 'inline');
+		$('#config').click(function(){
+	  		$('#upload').slideUp(200);
+	    	$('#addqueue').slideUp(200);
+	    	$('#configdiv').slideUp(200);
+	  	 	$('#logoutdiv').slideToggle(200);
+	  });
 	}
 	
 	now.finishLogout = function () {
