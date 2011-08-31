@@ -61,80 +61,13 @@ server.get('/play/:song', function(req, res) {
 	res.sendfile(filePath);
 });
 
-/*
-//Almost certain this doesn't work. -Kevin
-server.post('/upload', function(req, res, next) {
-	console.log("STARTING TO UPLOAD");
-	var form = new formidable.IncomingForm(); //not sure this line is right
-	form.parse(req, function (err, fields, files) {
-		fs.writeFile('derp.mp3', files.upload, 'utf8', function (err) {
-			if (err) throw err;
-			console.log("Saved lol");
-		});
-	});
-});
-*/
-
-/*
-**********************************************
-AFAIK this is the only version of uploading that works, but it's not async.
-
-Perhaps what we want to do is to have an iframe that will post to /upload. -Kevin
-**********************************************
-*/
-
-/*
-server.post('/upload', function(req, res, next) {
-	console.log("starting upload");
-	req.form.complete(function(err, fields, files) {
-		if (err) {
-			next(err);
-		} else {
-			//now rename the song!!!
-			fs.rename(files.song.path, __dirname + "/static/music/" + fields.title + ".mp3", function() {
-				everyone.now.wipeSongDiv();
-				everyone.now.getSongList();
-			});
-		}
-	});
-	req.form.on('progress', function(bytesReceived, bytesExpected) {
-		var percent = (bytesReceived / bytesExpected * 100) | 0;
-		process.stdout.write('Uploading: ' + percent + '\r');
-	});
-});
-*/
-/*
-server.post('/upload', function(req, res, next) {
-	console.log("STARTING TO UPLOAD");
-	req.form.complete(function(err, fields, files) {
-		if (err) {
-			console.log("ERROR OMG");
-			next(err);
-		} else {
-			console.log("hi");
-			console.log("THIS IS WHAT YOU UPLOADED: ", files);
-			console.log("LOLOLOL: ", files.songs.name);
-			fs.rename(files.songs.path, __dirname + "/static/music/" + files.songs.name, function () {
-				everyone.now.wipeSongDiv();
-				everyone.now.getSongList();
-			});
-			res.end("FUCK YOU");
-		}
-	});
-	
-});
-*/
-
 server.post('/upload', function(req, res) {
   var form = new formidable.IncomingForm();
   form.uploadDir = __dirname + '/static/music';
   form.encoding = 'binary';
 
   form.addListener('file', function(name, file) {
-	console.log(file.path);
-	console.log(file.name);
 	fs.rename(file.path, __dirname + "/static/music/" + file.name, function () {
-		console.log(arguments);
 		everyone.now.wipeSongDiv();
 		everyone.now.getSongList();
 	});
@@ -239,7 +172,6 @@ checkToPlay();
 //password is checked and then if it is, ones is page is
 //updated to reflect being logged in
 everyone.now.tryLogin = function(uname, pwd) {
-	console.log('gonna log in');
 	var self = this;
 	collection.findOne({username: uname}, function(err, doc) {
 		if (doc) {
@@ -265,10 +197,12 @@ everyone.now.tryLogin = function(uname, pwd) {
 	});
 };
 
+//called at the end of tryLogin.
 everyone.now.finishLogin = function () {
 	this.now.cleanLoginRegister();
 }
 
+//called to try to register.
 everyone.now.tryRegister = function(uname, pwd) {
 	var self = this;
 	collection.findOne({username: uname}, function(err, doc){
@@ -308,13 +242,12 @@ everyone.now.reRegister = function() {
 	this.now.reRegisterAlert();
 }
 
+//called when people logout
 everyone.now.tryLogout = function () {
-	console.log('gonna logout');
 	var self = this;
 	collection.findOne({uId: self.user.clientId}, function (err, doc) {
 		if (doc) {
 			doc.loggedIn = false;
-			//doc.uId = 0;
 			if (doc.isAristocrat == true) {
 				doc.isAristocrat = false;
 				numAristocrats--;
@@ -333,10 +266,10 @@ everyone.now.tryLogout = function () {
 						});
 					});
 				} else {
-
+					//do nothing
 				}
 			} else {
-
+				//do nothing
 			}
 			collection.update({uId: self.user.clientId}, doc, function (err, doc) {
 				process.nextTick(function () {
@@ -353,12 +286,13 @@ everyone.now.tryLogout = function () {
 //End of Logging-in/Register Section
 //================================================================
 
-
+//testing function
 everyone.now.songTest = function(songid, time) {
 	console.log("King Song: " + songid);
 	console.log("King Time: " + time);
 }
 
+//called by king to have every other user sync to his song state.
 everyone.now.syncToMe = function(state) {
 	var self = this;
 	collection.findOne({uId: self.user.clientId}, function(err, doc) {
@@ -380,34 +314,32 @@ everyone.now.syncToMe = function(state) {
 	});
 }
 
+//syncs all users to the king on a state change (play, pause)
 everyone.now.kingStateChange = function(state) {
 	var self = this;
-	//db.collection('userinfo', function(err, collection) {
 		collection.findOne({uId: self.user.clientId}, function(err, doc) {
 			if (!doc) {
 				//do nothing.
-			}
+			} 
 			if (doc.isKing == true) {
 				self.now.syncToMe(state);
 			} else {
 				//do nothing
 			}
 		});
-	//});
 }
 
-everyone.now.consolePrint = function(text) {
-	console.log(text);
-};
-
+//changes the song
 everyone.now.changeSong = function(songid) {
 	this.now.loadSong(songid, 0, "play");
 };
 
+//loads a song for a client at a specific state
 everyone.now.setSong = function(cId, songid, loc, state) {
 	nowjs.getClient(cId, function() {this.now.loadSong(songid, loc, state)});
 };
 
+//returns the king song to the client that asks
 everyone.now.kingSong = function(state) {
 	var callerId = this.user.clientId;
 	var self = this;
@@ -418,6 +350,7 @@ everyone.now.kingSong = function(state) {
 	});
 }
 
+//adds text to the chatbox
 everyone.now.appendtext = function(text) {
 	var self = this;
 	var usrname;
@@ -429,6 +362,7 @@ everyone.now.appendtext = function(text) {
 	});
 };
 
+//called by the king to skip to the next song
 everyone.now.playNextSong = function() {
 	var self = this;
 	//db.collection('userinfo', function(err, collection) {
@@ -454,106 +388,59 @@ everyone.now.playNextSong = function() {
 	//});
 }
 
-everyone.now.addToUsers = function(username) {
-	var test = false;
-	for (var i in names) {
-		if (username == names[i].username && !names[i].online) {
-			names[i].uId = this.user.clientId;
-			names[i].online = true;
-			test = true;
-		} else if (username == names[i].username && names[i].online) {
-			this.now.requestNewUsername();
-			test = true;
+//gets the song that is currently playing
+everyone.now.getCurrentSong = function() {
+	var self = this;
+	collection.findOne({uId: self.user.clientId}, function(err, doc) {
+		if (doc.isKing == true) {
+
+		} else if (doc.loggedIn == true) {
+			if (songQueue.length > 0) {
+				self.now.kingSong("play");
+				everyone.now.setTitleSong(currentSonguId, currentSongsId);
+			} else {
+		
+			}
 		} else {
 			
 		}
-	}
-	if (!test) {
-		var obj = {};
-		obj.uId = this.user.clientId;
-		obj.username = username;
-		obj.online = true;
-		names.push(obj);
-	} else {
-	
-	}
-	everyone.now.wipeUsersDiv();
-	everyone.now.getUserList();
-}
-
-everyone.now.getLogin = function(loc) {
-	var loggedin = false;
-	if (loggedin && !loc) {
-		this.now.openSettings();
-	} else if (!loggedin) {
-		this.now.openLogin();
-	} else {
-		//don't open the div
-	}
-}
-
-everyone.now.userLogin = function() {
-	//not written 
-}
-
-everyone.now.getCurrentSong = function() {
-	var self = this;
-	//db.collection('userinfo', function(err, collection) {
-		collection.findOne({uId: self.user.clientId}, function(err, doc) {
-			if (doc.isKing == true) {
-				/*if (songQueue.length > 0) {
-					this.now.playNextSong();
-				} else {
-			
-				}*/
-			} else if (doc.loggedIn == true) {
-				if (songQueue.length > 0) {
-					self.now.kingSong("play");
-					everyone.now.setTitleSong(currentSonguId, currentSongsId);
-				} else {
-			
-				}
-			} else {
-				
-			}
-		});
-	//});
+	});
 } 
 
+//called to add a song to the queue
 everyone.now.addToQueue = function(songid) {
 	var obj = {};
 	var self = this;
-	//db.collection('userinfo', function(err, collection) {
-		collection.findOne({uId: self.user.clientId}, function(err, doc) {
-			if (doc.isAristocrat == true) {
-				var changed = false;
-				for (var i in songQueue) {
-					if (songQueue[i].uId == doc.username) {
-						songQueue[i].sId = songid;
-						changed = true;
-					} 
-				}
-				if (changed) {
-					//do nothing
-				} else {
-				obj.uId = doc.username;
-				obj.sId = songid;
-				obj.downvotes = 0;
-				obj.upvotes = 0;
-				obj.upvoteList = [];
-				obj.downvoteList = [];
-				songQueue.push(obj);
-				}
-				sortQueue();
-				everyone.now.wipeQueueDiv();
-				everyone.now.getQueueList();
-			} else {
-				
+	collection.findOne({uId: self.user.clientId}, function(err, doc) {
+		if (doc.isAristocrat == true) {
+			var changed = false;
+			for (var i in songQueue) {
+				if (songQueue[i].uId == doc.username) {
+					songQueue[i].sId = songid;
+					changed = true;
+				} 
 			}
-		});
-	//});
+			if (changed) {
+				//do nothing
+			} else {
+			obj.uId = doc.username;
+			obj.sId = songid;
+			obj.downvotes = 0;
+			obj.upvotes = 0;
+			obj.upvoteList = [];
+			obj.downvoteList = [];
+			songQueue.push(obj);
+			}
+			sortQueue();
+			everyone.now.wipeQueueDiv();
+			everyone.now.getQueueList();
+		} else {
+			
+		}
+	});
 }
 
+//the voting function on items in the queue
 everyone.now.voteQueue = function(song, voted) {
 	var self = this;
 	collection.findOne({uId: self.user.clientId}, function (err, doc) {
@@ -629,12 +516,10 @@ everyone.now.voteQueue = function(song, voted) {
 	});
 }
 
+//queue sorting function
 function sortQueueItem(a,b) {
-	console.log("SONG QUEUE", songQueue);
 	var sumA = (a.upvotes - a.downvotes);
 	var sumB = (b.upvotes - b.downvotes);
-	console.log("sumA: ", sumA);
-	console.log("sumB: ", sumB);
 	if (sumA < sumB) {
 		return 1;
 	} else if (sumA == sumB) {
@@ -644,63 +529,63 @@ function sortQueueItem(a,b) {
 	}
 }
 
+//sorts the queue
 function sortQueue() {
 	songQueue.sort(sortQueueItem);
-	console.log("SONG QUEUE SORTED", songQueue);
 	everyone.now.wipeQueueDiv();
 	everyone.now.getQueueList();
 }
 
-
+//prints the song queue
 everyone.now.getQueueList = function() {
 	for (var i in songQueue) {
 		this.now.displayQueueItem(songQueue[i].uId, songQueue[i].sId);
 	}
 }
 
+//prints the user list
 everyone.now.getUserList = function() {
 	var self = this;
-	//db.collection('userinfo', function(err, collection) {
-		collection.find({loggedIn: true}, function(err, cursor) {
-			cursor.toArray(function (err, docs) {
-				if (docs) {
-					for (var i in docs) {
-						if (docs[i].uId == self.user.clientId) {
-							if (docs[i].isKing == true) {
-								if (docs[i].isAristocrat == true) {
-									self.now.displayUserItem(docs[i].username, true, true, true);
-								} else {
-									self.now.displayUserItem(docs[i].username, true, true, false);
-								}
+	collection.find({loggedIn: true}, function(err, cursor) {
+		cursor.toArray(function (err, docs) {
+			if (docs) {
+				for (var i in docs) {
+					if (docs[i].uId == self.user.clientId) {
+						if (docs[i].isKing == true) {
+							if (docs[i].isAristocrat == true) {
+								self.now.displayUserItem(docs[i].username, true, true, true);
 							} else {
-								if (docs[i].isAristocrat == true) {
-									self.now.displayUserItem(docs[i].username, true, false, true);
-								} else {
-									self.now.displayUserItem(docs[i].username, true, false, false);
-								}
+								self.now.displayUserItem(docs[i].username, true, true, false);
 							}
 						} else {
-							if (docs[i].isKing == true) {
-								if (docs[i].isAristocrat == true) {
-									self.now.displayUserItem(docs[i].username, false, true, true);
-								} else {
-									self.now.displayUserItem(docs[i].username, false, true, false);
-								}
+							if (docs[i].isAristocrat == true) {
+								self.now.displayUserItem(docs[i].username, true, false, true);
 							} else {
-								if (docs[i].isAristocrat == true) {
-									self.now.displayUserItem(docs[i].username, false, false, true);
-								} else {
-									self.now.displayUserItem(docs[i].username, false, false, false);
-								}
+								self.now.displayUserItem(docs[i].username, true, false, false);
+							}
+						}
+					} else {
+						if (docs[i].isKing == true) {
+							if (docs[i].isAristocrat == true) {
+								self.now.displayUserItem(docs[i].username, false, true, true);
+							} else {
+								self.now.displayUserItem(docs[i].username, false, true, false);
+							}
+						} else {
+							if (docs[i].isAristocrat == true) {
+								self.now.displayUserItem(docs[i].username, false, false, true);
+							} else {
+								self.now.displayUserItem(docs[i].username, false, false, false);
 							}
 						}
 					}
 				}
-			});
+			}
 		});
-	//});
+	});
 }
 
+//gets the list of songs in /static/music
 everyone.now.getSongList = function() {
 	var myId = this.user.clientId;
 	fs.readdir("static/music", function (err, files) {
@@ -717,6 +602,7 @@ everyone.now.getSongList = function() {
 	});
 }
 
+//called to elevate a user to the aristocracy
 everyone.now.becomeAristocrat = function() {
 	var self = this;
 	collection.findOne({uId: self.user.clientId}, function (err, doc) {
@@ -741,6 +627,7 @@ everyone.now.becomeAristocrat = function() {
 	});
 };
 
+//called by the client to leave the aristocracy
 everyone.now.unAristocrat = function () {
 	var self = this;
 	var actuallyDoSomething = false;
@@ -749,7 +636,6 @@ everyone.now.unAristocrat = function () {
 			if (doc.isAristocrat == true) {
 				doc.isAristocrat = false;
 				numAristocrats--;
-				console.log("Number of aristocrats now: "+numAristocrats);
 				if (doc.isKing == true) {
 					actuallyDoSomething = true;
 					doc.isKing = false;
@@ -773,11 +659,11 @@ everyone.now.unAristocrat = function () {
 	});
 };
 
+//called when the king abdicates and a new king needs to be chosen
 everyone.now.tryNewKing = function () {
 	collection.find({isAristocrat: true}, function (err, cursor) {
 		cursor.toArray(function (err, docs) {
 			if (docs[0]) {
-				console.log("LONG LIVE THE NEW KING");
 				var newKing = docs[0];
 				newKing.isKing = true;
 				collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
@@ -787,7 +673,6 @@ everyone.now.tryNewKing = function () {
 					});
 				});
 			} else {
-				console.log("could not find a new king");
 			}
 		});
 	});

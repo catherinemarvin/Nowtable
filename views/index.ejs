@@ -9,9 +9,7 @@
 <link type="text/css" href="/skin/jplayer.blue.monday.css" rel="stylesheet"/>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>  
-<!-- Uncomment this for a local version of jquery. Useful only if you have terrible Internet.
-<script type="text/javascript" src="/jquery-1.6.2.min.js"></script>
--->
+
 <script type="text/javascript" src="/jquery.marquee.js"></script>
 <script type="text/javascript" src="/jquery.jplayer.min.js"></script>
 <script src="/nowjs/now.js"></script>
@@ -21,9 +19,8 @@
       type="image/ico" 
       href="images/favicon.ico">
 
-<!-- begin the Javascript business -->
-
 <script type="text/javascript">
+//this code handles the async file upload.
 var TCNDDU = {};
 
 
@@ -95,7 +92,7 @@ var TCNDDU = {};
 	xhr.send(formData);
 
   };
-
+//end async file upload
 </script>
 
 <script type="text/javascript">
@@ -128,6 +125,7 @@ $(document).ready(function(){
    	$('#configdiv').slideToggle(200);
 	}
 		
+	//sends the state of the song
 	now.giveData = function(cId, state) {
 		var state2 = "";
 		if ($("#jquery_jplayer_1").data("jPlayer").status.paused) {state2 = "pause";} else {state2 = "play";}
@@ -138,6 +136,7 @@ $(document).ready(function(){
 			state
 		);
 	}
+	
 	
 	now.setPlayButton = function(state) {
 		var btn = $('#playpause');
@@ -598,9 +597,7 @@ $(document).ready(function(){
     <ul id="users">
 		
     </ul>
-    <!--
-<input type="button" id="becomeAristocrat" value="Become Aristocrat" onclick="now.becomeAristocrat()"/>
--->
+    
 	<div class="big" id="ascend"><div class="left">ascend</div><div class="right button" id="becomeAristocrat">&#9834;</div><div class="clear"></div></div>
 	
 	<div class="big" id="abdicate"><div class="left">abdicate</div><div class="right button" id="unAristocrat">&#9773;</div><div class="clear"></div></div>
