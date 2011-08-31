@@ -17,9 +17,6 @@
 <script src="/nowjs/now.js"></script>
 <script type="text/javascript" src="/jquery.form.js"></script>
 
-<script type="text/javascript" src="/fileuploader.js"></script>
-<link href="/fileuploader.css" rel="stylesheet" type="text/css">
-
 <link rel="icon" 
       type="image/ico" 
       href="images/favicon.ico">
@@ -304,7 +301,8 @@ $(document).ready(function(){
 	}
 	
 	now.finishLogout = function () {
-		$('#loginregisterdiv').html('<div class="right button" id="closeloginregister">close X</div><div class="big">Login</div><form name="loginform" action="/login" method="post">Username: <input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br>Password: <input type="password" id="pwd" name="pwd"/></br><input type="button" id="loginsubmit" value="Login"/></form><br><div class="big">Register</div><form name="registerform" action="/register" method="post">Username: <input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/></br>Password: <input type="password" id="pwdreg" name="pwd"></br><input type="button" id="registersubmit" value="Register"/></form>');
+		var toPut = '<div class="right button" id="closeloginregister">close X</div><div class="big">Login</div><form name="loginform" action="/login" method="post">Username<br><input type="text" id="uname" name="uname" placeholder="Rainbow Dash"/></br><br>Password<br><input type="password" id="pwd" name="pwd"/><br><br><input type="button" id="loginsubmit" value="Login"/></form><br><div class="big">Register</div><form name="registerform" action="/register" method="post">Username<br><input type="text" id="unamereg" name="uname" placeholder="Twilight Sparkle"/><br>Password<br><input type="password" id="pwdreg" name="pwd"><br><br><input type="button" id="registersubmit" value="Register"/></form>'
+		$('#loginregisterdiv').replaceWith(toPut);
 	};
 	
 	now.cleanAristocrat = function () {
@@ -315,6 +313,14 @@ $(document).ready(function(){
 		$('#abdicate').css('display', 'none');
 		$('#ascend').css('display', 'inline');
 	}
+	
+	now.needNewKing = function (dostuff) {
+		if (dostuff) {
+			now.tryNewKing();
+		} else {
+			//do nothing
+		}
+	};
 	
 	now.ready(function(){
 		$("#jquery_jplayer_1").jPlayer({
