@@ -163,10 +163,10 @@ $(document).ready(function(){
 	}
 	
 	now.startPlaylist = function() {
-		if (state == 'play') {
-			//do nothing
-		} else {
+		if ($("#jquery_jplayer_1").data("jPlayer").status.paused) {
 			now.playNextSong();
+		} else {
+			//do nothing
 		}
 	}
 	
