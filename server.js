@@ -220,6 +220,7 @@ checkToPlay = function () {
 	} else {
 		//tell king to play next song or just keep playing the current
 		collection.findOne({isKing: true}, function(err, doc) {
+			console.log("king found and", err);
 			if (err) {
 				console.log("There was no king when trying to check if there was shit in playlist. YOU DONE GOOFED!");
 			} else {
@@ -227,7 +228,7 @@ checkToPlay = function () {
 			}
 		});
 	}
-	t=setTimeout( function () {checkToPlay()},1000);
+	t=setTimeout(function() {checkToPlay()},1000);
 }
 checkToPlay();
 
