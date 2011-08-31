@@ -17,4 +17,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Dependencies: node express now connect-form formidable mongodb ejs
 
-To run the code, simply run server.js.
+******************
+SETUP INSTRUCTIONS
+******************
+1: Download the code:
+git clone https://github.com/DungFu/Nowtable
+2: Install dependencies via npm:
+npm install express now connect-form formidable mongodb ejs
+3: Run the code:
+sudo node server.js
+
+Make sure that you have MongoDB on your system! If you have installed MongoDB for the first time make sure that it is running and set up properly before you run the code. Make sure /data/db exists. If not, run:
+mkdir -p /data/db.
