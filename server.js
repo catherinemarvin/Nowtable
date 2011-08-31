@@ -220,10 +220,11 @@ checkToPlay = function () {
 	} else {
 		//tell king to play next song or just keep playing the current
 		collection.findOne({isKing: true}, function(err, doc) {
-			console.log("king found and", err);
+			console.log("king found and", doc);
 			if (err) {
 				console.log("There was no king when trying to check if there was shit in playlist. YOU DONE GOOFED!");
 			} else {
+				console.log('huehuehue', doc.uId);
 				nowjs.getClient(doc.uId, function() {this.now.startPlaylist()});
 			}
 		});
@@ -742,52 +743,3 @@ everyone.now.tryNewKing = function () {
 		});
 	});
 };
-/*
-everyone.now.unAristocrat = function () {
-	var self = this;
-	collection.findOne({uId: self.user.clientId}, function(err, doc) {
-		if (doc) {
-			if (doc.isAristocrat == true) {
-				doc.isAristocrat = false;
-				numAristocrats--;
-				console.log("Number of aristocrats now: "+numAristocrats);
-				if (doc.isKing == true) {
-					doc.isKing = false;
-					collection.find({isAristocrat: true}, function(err, cursor) {
-						cursor.toArray(function (err, docs) {
-							if (docs[0]) {
-								var newKing = docs[0];
-								newKing.isKing = true;
-								collection.update({uId: newKing.uId}, newKing, function (err, doc1) {
-									self.now.cleanUnaristocrat();
-									everyone.now.wipeUsersDiv();
-									everyone.now.getUserList();
-								});
-							} else {
-								numKings = 0;
-								self.now.cleanUnaristocrat();
-								everyone.now.wipeUsersDiv();
-								everyone.now.getUserList();
-							}
-						});
-					});
-				} else {
-				
-				}
-			} else {
-				console.log('wat');
-			}
-			collection.update({uId: self.user.clientId}, doc, function (err, doc) {
-				process.nextTick(function () {
-					everyone.now.wipeUsersDiv();
-				});
-			});
-		}
-	});
-	process.nextTick(function () {
-		self.now.cleanUnaristocrat();
-		everyone.now.wipeUsersDiv();
-		everyone.now.getUserList();
-	})
-};
-*/
