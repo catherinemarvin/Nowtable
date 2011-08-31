@@ -216,15 +216,13 @@ var numAristocrats = 0;
 var t;
 checkToPlay = function () {
 	if (songQueue.length == 0) {
-		console.log("nothing in the playlist");
+		//nothing in playlist
 	} else {
 		//tell king to play next song or just keep playing the current
 		collection.findOne({isKing: true}, function(err, doc) {
-			console.log("king found and", doc);
 			if (err) {
-				console.log("There was no king when trying to check if there was shit in playlist. YOU DONE GOOFED!");
+				//this is bad if this happens
 			} else {
-				console.log('huehuehue', doc.uId);
 				nowjs.getClient(doc.uId, function() {this.now.startPlaylist()});
 			}
 		});
@@ -624,6 +622,17 @@ everyone.now.voteQueue = function(song, voted) {
 			
 		}
 	});
+	sortQueue();
+}
+
+function sortQueueItem(a,b) {
+	return ((a.upvotes - a.downvotes) - (b.upvotes - b.downvotes));
+}
+
+function sortQueue() {
+	songQueue = songQueue.sort(sortQueueItem);
+	everyone.now.wipeQueueDiv();
+	everyone.now.getQueueList();
 }
 
 
