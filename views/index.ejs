@@ -240,14 +240,6 @@ $(document).ready(function(){
 	now.wipeQueueDiv = function() {
 		$("#queue").empty();
 	}
-
-	//don't think this is ever used lol
-	function update() {
-		try {
-		} catch (e) {
-		}
-		setTimeout(update, 500);
-	}
 	
 	now.displayUserItem = function(username, who, king, aristocrat) {
 		var div = $("#users");
@@ -353,17 +345,11 @@ $(document).ready(function(){
         	ready: function () {
        	},
 			swfPath: "js",
-        	//supplied: "mp3, m4a, oga",
-			supplied: "mp3",
+        	supplied: "mp3, m4a, oga",
         	preload: "auto",
         	volume: 1
 		});
-		/*$("#jquery_jplayer_1").bind($.jPlayer.event.play, function() { // Bind an event handler to the instance's play event.
-  			now.syncToMe("play"); // sync all other players to this one but play them.
-		});
-		$("#jquery_jplayer_1").bind($.jPlayer.event.pause, function() { // Bind an event handler to the instance's play event.
-  			now.syncToMe("pause"); // sync all other players to this one but pause them.
-		});*/
+		
 		$("#jquery_jplayer_1").bind($.jPlayer.event.ended, function() { // Bind an event handler to the instance's play event.
   			now.playNextSong(); // plays the next song, but checks to see if king. Only the king will tell everyone to change the song.
 		});
@@ -382,18 +368,7 @@ $(document).ready(function(){
 			$("#box").val("");
 		}
 		
-	});	
-  
-  $('#playpause').click(function() {
-  	if ($("#jquery_jplayer_1").data("jPlayer").status.paused) {
-  		
-  		now.kingStateChange('play');
-  	} else {
-  		now.kingStateChange('pause');
-  	}
-
-
-});
+	});
 
   $('#muteunmute').click(function() {
   	console.log("Mute status: " + muted);
@@ -461,23 +436,7 @@ $(document).ready(function(){
 	$('#unAristocrat').click(function () {
 		now.unAristocrat();
 	});
-  /*
-  $('#closelogin').click(function(){
-    $('#upload').slideUp(200);
-    $('#addqueue').slideUp(200);
-    $('#configdiv').slideUp(200);
-    $('#logindiv').slideUp(200);
-    $('#registerdiv').slideUp(200);
-  });
-  
-  $('#closeregister').click(function(){
-    $('#upload').slideUp(200);
-    $('#addqueue').slideUp(200);
-    $('#configdiv').slideUp(200);
-    $('#logindiv').slideUp(200);
-    $('#registerdiv').slideUp(200);
-  });
-*/
+
 	$('#closeloginregister').click(function () {
 		$('#upload').slideUp(200);
 	    $('#addqueue').slideUp(200);
@@ -562,7 +521,7 @@ $(document).ready(function(){
 </div>
   
   <div id="content">
-  	<div class="button" id="playpause">play</div> <div class="button" id="muteunmute">mute</div>
+  	<div class="button" id="muteunmute">mute</div>
   	<!-- <div class="button" id="sync" onclick="now.getCurrentSong()">sync</div> -->
   	<div class="button" id="next" onclick="now.playNextSong()">next</div>
   	 <!--jplayer-->
