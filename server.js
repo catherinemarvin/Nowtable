@@ -214,7 +214,7 @@ var numAristocrats = 0;
 //This function will run in the background to make sure that a song will be played 
 //the instant it is added to the queue if there were previously no songs.
 var t;
-function checkToPlay() {
+checkToPlay = function() {
 	if (songQueue.length == 0) {
 		console.log("nothing in the playlist");
 	} else {
@@ -227,7 +227,7 @@ function checkToPlay() {
 			}
 		});
 	}
-	t=setTimeout("checkToPlay()",1000);
+	t=setTimeout(function() {checkToPlay()},1000);
 }
 checkToPlay();
 
