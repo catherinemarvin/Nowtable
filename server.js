@@ -395,12 +395,9 @@ everyone.now.getCurrentSong = function() {
 		if (doc.isKing == true) {
 
 		} else if (doc.loggedIn == true) {
-			if (songQueue.length > 0) {
-				self.now.kingSong("play");
-				everyone.now.setTitleSong(currentSonguId, currentSongsId);
-			} else {
-		
-			}
+			self.now.kingSong("play");
+			everyone.now.setTitleSong(currentSonguId, currentSongsId);
+
 		} else {
 			
 		}
