@@ -323,14 +323,19 @@ $(document).ready(function(){
 	  });
 	};
 	
-	now.cleanAristocrat = function () {
-		$('#abdicate').css('display', 'inline');
-		$('#ascend').css('display', 'none');
-	}
+	now.cleanAristocrat = function (shouldFlip) {
+		if (shouldFlip) {
+			$('#abdicate').css('display', 'inline');
+			$('#ascend').css('display', 'none');
+		} else {
+			alert("There are already five aristocrats! Perhaps you should arrange a coup...");
+		}
+	};
+	
 	now.cleanUnaristocrat = function () {
 		$('#abdicate').css('display', 'none');
 		$('#ascend').css('display', 'inline');
-	}
+	};
 	
 	now.needNewKing = function (dostuff) {
 		if (dostuff) {
