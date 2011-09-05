@@ -196,13 +196,13 @@ $(document).ready(function(){
 	
 	now.appendSong = function(text) {
 		var div = $("#songlistdiv");	
-		div.append("<div class=\"songline\">" + "<button type=\'button\' onclick=\"now.loadSong(\'\/play\/" + text + "\', 0, \'play\')\">" + text.split(".mp3")[0].split(".m4a")[0] + "</button></div>");
+		div.append("<div class=\"songline\">" + "<button type=\'button\' onclick=\"now.loadSong(\'\/play\/" + text + "\', 0, \'play\')\">" + decodeURI(text).split(".mp3")[0].split(".m4a")[0] + "</button></div>");
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
 	now.appendQueue = function(text) {
 		var div = $("#addqueuelist");	
-		div.append("<li><div class=\"songline\"" + "onclick=\"now.addToQueue(\'\/play\/" + text + "\')\">" + text.split(".mp3")[0].split(".m4a")[0] + "</div></li>");
+		div.append("<li><div class=\"songline\"" + "onclick=\"now.addToQueue(\'\/play\/" + text + "\')\">" + decodeURI(text).split(".mp3")[0].split(".m4a")[0] + "</div></li>");
 		div.animate({ scrollTop: div.attr("scrollHeight") }, 500);
 	}
 	
@@ -217,20 +217,20 @@ $(document).ready(function(){
 		
 		var li = $("<li></li>");
 		var s1 = $("<span></span>").addClass('qartist').text(uId);
-		var s2 = $("<span></span>").addClass('qtitle').text(sId.split("\/play\/")[1].split(".mp3")[0].split(".m4a")[0]);
+		var s2 = $("<span></span>").addClass('qtitle').text(decodeURI(sId).split("\/play\/")[1].split(".mp3")[0].split(".m4a")[0]);
 		li.append(button1).append(" - ").append(button2).append(" - ").append(s1).append(" - ").append(s2);
 	    div.append(li);	
 	}
 	
 	now.displayQueueItem1 = function(uId, sId) {
 		var div = $("ul#queue");
-		div.append("<li class='firstqueue' ><span class='q1artist'>" + uId + "</span> - <span class='q1title'>" + sId + "</span></li>");
+		div.append("<li class='firstqueue' ><span class='q1artist'>" + uId + "</span> - <span class='q1title'>" + decodeURI(sId) + "</span></li>");
 	}
 	
 	now.setTitleSong = function(uId, sId) {
 		var div = $("#text");
 		div.empty();
-		div.append("<marquee scrollamount='6' width='575'><span class='artist'>" + uId + "</span> - <span class='title'>" + sId.split("\/play\/")[1].split(".mp3")[0].split(".m4a")[0] + "</span></marquee>");
+		div.append("<marquee scrollamount='6' width='575'><span class='artist'>" + uId + "</span> - <span class='title'>" + decodeURI(sId).split("\/play\/")[1].split(".mp3")[0].split(".m4a")[0] + "</span></marquee>");
 	}
 	
 	now.wipeSongDiv = function() {
