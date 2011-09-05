@@ -54,7 +54,9 @@ server.get('/', function(req, res){
 });
 
 server.get('/play/:song', function(req, res) {
-	filePath = path.join(__dirname, "/static/music", req.param('song'));
+	console.log("req.param('song'): ", req.param('song'));
+	console.log("ENCODED req.param('song'): ", req.param('song'));
+	filePath = path.join(__dirname, "/static/music", encodeURI(req.param('song')));
 	stat = fs.statSync(filePath);
 	res.header('content-type', 'audio/mp3');
 	res.header('content-length', stat.size);
@@ -67,7 +69,7 @@ server.post('/upload', function(req, res) {
   form.encoding = 'binary';
 
   form.addListener('file', function(name, file) {
-	fs.rename(file.path, __dirname + "/static/music/" + file.name, function () {
+	fs.rename(file.path, __dirname + "/static/music/" + encodeURI(file.name), function () {
 		everyone.now.wipeSongDiv();
 		everyone.now.getSongList();
 	});
