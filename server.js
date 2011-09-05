@@ -595,10 +595,13 @@ everyone.now.getSongList = function() {
 //called to elevate a user to the aristocracy
 everyone.now.becomeAristocrat = function() {
 	var self = this;
+	var shouldFlip = false;
+	
 	collection.findOne({uId: self.user.clientId}, function (err, doc) {
 		if (doc && doc.isAristocrat == false) {
 			if (numAristocrats < 5) {
 				doc.isAristocrat = true;
+				shouldFlip = true;
 				numAristocrats++;
 				if (numKings == 0) {
 					doc.isKing = true;
@@ -607,7 +610,7 @@ everyone.now.becomeAristocrat = function() {
 			}
 			collection.update({uId: self.user.clientId}, doc, function (err, doc) {
 				process.nextTick(function () {
-					self.now.cleanAristocrat();
+					self.now.cleanAristocrat(shouldFlip);
 					everyone.now.wipeUsersDiv();
 					everyone.now.getUserList();
 				});
