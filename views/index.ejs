@@ -6,7 +6,10 @@
 <meta http-equiv="Content-Language" content="en-us"> 
 
 <link href="/style.css" rel="stylesheet" type="text/css">
+
+<!--
 <link type="text/css" href="/skin/jplayer.blue.monday.css" rel="stylesheet"/>
+-->
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>  
 
@@ -188,9 +191,9 @@ $(document).ready(function(){
 		mydiv.slideDown(1000);
 	}
 	now.refreshtext = function(id, text) {
-	   text = $('<div/>').text(text).html();
+	   text = $('<div>').text(text).html();
 		var div = $("#chatmessagediv");
-		div.append("<div class=\"textline\">" + id + ": "+ text + "</div>");
+		div.append("<div class=\"textline\">" + id + ": " + text + "</div>");
 		$(".chat").scrollTop($(".chat")[0].scrollHeight);
 	}
 	
@@ -348,8 +351,8 @@ $(document).ready(function(){
 	now.ready(function(){
 		$("#jquery_jplayer_1").jPlayer({
         	ready: function () {
+       		
        	},
-			swfPath: "js",
         	supplied: "mp3, m4a, oga",
         	preload: "auto",
         	volume: 1
@@ -357,7 +360,21 @@ $(document).ready(function(){
 		
 		$("#jquery_jplayer_1").bind($.jPlayer.event.ended, function() { // Bind an event handler to the instance's play event.
   			now.playNextSong(); // plays the next song, but checks to see if king. Only the king will tell everyone to change the song.
+  			var div = $("#song-time");
+			div.empty();
+			div.append("0:0 - 0:0");
 		});
+		
+		$("#jquery_jplayer_1").bind($.jPlayer.event.timeupdate, function(event) {
+			var div = $("#song-time");
+			div.empty();
+			div.append(
+				Math.floor(event.jPlayer.status.currentTime/60) + ":" + (Math.round(event.jPlayer.status.currentTime) - Math.floor(event.jPlayer.status.currentTime/60)*60) + 
+				" - " + 
+				Math.floor(event.jPlayer.status.duration/60) + ":" + (Math.round(event.jPlayer.status.duration) - Math.floor(event.jPlayer.status.duration/60)*60)
+			);
+  		});
+		
 		now.getSongList();
 		now.getQueueList();
 	});
@@ -466,7 +483,7 @@ $(document).ready(function(){
 
 <div id="main">
 	<div id="top">
-    	<div id="text"><marquee scrollamount="6" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
+    	<div id="text"><marquee scrollamount="6" behavior="alternate" width="575"><span class="artist">nothing</span> - <span class="title">nothing</span></marquee></div>
 		<div id="l"></div>
     	<div id="r"></div>
 	</div>
@@ -530,20 +547,8 @@ $(document).ready(function(){
   	<!-- <div class="button" id="sync" onclick="now.getCurrentSong()">sync</div> -->
   	<div class="button" id="next" onclick="now.playNextSong()">next</div>
   	 <!--jplayer-->
-		<div id="jquery_jplayer_1" class="jp-jplayer"></div>
-			<div class="jp-audio">
-			<div class="jp-type-single">
-			<div id="jp_interface_1" class="jp-interface">
-				<div class="jp-progress">
-				  <div class="jp-seek-bar">
-					<div class="jp-play-bar"></div>
-				  </div>
-				</div>
-				<div class="jp-current-time"></div>
-				<div class="jp-duration"></div>
-			</div>
-		</div>
-	</div>
+	<div id="jquery_jplayer_1" class="jp-jplayer"></div>
+	<div id="song-time">0:0 - 0:0</div>
 	<!--end jplayer-->
 	<div id="chatdiv"><input placeholder="Type your message ..." type="text" id="box"></div>
 	<div id="chatmessagediv" class="chat"></div>  

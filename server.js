@@ -54,12 +54,16 @@ server.get('/', function(req, res){
 });
 
 server.get('/play/:song', function(req, res) {
-	console.log("req.param('song'): ", req.param('song'));
-	console.log("ENCODED req.param('song'): ", req.param('song'));
 	filePath = path.join(__dirname, "/static/music", encodeURI(req.param('song')));
 	stat = fs.statSync(filePath);
 	res.header('content-type', 'audio/mp3');
 	res.header('content-length', stat.size);
+	res.sendfile(filePath);
+});
+
+server.get('/jp/:file', function(req, res) {
+	filePath = path.join(__dirname, "/static/js", req.param('file'));
+	stat = fs.statSync(filePath);
 	res.sendfile(filePath);
 });
 
