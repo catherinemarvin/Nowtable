@@ -312,6 +312,12 @@ a {
 }
 
 #muteunmute {
-	padding-right: 70px;
-	padding-left: 55px;
+	padding-right: 30px;
+	padding-left: 30px;
+}
+
+#song-time {
+	margin-top: 15px;
+	margin-right: 15px;
+	float: right;
 }
